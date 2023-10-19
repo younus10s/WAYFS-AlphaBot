@@ -9,3 +9,15 @@ If both the computer and RPi are on the same network ssh pi@raspberrypi.local ca
 ### VNC
 Download VNC. Connect to the RPi using SSH to find the AlphaBots IP address (ifconfig). Open VNC and create a new connection (file->new connection...). Enter the IP address, and a name. Select the VNC server and enter username (pi) and password (HiQBot1!) if prompted.
 
+## Installing .NET SDK on the RPi (raspbian):
+
+### Install via curl:
+curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel Current
+
+echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
+source ~/.bashrc
+
+## Add GPIO package for pin access:
+
+dotnet add package System.Device.Gpio --version 2.2.0-*
