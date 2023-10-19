@@ -1,21 +1,29 @@
+using System.Threading;
 
 class Program
 {
+
     static void Main(string[] args)
     {
+
+        try
+        {
+            AlphaBot ab = new AlphaBot();
+            
+            ab.Forward();
+            
+            Console.Write("Moving! :D\n");
+
+            Thread.Sleep(1000);
+
+            ab.Stop();
+
+        }
+        catch(Exception e)
+        {
+            Console.Write("Ajjjdåååå D:" + e.Message);
+        }
         
-        Console.Write("Add some numbers! :D\n");
-
-        adder adder = new adder();
-        
-        Console.Write("First number:\n");
-        int a = int.Parse(Console.ReadLine());
-        Console.Write("Second number:\n");
-        int b = int.Parse(Console.ReadLine());
-
-        int res = adder.add(a, b);
-
-        Console.Write("Is you number " + res.ToString() + "\n");
-
+        Console.Write("Done! \n");  
     }
 }
