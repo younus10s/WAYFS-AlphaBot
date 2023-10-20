@@ -10,27 +10,19 @@ class Program
             AlphaBot ab = new AlphaBot();
             
             ab.Forward();
-            
-            Console.Write("Moving Forward! :D\n");
-
+            Console.Write("Moving Forward! :D\n")
             Thread.Sleep(1000);
 
-            ab. Left(); 
+            //ab. Left();
+            //Console.Write("Left! :D\n"); 
+            //Thread.Sleep(1000);
 
-            Console.Write("Left! :D\n");
-
-            Thread.Sleep(1000);
-
-            ab.Backward(); 
-
-            Console.Write("Backward! :D\n");
-
-            Thread.Sleep(1000);
+            //ab.Backward();
+            //Console.Write("Backward! :D\n");
+            //Thread.Sleep(1000);
 
             ab.Right(); 
-
             Console.Write("Right! :D\n");
-
             Thread.Sleep(1000);
 
             ab.Stop();

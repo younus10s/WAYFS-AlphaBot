@@ -29,11 +29,11 @@ class AlphaBot
 
     public void Forward()
     {
-        gpioController.Write(left_in1, PinValue.High);
-        gpioController.Write(left_in2, PinValue.Low);
+        gpioController.Write(left_in1, PinValue.Low);
+        gpioController.Write(left_in2, PinValue.High);
 
-        gpioController.Write(right_in1, PinValue.High);
-        gpioController.Write(right_in2, PinValue.Low);
+        gpioController.Write(right_in1, PinValue.Low);
+        gpioController.Write(right_in2, PinValue.High);
     }
 
     public void Stop()
@@ -46,25 +46,25 @@ class AlphaBot
 
     public void Backward()
     {
-        gpioController.Write(left_in1, PinValue.Low);
-        gpioController.Write(left_in2, PinValue.High);
-        gpioController.Write(right_in1, PinValue.Low);
-        gpioController.Write(right_in2, PinValue.High);
-    }
-
-    public void Left()
-    {
-        gpioController.Write(left_in1, PinValue.Low);
-        gpioController.Write(left_in2, PinValue.High);
+        gpioController.Write(left_in1, PinValue.High);
+        gpioController.Write(left_in2, PinValue.Low);
         gpioController.Write(right_in1, PinValue.High);
         gpioController.Write(right_in2, PinValue.Low);
     }
 
-    public void Right()
+    public void Left()
     {
         gpioController.Write(left_in1, PinValue.High);
         gpioController.Write(left_in2, PinValue.Low);
         gpioController.Write(right_in1, PinValue.Low);
         gpioController.Write(right_in2, PinValue.High);
+    }
+
+    public void Right()
+    {
+        gpioController.Write(left_in1, PinValue.Low);
+        gpioController.Write(left_in2, PinValue.High);
+        gpioController.Write(right_in1, PinValue.High);
+        gpioController.Write(right_in2, PinValue.Low);
     }
 }
