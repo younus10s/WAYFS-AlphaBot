@@ -10,7 +10,7 @@ class Program
             AlphaBot ab = new AlphaBot();
             
             ab.Forward();
-            Console.Write("Moving Forward! :D\n")
+            Console.Write("Moving Forward! :D\n");
             Thread.Sleep(1000);
 
             //ab. Left();
