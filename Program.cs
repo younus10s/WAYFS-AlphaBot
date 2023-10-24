@@ -9,7 +9,7 @@ class Program
         {
             AlphaBot ab = new AlphaBot();
             
-            ab.Forward();
+            ab.movement.Forward();
             Console.Write("Moving Forward! :D\n");
             Thread.Sleep(1000);
 
@@ -21,11 +21,11 @@ class Program
             //Console.Write("Backward! :D\n");
             //Thread.Sleep(1000);
 
-            ab.Right(); 
+            ab.movement.Right(); 
             Console.Write("Right! :D\n");
             Thread.Sleep(1000);
 
-            ab.Stop();
+            ab.movement.Stop();
 
             Console.Write("Stop! :D\n");
         }
