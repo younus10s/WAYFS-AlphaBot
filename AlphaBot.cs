@@ -11,8 +11,6 @@ class AlphaBot
     private const int right_ena = 26;
     private PwmChannel pwm_a; 
     private PwmChannel pwm_b;
-    private double pa = 0.5; 
-    private double pb = 0.5; 
 
   
     private GpioController gpioController;
@@ -31,23 +29,28 @@ class AlphaBot
         //gpioController.Write(left_ena, PinValue.High);
         //gpioController.Write(right_ena, PinValue.High);
 
-        pwm_a = PwmChannel.Create(0, left_ena, 400, 0.5);
-        pwm_b = PwmChannel.Create(0, right_ena, 400, 0.5);
+        pwm_a = PwmChannel.Create(0, 0, 400, 0.01);
+        pwm_b = PwmChannel.Create(0, 1, 400, 0.01);
         pwm_a.Start();
         pwm_b.Start();
+
+        //Console.WriteLine("isPinOpen: " + gpioController.IsPinOpen(right_ena));
+        //Console.WriteLine(gpioController.Read(right_ena));
 
         Stop();
     }
 
     public void Forward()
     {
-        pwm_a.DutyCycle = pa;
-        pwm_b.DutyCycle = pb;
+        // pwm_a.DutyCycle = pa;
+        // pwm_b.DutyCycle = pb;
 
         gpioController.Write(left_in1, PinValue.High);
         gpioController.Write(left_in2, PinValue.Low);
         gpioController.Write(right_in1, PinValue.High);
         gpioController.Write(right_in2, PinValue.Low);
+
+        Console.WriteLine("pwm_a.DutyCycle: " + pwm_a.DutyCycle);
     }
 
     public void Stop()

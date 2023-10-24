@@ -31,7 +31,7 @@ class Program
         }
         catch(Exception e)
         {
-            Console.Write("Ajjjdåååå D:" + e.Message);
+            Console.Write("Ajjjdåååå D: " + e.Message);
         }
         
         Console.Write("Done! \n");  
