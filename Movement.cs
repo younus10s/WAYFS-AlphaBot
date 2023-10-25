@@ -117,10 +117,16 @@ class Movement
                 gpioController.Write(left_ena, PinValue.High);
                 gpioController.Write(right_ena, PinValue.High);
                 Thread.Sleep(pulseWidth);
+
+                if(tempDutyCycle != 1){
+                    gpioController.Write(left_ena, PinValue.Low);
+                    gpioController.Write(right_ena, PinValue.Low);
+                    Thread.Sleep(period - pulseWidth);
+                }
+                
+            }else{
                 gpioController.Write(left_ena, PinValue.Low);
                 gpioController.Write(right_ena, PinValue.Low);
-                Thread.Sleep(period - pulseWidth);
-            }else{
                 Thread.Sleep(100);
             }
         }
