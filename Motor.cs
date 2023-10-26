@@ -38,14 +38,14 @@ class Motor
 
     public void Forward()
     {
-        gpioController.Write(in1, PinValue.High);
-        gpioController.Write(in2, PinValue.Low);
+        gpioController.Write(in1, PinValue.Low);
+        gpioController.Write(in2, PinValue.High);
     }
 
     public void Backward()
     {
-        gpioController.Write(in1, PinValue.Low);
-        gpioController.Write(in2, PinValue.High);
+        gpioController.Write(in1, PinValue.High);
+        gpioController.Write(in2, PinValue.Low);
     }
 
     public void Stop()
@@ -66,6 +66,7 @@ class Motor
     {
         keepRunning = false;
         pwmThread?.Join();
+	Console.WriteLine("Got Here");
     }
 
     public void PwmLoop()

@@ -7,7 +7,7 @@ class Program
     {
         using (AlphaBot ab = new AlphaBot())
         {
-            ab.movement.Forward(0.5);
+            ab.movement.Forward(1);
             Console.Write("Moving Forward! :D\n");
             Thread.Sleep(1000);
 
@@ -15,7 +15,7 @@ class Program
             Console.Write("Stop! :D\n");
             Thread.Sleep(1000);
 
-            ab.movement.Left(0.5);
+            ab.movement.Left(0.9);
             Console.Write("Left! :D\n");
             Thread.Sleep(1000);
 
