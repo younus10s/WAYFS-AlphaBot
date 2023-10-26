@@ -43,10 +43,10 @@ class Movement
             dutyCycle = dutyCycle_;
         }
 
-        gpioController.Write(left_in1, PinValue.High);
-        gpioController.Write(left_in2, PinValue.Low);
-        gpioController.Write(right_in1, PinValue.High);
-        gpioController.Write(right_in2, PinValue.Low);
+        gpioController.Write(left_in1, PinValue.Low);
+        gpioController.Write(left_in2, PinValue.High);
+        gpioController.Write(right_in1, PinValue.Low);
+        gpioController.Write(right_in2, PinValue.High);
     }
 
     public void Stop()
@@ -67,25 +67,13 @@ class Movement
             dutyCycle = dutyCycle_;
         }
 
-        gpioController.Write(left_in1, PinValue.Low);
-        gpioController.Write(left_in2, PinValue.High);
-        gpioController.Write(right_in1, PinValue.Low);
-        gpioController.Write(right_in2, PinValue.High);
-    }
-
-    public void Left(double dutyCycle_)
-    {
-        lock(lockDutyCycle){
-            dutyCycle = dutyCycle_;
-        }
-
-        gpioController.Write(left_in1, PinValue.Low);
-        gpioController.Write(left_in2, PinValue.High);
+        gpioController.Write(left_in1, PinValue.High);
+        gpioController.Write(left_in2, PinValue.Low);
         gpioController.Write(right_in1, PinValue.High);
         gpioController.Write(right_in2, PinValue.Low);
     }
 
-    public void Right(double dutyCycle_)
+    public void Left(double dutyCycle_)
     {
         lock(lockDutyCycle){
             dutyCycle = dutyCycle_;
@@ -95,6 +83,18 @@ class Movement
         gpioController.Write(left_in2, PinValue.Low);
         gpioController.Write(right_in1, PinValue.Low);
         gpioController.Write(right_in2, PinValue.High);
+    }
+
+    public void Right(double dutyCycle_)
+    {
+        lock(lockDutyCycle){
+            dutyCycle = dutyCycle_;
+        }
+
+        gpioController.Write(left_in1, PinValue.Low);
+        gpioController.Write(left_in2, PinValue.High);
+        gpioController.Write(right_in1, PinValue.High);
+        gpioController.Write(right_in2, PinValue.Low);
     }
 
     public void StartPwm()
