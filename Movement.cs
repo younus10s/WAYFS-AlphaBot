@@ -10,7 +10,7 @@ class Movement
     private const int right_in1 = 20;
     private const int right_in2 = 21;
     private const int right_ena = 26;
-  
+
     private Thread? pwmThread;
     private const int frequency = 500;
     private  double dutyCycle;
@@ -54,7 +54,7 @@ class Movement
         lock(lockDutyCycle){
             dutyCycle = 0;
         }
-        
+
         gpioController.Write(left_in1, PinValue.Low);
         gpioController.Write(left_in2, PinValue.Low);
         gpioController.Write(right_in1, PinValue.Low);
@@ -112,7 +112,7 @@ class Movement
 
     public void PwmLoop()
     {
-        double tempDutyCycle = 0;   
+        double tempDutyCycle = 0;
 
         while (keepRunning)
         {

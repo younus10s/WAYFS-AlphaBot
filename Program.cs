@@ -14,11 +14,11 @@ class Program
             ab.movement.Stop();
             Console.Write("Stop! :D\n");
             Thread.Sleep(1000);
-            
+
             ab.movement.Left(0.5);
             Console.Write("Left! :D\n");
             Thread.Sleep(1000);
-            
+
             ab.movement.Right(0.5);
             Console.Write("Right! :D\n");
             Thread.Sleep(1000);
