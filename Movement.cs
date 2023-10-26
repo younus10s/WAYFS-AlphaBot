@@ -3,6 +3,7 @@ using System.Threading;
 
 class Movement
 {
+    private GpioController gpioController;
     private const int left_in1 = 12;
     private const int left_in2 = 13;
     private const int left_ena = 6;
@@ -10,12 +11,10 @@ class Movement
     private const int right_in2 = 21;
     private const int right_ena = 26;
   
-    private const int frequency = 400;
-    private  double dutyCycle = 0.5;
-    private volatile bool keepRunning = false;
-    private GpioController gpioController;
-
     private Thread? pwmThread;
+    private const int frequency = 500;
+    private  double dutyCycle;
+    private volatile bool keepRunning = false;
     private object lockDutyCycle = new object();
 
 
@@ -34,14 +33,14 @@ class Movement
         Stop();
     }
 
-    ~Movement(){
+    public void ClosePWM(){
         StopPwm();
     }
 
-    public void Forward()
+    public void Forward(double dutyCycle_)
     {
         lock(lockDutyCycle){
-            dutyCycle = 0.5;
+            dutyCycle = dutyCycle_;
         }
 
         gpioController.Write(left_in1, PinValue.High);
@@ -62,24 +61,36 @@ class Movement
         gpioController.Write(right_in2, PinValue.Low);
     }
 
-    public void Backward()
+    public void Backward(double dutyCycle_)
     {
+        lock(lockDutyCycle){
+            dutyCycle = dutyCycle_;
+        }
+
         gpioController.Write(left_in1, PinValue.Low);
         gpioController.Write(left_in2, PinValue.High);
         gpioController.Write(right_in1, PinValue.Low);
         gpioController.Write(right_in2, PinValue.High);
     }
 
-    public void Left()
+    public void Left(double dutyCycle_)
     {
+        lock(lockDutyCycle){
+            dutyCycle = dutyCycle_;
+        }
+
         gpioController.Write(left_in1, PinValue.Low);
         gpioController.Write(left_in2, PinValue.High);
         gpioController.Write(right_in1, PinValue.High);
         gpioController.Write(right_in2, PinValue.Low);
     }
 
-    public void Right()
+    public void Right(double dutyCycle_)
     {
+        lock(lockDutyCycle){
+            dutyCycle = dutyCycle_;
+        }
+
         gpioController.Write(left_in1, PinValue.High);
         gpioController.Write(left_in2, PinValue.Low);
         gpioController.Write(right_in1, PinValue.Low);
@@ -103,32 +114,23 @@ class Movement
     {
         double tempDutyCycle = 0;   
 
-        //KeepRunnig maybe needs a lock???
         while (keepRunning)
         {
-            if(dutyCycle != 0){
-                
-                lock(lockDutyCycle){
-                    tempDutyCycle = dutyCycle;
-                }
-                int period = (int)(1000.0 / frequency);
-                int pulseWidth = (int)(period * tempDutyCycle);
 
-                gpioController.Write(left_ena, PinValue.High);
-                gpioController.Write(right_ena, PinValue.High);
-                Thread.Sleep(pulseWidth);
-
-                if(tempDutyCycle != 1){
-                    gpioController.Write(left_ena, PinValue.Low);
-                    gpioController.Write(right_ena, PinValue.Low);
-                    Thread.Sleep(period - pulseWidth);
-                }
-                
-            }else{
-                gpioController.Write(left_ena, PinValue.Low);
-                gpioController.Write(right_ena, PinValue.Low);
-                Thread.Sleep(100);
+            lock(lockDutyCycle)
+            {
+                tempDutyCycle = dutyCycle;
             }
+            int period = (int)(1000.0 / frequency);
+            int pulseWidth = (int)(period * tempDutyCycle);
+
+            gpioController.Write(left_ena, PinValue.High);
+            gpioController.Write(right_ena, PinValue.High);
+            Thread.Sleep(pulseWidth);
+
+            gpioController.Write(left_ena, PinValue.Low);
+            gpioController.Write(right_ena, PinValue.Low);
+            Thread.Sleep(period - pulseWidth);
         }
     }
 }
