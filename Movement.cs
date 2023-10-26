@@ -1,9 +1,5 @@
-using System.Device.Gpio;
-using System.Threading;
-
 class Movement
 {
-    private GpioController gpioController;
     private const int left_in1 = 12;
     private const int left_in2 = 13;
     private const int left_ena = 6;
@@ -11,126 +7,64 @@ class Movement
     private const int right_in2 = 21;
     private const int right_ena = 26;
 
-    private Thread? pwmThread;
     private const int frequency = 500;
-    private  double dutyCycle;
-    private volatile bool keepRunning = false;
-    private object lockDutyCycle = new object();
 
+    private Motor LeftMotor;
+    private Motor RightMotor;
 
     public Movement()
     {
-        gpioController = new GpioController();
-
-        gpioController.OpenPin(left_in1, PinMode.Output);
-        gpioController.OpenPin(left_in2, PinMode.Output);
-        gpioController.OpenPin(left_ena, PinMode.Output);
-        gpioController.OpenPin(right_in1, PinMode.Output);
-        gpioController.OpenPin(right_in2, PinMode.Output);
-        gpioController.OpenPin(right_ena, PinMode.Output);
-
-        StartPwm();
-        Stop();
+        LeftMotor = new Motor(left_in1, left_in2, left_ena, frequency);
+        RightMotor = new Motor(right_in1, right_in2, right_ena, frequency);
     }
 
-    public void ClosePWM(){
-        StopPwm();
-    }
-
-    public void Forward(double dutyCycle_)
-    {
-        lock(lockDutyCycle){
-            dutyCycle = dutyCycle_;
-        }
-
-        gpioController.Write(left_in1, PinValue.Low);
-        gpioController.Write(left_in2, PinValue.High);
-        gpioController.Write(right_in1, PinValue.Low);
-        gpioController.Write(right_in2, PinValue.High);
+    public void CleanUp(){
+        RightMotor.StopPwm();
+        LeftMotor.StopPwm();
     }
 
     public void Stop()
     {
-        lock(lockDutyCycle){
-            dutyCycle = 0;
-        }
+        LeftMotor.Stop();
+        RightMotor.Stop();
 
-        gpioController.Write(left_in1, PinValue.Low);
-        gpioController.Write(left_in2, PinValue.Low);
-        gpioController.Write(right_in1, PinValue.Low);
-        gpioController.Write(right_in2, PinValue.Low);
+        RightMotor.SetPower(0);
+        LeftMotor.SetPower(0);
     }
 
-    public void Backward(double dutyCycle_)
+    public void Forward(double power)
     {
-        lock(lockDutyCycle){
-            dutyCycle = dutyCycle_;
-        }
+        LeftMotor.Forward();
+        RightMotor.Forward();
 
-        gpioController.Write(left_in1, PinValue.High);
-        gpioController.Write(left_in2, PinValue.Low);
-        gpioController.Write(right_in1, PinValue.High);
-        gpioController.Write(right_in2, PinValue.Low);
+        RightMotor.SetPower(power);
+        LeftMotor.SetPower(power);
     }
 
-    public void Left(double dutyCycle_)
+    public void Backward(double power)
     {
-        lock(lockDutyCycle){
-            dutyCycle = dutyCycle_;
-        }
+        LeftMotor.Backward();
+        RightMotor.Backward();
 
-        gpioController.Write(left_in1, PinValue.High);
-        gpioController.Write(left_in2, PinValue.Low);
-        gpioController.Write(right_in1, PinValue.Low);
-        gpioController.Write(right_in2, PinValue.High);
+        RightMotor.SetPower(power);
+        LeftMotor.SetPower(power);
     }
 
-    public void Right(double dutyCycle_)
+    public void Left(double power)
     {
-        lock(lockDutyCycle){
-            dutyCycle = dutyCycle_;
-        }
+        LeftMotor.Stop();
+        RightMotor.Forward();
 
-        gpioController.Write(left_in1, PinValue.Low);
-        gpioController.Write(left_in2, PinValue.High);
-        gpioController.Write(right_in1, PinValue.High);
-        gpioController.Write(right_in2, PinValue.Low);
+        LeftMotor.SetPower(0);
+        RightMotor.SetPower(power);
     }
 
-    public void StartPwm()
+    public void Right(double power)
     {
-            keepRunning = true;
-            pwmThread = new Thread(PwmLoop);
-            pwmThread.Start();
-    }
+        LeftMotor.Forward();
+        RightMotor.Stop();
 
-    public void StopPwm()
-    {
-        keepRunning = false;
-        pwmThread?.Join();
-    }
-
-    public void PwmLoop()
-    {
-        double tempDutyCycle = 0;
-
-        while (keepRunning)
-        {
-
-            lock(lockDutyCycle)
-            {
-                tempDutyCycle = dutyCycle;
-            }
-            int period = (int)(1000.0 / frequency);
-            int pulseWidth = (int)(period * tempDutyCycle);
-
-            gpioController.Write(left_ena, PinValue.High);
-            gpioController.Write(right_ena, PinValue.High);
-            Thread.Sleep(pulseWidth);
-
-            gpioController.Write(left_ena, PinValue.Low);
-            gpioController.Write(right_ena, PinValue.Low);
-            Thread.Sleep(period - pulseWidth);
-        }
+        LeftMotor.SetPower(power);
+        RightMotor.SetPower(0);
     }
 }
