@@ -7,7 +7,7 @@ class Movement
     private const int right_in2 = 21;
     private const int right_ena = 26;
 
-    private const int frequency = 500;
+    private const int frequency = 50;
 
     public Motor LeftMotor;
     public Motor RightMotor;

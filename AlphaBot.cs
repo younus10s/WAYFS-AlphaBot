@@ -13,14 +13,17 @@ class AlphaBot : IDisposable
         // if ir1 is one => rightmotor more power
         // if ir5 is ones => leftmoter more power
         
-        if(blackLines.Sum() >= 4 || blackLines.Sum() == 0)
+        if(blackLines.Sum() >= 4 || blackLines.Sum() == 0){
             Console.WriteLine("Cross!!!!");
+	    movement.Forward(0);
+	}
         else if(blackLines[0] == 1){
             Console.WriteLine("TurnLeft");
         }else if(blackLines[4] == 1){
             Console.WriteLine("TurnRight");
         }else{
             //Återställa power
+	    movement.Forward(power);
         }
         
 
