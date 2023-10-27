@@ -9,8 +9,8 @@ class Movement
 
     private const int frequency = 500;
 
-    private Motor LeftMotor;
-    private Motor RightMotor;
+    public Motor LeftMotor;
+    public Motor RightMotor;
 
     public Movement()
     {

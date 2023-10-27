@@ -26,10 +26,14 @@ class Program
             //ab.movement.Backward(0.5);
             //Console.Write("Back! :D\n");
             //Thread.Sleep(1000);
-	    while(true){
-		ab.Trsensor.PrintValues(ab.Trsensor.ReadLine(ab.Trsensor.AnalogRead()));
-		Thread.Sleep(100);
-	    }
+            // while(true){
+            // ab.Trsensor.PrintValues(ab.Trsensor.ReadLine(ab.Trsensor.AnalogRead()));
+            // Thread.Sleep(100);
+            // }
+
+            while(true){
+                ab.LineFollow();
+            }
             ab.movement.Stop();
 
             Console.Write("Stop! D:\n");
