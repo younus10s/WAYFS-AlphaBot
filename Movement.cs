@@ -66,5 +66,5 @@ class Movement
 
         LeftMotor.SetPower(power);
         RightMotor.SetPower(0);
-    }
+    } 
 }
