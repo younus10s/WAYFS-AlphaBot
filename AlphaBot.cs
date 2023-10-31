@@ -2,18 +2,41 @@ class AlphaBot : IDisposable
 {
     public MotionControl MotionControl = new MotionControl();
     public TRSensor Trsensor = new TRSensor();
+    private double power = 0.3;
 
     public void TurnLeft(){
-        //turn until SensorValues[2]=0;
-        //turn until SensorValues[2]=1;
+        int[] SensorValues = Trsensor.ReadLine();
+
+        MotionControl.Left(power);
+
+        while(SensorValues[2]==1){
+            SensorValues = Trsensor.ReadLine();
+        }
+
+        while(SensorValues[2]==0){
+            SensorValues = Trsensor.ReadLine();
+        }
+
+        MotionControl.Stop();
     }
 
     public void TurnRight(){
+        int[] SensorValues = Trsensor.ReadLine();
 
+        MotionControl.Right(power);
+        
+        while(SensorValues[2]==1){
+            SensorValues = Trsensor.ReadLine();
+        }
+
+        while(SensorValues[2]==0){
+            SensorValues = Trsensor.ReadLine();
+        }
+
+        MotionControl.Stop();
     }
 
     public void LineFollow(){
-        double power = 0.3;
         int[] SensorValues;
     
         int[] forward = {0,0,1,0,0};
@@ -27,7 +50,7 @@ class AlphaBot : IDisposable
         bool Continue = true;
 
         while(Continue){
-            SensorValues = Trsensor.ReadLine(Trsensor.AnalogRead());
+            SensorValues = Trsensor.ReadLine();
 
             if(SensorValues.Sum() >= 3 || SensorValues.Sum() == 0){
                 MotionControl.Stop();

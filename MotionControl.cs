@@ -52,20 +52,20 @@ class MotionControl
 
     public void Left(double power)
     {
-        LeftMotor.Stop();
+        LeftMotor.Backward();
         RightMotor.Forward();
 
-        LeftMotor.SetPower(0);
+        LeftMotor.SetPower(power);
         RightMotor.SetPower(power);
     }
 
     public void Right(double power)
     {
         LeftMotor.Forward();
-        RightMotor.Stop();
+        RightMotor.Backward();
 
         LeftMotor.SetPower(power);
-        RightMotor.SetPower(0);
+        RightMotor.SetPower(power);
     } 
 
     public void SetPowerLeft(double power)

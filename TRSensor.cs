@@ -45,7 +45,9 @@ public class TRSensor{
 		return Value[1..];
 	}
 
-	public int[] ReadLine(int[] Value){
+	public int[] ReadLine(){
+		int[] Value = AnalogRead();
+
 		int[] blackLine = new int[Value.Length];
 		for(int i = 0; i < Value.Length; i++){
 			if(Value[i] < 600 && Value[i] > 0)

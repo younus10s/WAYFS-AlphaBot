@@ -30,7 +30,7 @@ class GridBot
     {
         Gunnar.LineFollow();
 
-        int[] SensorValues = Gunnar.Trsensor.ReadLine(Gunnar.Trsensor.AnalogRead());
+        int[] SensorValues = Gunnar.Trsensor.ReadLine();
 
         while(SensorValues.Sum() >= 3){
             Gunnar.MotionControl.Forward(0.1);
