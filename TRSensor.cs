@@ -45,18 +45,10 @@ public class TRSensor{
 		return Value[1..];
 	}
 
-	public void PrintValues(int[] Value){
-		Console.Write("[");
-		for(int i = 0; i < Value.Length - 1; i++){
-			Console.Write(Value[i] + ", ");
-		}
-		Console.WriteLine(Value[numSensors-1] + "]");
-	}
-
 	public int[] ReadLine(int[] Value){
 		int[] blackLine = new int[Value.Length];
 		for(int i = 0; i < Value.Length; i++){
-			if(Value[i] < 400 && Value[i] > 100)
+			if(Value[i] < 600 && Value[i] > 0)
 				blackLine[i] = 1;
 			else
 				blackLine[i] = 0;

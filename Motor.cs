@@ -50,8 +50,12 @@ class Motor
 
     public void Stop()
     {
-        gpioController.Write(in1, PinValue.Low);
-        gpioController.Write(in2, PinValue.Low);
+        lock(lockDutyCycle){
+            dutyCycle = 0;
+        }
+
+        //gpioController.Write(in1, PinValue.Low);
+        //gpioController.Write(in2, PinValue.Low);
     }
 
 
