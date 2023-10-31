@@ -11,7 +11,6 @@ class GridBot
     private int PosY;
     private int Facing;
 
-
     public GridBot(int rows, int cols)
     {
         Gunnar = new AlphaBot();
@@ -34,7 +33,9 @@ class GridBot
 
         while(SensorValues.Sum() >= 3){
             Gunnar.MotionControl.Forward(0.1);
+            SensorValues = Gunnar.Trsensor.ReadLine();
         }
+        
         Gunnar.MotionControl.Stop();
     }
 
@@ -51,5 +52,9 @@ class GridBot
     public void Report()
     {
         //Raportera state
+    }
+
+    public void CleanUp(){
+        Gunnar.CleanUp();
     }
 }

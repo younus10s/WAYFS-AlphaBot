@@ -5,5 +5,7 @@ class Program
     {
         GridBot GridBot = new GridBot(5, 5);
         GridBot.Move();
+
+        GridBot.CleanUp();
     }
 }

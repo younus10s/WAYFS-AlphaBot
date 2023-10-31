@@ -1,4 +1,4 @@
-class AlphaBot : IDisposable
+class AlphaBot
 {
     public MotionControl MotionControl = new MotionControl();
     public TRSensor Trsensor = new TRSensor();
@@ -71,7 +71,7 @@ class AlphaBot : IDisposable
         }
     }
 
-    public void Dispose(){
+    public void CleanUp(){
         MotionControl.CleanUp();
     }
 }
