@@ -9,7 +9,7 @@ class Motor
 
     private Thread? pwmThread;
     private int frequency;
-    private  double dutyCycle = 0;
+    private double dutyCycle = 0;
     private volatile bool keepRunning = false;
     private object lockDutyCycle = new object();
 
