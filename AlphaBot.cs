@@ -1,35 +1,43 @@
 class AlphaBot : IDisposable
 {
-    public Movement movement = new Movement();
+    public MotionControl MotionControl = new MotionControl();
     public TRSensor Trsensor = new TRSensor();
 
-    public void LineFollow(){
-        double power = 0.5;
-        int[] blackLines = Trsensor.ReadLine(Trsensor.AnalogRead());
-        movement.Stop();
-        movement.Forward(power);
+    public bool LineFollow(){
+        double power = 0.8;
+        int[] SensorValues = Trsensor.ReadLine(Trsensor.AnalogRead());
+        MotionControl.Stop();
+        MotionControl.Forward(power);
 
-        // if there is four ones or all zeros => stop
-        // if ir1 is one => rightmotor more power
-        // if ir5 is ones => leftmoter more power
-        
-        if(blackLines.Sum() >= 4 || blackLines.Sum() == 0){
-            Console.WriteLine("Cross!!!!");
-	    movement.Forward(0);
-	}
-        else if(blackLines[0] == 1){
-            Console.WriteLine("TurnLeft");
-        }else if(blackLines[4] == 1){
-            Console.WriteLine("TurnRight");
-        }else{
-            //Återställa power
-	    movement.Forward(power);
+        if(SensorValues.Sum() >= 3 || SensorValues.Sum() == 0){
+            Console.WriteLine("JUNCTION. STOPPING...");
+	        MotionControl.Forward(0);
+            return false;
+	    }
+
+        int[] forward = {0,0,1,0,0};
+        int[] left1 = {0,0,1,1,0};
+        int[] left2 = {0,0,0,1,0};
+        int[] right1 = {0,1,1,0,0};
+        int[] right2 = {0,1,0,0,0};
+
+        if(SensorValues.SequenceEqual(forward)){
+            MotionControl.Forward(power);
         }
-        
+        else if(SensorValues.SequenceEqual(left1) || SensorValues.SequenceEqual(left2)){
+            MotionControl.SetPowerRight(power*0.9);
+        } 
+        else if(SensorValues.SequenceEqual(right1) || SensorValues.SequenceEqual(right2)){
+	        MotionControl.SetPowerLeft(power*0.9);
+        }else{
+            Console.WriteLine("Unhandeled case");
+            return false;
+        }
 
+        return true;
     }
 
     public void Dispose(){
-        movement.CleanUp();
+        MotionControl.CleanUp();
     }
 }

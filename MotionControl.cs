@@ -1,4 +1,4 @@
-class Movement
+class MotionControl
 {
     private const int left_in1 = 12;
     private const int left_in2 = 13;
@@ -9,10 +9,10 @@ class Movement
 
     private const int frequency = 50;
 
-    public Motor LeftMotor;
-    public Motor RightMotor;
+    private Motor LeftMotor;
+    private Motor RightMotor;
 
-    public Movement()
+    public MotionControl()
     {
         LeftMotor = new Motor(left_in1, left_in2, left_ena, frequency);
         RightMotor = new Motor(right_in1, right_in2, right_ena, frequency);
@@ -67,4 +67,16 @@ class Movement
         LeftMotor.SetPower(power);
         RightMotor.SetPower(0);
     } 
+
+    public void SetPowerLeft(double power)
+    {
+        LeftMotor.Forward();
+        LeftMotor.SetPower(power);
+    }
+
+    public void SetPowerRight(double power)
+    {
+        RightMotor.Forward();
+        RightMotor.SetPower(power);
+    }
 }

@@ -31,10 +31,13 @@ class Program
             // Thread.Sleep(100);
             // }
 
-            while(true){
-                ab.LineFollow();
+            bool Follow = true;
+
+            while(Follow){
+                Follow = ab.LineFollow();
             }
-            ab.movement.Stop();
+
+            ab.MotionControl.Stop();
 
             Console.Write("Stop! D:\n");
         }
