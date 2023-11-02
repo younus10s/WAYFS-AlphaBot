@@ -41,7 +41,7 @@ class AlphaBot
         MotionControl.Stop();
     }
 
-    public void LineFollow(){
+    public bool LineFollow(){
         int[] SensorValues;
     
         int[] forward = {0,0,1,0,0};
@@ -57,7 +57,7 @@ class AlphaBot
         while(Continue){
             SensorValues = Trsensor.ReadLine();
 
-            if(SensorValues.Sum() >= 3 || SensorValues.Sum() == 0){
+            if(SensorValues.Sum() >= 3){
                 MotionControl.Stop();
                 Continue = false;
             }
@@ -72,8 +72,10 @@ class AlphaBot
             }else{
                 Console.WriteLine("Unhandeled case");
                 Continue = false;
+                return false; 
             }
         }
+        return true; 
     }
 
     public void CleanUp(){
