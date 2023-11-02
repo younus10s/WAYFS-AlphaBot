@@ -7,7 +7,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 function Header() {
     return (
         <>
-            <Navbar className="navbar navbar-dark bg-dark fixed-top">
+            <Navbar className="navbar navbar-dark bg-primary fixed-top">
                 <Navbar.Brand to="/" className="navbar-brand">Logo</Navbar.Brand>
                 <Nav>
                     <Link to="/" className="nav-link">Home</Link>
