@@ -13,6 +13,14 @@ class Program
         Console.WriteLine("Right");
         GridBot.Right();
         Console.WriteLine("Forwards");
+        GridBot.Move();
+        Console.WriteLine("Left");
+        GridBot.Left();
+        Console.WriteLine("Forwards");
+        GridBot.Move();
+        Console.WriteLine("Right");
+        GridBot.Right();
+        Console.WriteLine("Forwards");
         GridBot.Move();  
 
         GridBot.CleanUp();
