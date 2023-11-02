@@ -22,6 +22,7 @@ class AlphaBot
             SensorValues = Trsensor.ReadLine();
         }
 
+        Thread.Sleep(100);
         MotionControl.Stop();
     }
 
@@ -38,6 +39,7 @@ class AlphaBot
             SensorValues = Trsensor.ReadLine();
         }
 
+        Thread.Sleep(100);
         MotionControl.Stop();
     }
 
