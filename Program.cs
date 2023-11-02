@@ -2,7 +2,8 @@ class Program
 {
     static void Main(string[] args)
     {
-        GridBot gunnar = new GridBot(5, 5);
+        GridBot Gunnar = new GridBot(5, 5);
+        TxtParser TParser = new TxtParser(Gunnar;)
         //gunnar.RunFile("robot.txt");
 
         // gunnar.Place(2,1,"north");
