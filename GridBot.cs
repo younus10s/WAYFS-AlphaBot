@@ -63,7 +63,7 @@ class GridBot
                 Console.WriteLine("Failed LineFollow() :((((((");
             }
         } else {
-            Console.WriteLine("Invalid position!");
+            Console.WriteLine("Invalid move :)");
         }
     }
 
