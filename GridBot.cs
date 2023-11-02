@@ -132,7 +132,7 @@ class GridBot
     private void Execute(string command){
         string[] parts = command.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
         if(parts.Length == 4 && parts[0] == "PLACE"){
-            Place(int.Parse(parts[1]), int.Parse(parts[2]), parts[3]);
+            Place(int.Parse(parts[1]), int.Parse(parts[2]), parts[3].ToLower());
             Report();
         }else{
             switch(parts[0]){
