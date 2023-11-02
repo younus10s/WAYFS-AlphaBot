@@ -18,16 +18,6 @@ class Program
         Console.WriteLine("Forwards");
         GridBot.Move();
         GridBot.Report(); 
-        Console.WriteLine("Left");
-        GridBot.Left();
-        Console.WriteLine("Forwards");
-        GridBot.Move();
-        GridBot.Report(); 
-        Console.WriteLine("Right");
-        GridBot.Right();
-        Console.WriteLine("Forwards");
-        GridBot.Move();  
-        GridBot.Report(); 
 
         GridBot.CleanUp();
     }

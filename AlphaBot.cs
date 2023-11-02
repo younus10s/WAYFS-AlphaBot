@@ -22,7 +22,7 @@ class AlphaBot
             SensorValues = Trsensor.ReadLine();
         }
 
-        Thread.Sleep(100);
+        //Thread.Sleep(100);
         MotionControl.Stop();
     }
 
@@ -39,7 +39,7 @@ class AlphaBot
             SensorValues = Trsensor.ReadLine();
         }
 
-        Thread.Sleep(100);
+        //Thread.Sleep(100);
         MotionControl.Stop();
     }
 
@@ -73,6 +73,10 @@ class AlphaBot
                 MotionControl.SetPowerLeft(power*0.9);
             }else{
                 Console.WriteLine("Unhandeled case");
+
+                string printSensor = string.Join(", ", SensorValues);
+                Console.WriteLine("SensonValues: " + printSensor);
+
                 Continue = false;
                 return false; 
             }
