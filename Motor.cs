@@ -70,7 +70,6 @@ class Motor
     {
         keepRunning = false;
         pwmThread?.Join();
-	Console.WriteLine("Got Here");
     }
 
     public void PwmLoop()

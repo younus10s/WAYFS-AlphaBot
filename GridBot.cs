@@ -13,7 +13,7 @@ class GridBot
 
     public GridBot(int rows, int cols)
     {
-        Gunnar = new AlphaBot();
+        Gunnar = new AlphaBot(0.2);
         NumRows = rows;
         NumCols = cols;
     }
@@ -35,6 +35,8 @@ class GridBot
             Gunnar.MotionControl.Forward(0.1);
             SensorValues = Gunnar.Trsensor.ReadLine();
         }
+
+        Thread.Sleep(100);
         
         Gunnar.MotionControl.Stop();
     }

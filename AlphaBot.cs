@@ -2,7 +2,12 @@ class AlphaBot
 {
     public MotionControl MotionControl = new MotionControl();
     public TRSensor Trsensor = new TRSensor();
-    private double power = 0.3;
+    private double power;
+
+    public AlphaBot(double power_){
+        power = power_;
+    }
+
 
     public void TurnLeft(){
         int[] SensorValues = Trsensor.ReadLine();
