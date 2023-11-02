@@ -59,8 +59,8 @@ public class TRSensor{
 		//test 
 		//string printValue = string.Join(", ", Value);
 		//Console.WriteLine("AnalogRead: \t" + printValue);
-		string printBlack = string.Join(", ", blackLine);
-		Console.WriteLine("printBlack: \t" + printBlack);
+		//string printBlack = string.Join(", ", blackLine);
+		//Console.WriteLine("printBlack: \t" + printBlack);
 
 		return blackLine;
 	}
