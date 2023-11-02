@@ -105,62 +105,7 @@ class GridBot
 
     public void Report(){
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Facing);
-    }
-
-    public void RunFile(string filePath)  {
-        if (File.Exists(filePath))
-        {
-            // Open the text file using a stream reader
-            using (StreamReader sr = new StreamReader(filePath))
-            {
-                string line;
-                // Read the stream to a string, and write the string to the console
-                while ((line = sr.ReadLine()) != null)
-                {
-                    //Console.WriteLine(line);
-                    Execute(line);
-                }
-            }
-        }
-        else
-        {
-            Console.WriteLine("The file does not exist.");
-        }
-    }
-    
-
-    private void Execute(string command){
-        string[] parts = command.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
-        if(parts.Length == 4 && parts[0] == "PLACE"){
-            Place(int.Parse(parts[1]), int.Parse(parts[2]), parts[3].ToLower());
-            Report();
-        }else{
-            switch(parts[0]){
-                case "MOVE":
-                    Move();
-                    Console.WriteLine("Move");
-                    Console.WriteLine("PosX: " + PosX);
-                    Console.WriteLine("PosY: " + PosY);
-                break;
-                case "LEFT":
-                    Left();
-                    Console.WriteLine("Left");
-                break;
-                case "RIGHT":
-                    Right();
-                    Console.WriteLine("Right");
-                    break;
-                case "REPORT":
-                    Report();
-                    Console.WriteLine("Report");
-                    break;
-                default:
-                    Console.WriteLine("Invalid command");
-                break;
-            }
-        }
-    }
-
+    }    
     
     public void CleanUp() {
         Gunnar.CleanUp();

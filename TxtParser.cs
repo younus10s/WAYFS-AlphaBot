@@ -29,7 +29,7 @@ class TxtParser {
     private void Execute(string command){
         string[] parts = command.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
         if(parts.Length == 4 && parts[0] == "PLACE"){
-            Gunnar.Place(int.Parse(parts[1]), int.Parse(parts[2]), parts[3]);
+            Gunnar.Place(int.Parse(parts[1]), int.Parse(parts[2]), parts[3].ToLower());
             Gunnar.Report();
         }else{
             switch(parts[0]){
