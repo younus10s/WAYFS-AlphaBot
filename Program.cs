@@ -3,24 +3,24 @@ class Program
     static void Main(string[] args)
     {
         GridBot Gunnar = new GridBot(5, 5);
-        TxtParser TParser = new TxtParser(Gunnar;)
-        //gunnar.RunFile("robot.txt");
+        TxtParser TParser = new TxtParser(Gunnar);
+        TParser.RunFile("robot.txt");
 
-        // gunnar.Place(2,1,"north");
+        // Gunnar.Place(2,1,"north");
         // Console.WriteLine("Forwards");
-        // gunnar.Move();
-        // gunnar.Report(); 
+        // Gunnar.Move();
+        // Gunnar.Report(); 
         // Console.WriteLine("Left");
-        // gunnar.Left();
+        // Gunnar.Left();
         // Console.WriteLine("Forwards");
-        // gunnar.Move();
-        // gunnar.Report(); 
+        // Gunnar.Move();
+        // Gunnar.Report(); 
         // Console.WriteLine("Right");
-        // GridBot.Right();
+        // Gunnar.Right();
         // Console.WriteLine("Forwards");
-        // GridBot.Move();
-        // GridBot.Report(); 
+        // Gunnar.Move();
+        // Gunnar.Report(); 
 
-        gunnar.CleanUp();
+        Gunnar.CleanUp();
     }
 }
