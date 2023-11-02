@@ -1,29 +1,39 @@
 import React, { useEffect, useState } from 'react';
+import CommandsModal from './CommandsModal';
 
 function ControlRobot() {
     const [sentData, setSentData] = useState([]);
     const [connected, setConnected] = useState(false);
     const [buttonClickValue, setButtonClickValue] = useState(null);
+    const [commands, setCommands] = useState([]);
 
-    const Connect = (id) => {
+
+
+    const sendCommands = () => {
+
         const webSocket = new WebSocket('ws://localhost:5175');
-
-        setButtonClickValue(id);
-
-        // webSocket.send("Hello server!");
 
         webSocket.onopen = () => {
             console.log('WebSocket connected');
+            webSocket.send(commands);
             setConnected(true);
         };
 
-        webSocket.onmessage = (event) => {
-            // Parse message from string into an array of doubles
-            console.log(typeof event.data)
-            const doubles = JSON.parse(event.data);
-
-            setSentData(doubles);
+        webSocket.onerror = (error) => {
+            console.error('WebSocket error: ' + error);
         };
+
+        console.log(commands);
+
+
+
+        // webSocket.onmessage = (event) => {
+        //     // Parse message from string into an array of doubles
+        //     console.log(typeof event.data)
+        //     const doubles = JSON.parse(event.data);
+
+        //     setSentData(doubles);
+        // };
 
 
         webSocket.onclose = (event) => {
@@ -34,39 +44,60 @@ function ControlRobot() {
             }
             console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
         };
+    };
 
-        webSocket.onerror = (error) => {
-            console.error('WebSocket error: ' + error);
-        };
+    const addCommand = (com) => {
+        setCommands(oldCommands => [...oldCommands, com]);
+    };
 
+
+    const removeCommand = (indexToRemove) => {
+        // Create a new array with the command removed
+        const updatedCommands = commands.filter((_, index) => index !== indexToRemove);
+        setCommands(updatedCommands);
     };
 
     return (
         <div>
             <div className="btn-group" role="group" aria-label="Default button group">
-                <button className="btn btn-dark button-style" onClick={() => Connect(1)}>Click here to make robot follow line</button>
-                <button className="btn btn-dark button-style" onClick={() => Connect(2)}>Click here to control robot</button>
-            </div>
-            {buttonClickValue === 1 &&
+                {/* <button className="btn btn-secondary button-style" onClick={() => Connect(1)}>Click here to make robot follow line</button> */}
+
+                <div className="container">
+                    <div className='row p-2 bg-white self-start max-w-screen-md'>
+                        <div className='col m-6'>Add movements to robot and press "Send"</div>
+                        <div className='container'>
+                            <ul >
+                                {commands.map((command, index) => (
+                                    <li className='row text-black' key={index}>
+                                        <span className="icon">{command}
+                                            <i onClick={() => removeCommand(index)} className="fa-sharp fa-solid fa-xmark m-2 text-red-600 hover:cursor-pointer"></i>
+                                        </span>
+                                    </li>
+                                ))}
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className='row m-10'>
+                        <div className='col'>
+                            <button type="button" onClick={() => addCommand("Left")} className="btn bg-secondary-color text-white m-1 hover:bg-slate-700">Left</button>
+                            <button type="button" onClick={() => addCommand("Forward")} className="btn bg-secondary-color text-white m-1  hover:bg-slate-700">Forward</button>
+                            <button type="button" onClick={() => addCommand("Right")} className="btn bg-secondary-color text-white m-1 hover:bg-slate-700">Right</button>
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div className='col'>
+                            <button type="button" onClick={sendCommands} className="btn py-3 p-8 bg-dark text-white m-2 hover:bg-slate-700">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div >
+            {/* {buttonClickValue === 1 &&
                 <><p>first value: {sentData[0]}, second value: {sentData[1]}, third value: {sentData[2]}</p>
                 </>
-            }
-            <div className='row'>
-                {buttonClickValue === 2 && ControlButtons()}
-            </div>
-        </div>
-    );
-}
-
-function ControlButtons() {
-
-
-    return (
-        <div className="btn-group" role="group" aria-label="Default button group">
-            <button type="button" className="btn btn-dark">Left</button>
-            <button type="button" className="btn btn-dark">Forward</button>
-            <button type="button" className="btn btn-dark">Right</button>
-        </div>
+            } */}
+        </div >
     );
 }
 

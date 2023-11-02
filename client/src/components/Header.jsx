@@ -7,11 +7,11 @@ import { Navbar, Nav } from 'react-bootstrap';
 function Header() {
     return (
         <>
-            <Navbar className="navbar navbar-dark bg-primary fixed-top">
-                <Navbar.Brand to="/" className="navbar-brand">Logo</Navbar.Brand>
-                <Nav>
-                    <Link to="/" className="nav-link">Home</Link>
-                    <Link to="/control" className="nav-link">Control Robot</Link>
+            <Navbar className="navbar fixed-top bg-secondary-color shadow-md">
+                {/* <Navbar.Brand to="/" className="navbar-brand">Logo</Navbar.Brand> */}
+                <Nav className='gap-4 text-white py-1 text-xl'>
+                    <Link to="/" className="nav-link text-white">Home</Link>
+                    <Link to="/control" className="nav-link text-white">Control Robot</Link>
                 </Nav>
             </Navbar>
             <Routes>

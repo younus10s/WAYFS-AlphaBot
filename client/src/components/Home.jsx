@@ -4,7 +4,9 @@ function Home() {
 
     return (
         <div className='row'>
-            <h3>Welcome to Robot App :)</h3>
+            <div>
+                <h3 className='text-white'>Welcome to Robot App :)</h3>
+            </div>
         </div>
 
     );
