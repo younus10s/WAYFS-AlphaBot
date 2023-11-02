@@ -80,15 +80,15 @@ class GridBot
         Gunnar.TurnLeft();
         switch(Facing) {
             case "north": 
-                Facing="east"; 
+                Facing="west"; 
                 break;
-            case "east":
+            case "west":
                 Facing="south"; 
                 break; 
             case "south": 
-                Facing="west";
+                Facing="east";
                 break;
-            case "west":
+            case "east":
                 Facing="north"; 
                 break; 
         }
@@ -99,15 +99,15 @@ class GridBot
         Gunnar.TurnRight();
         switch(Facing) {
             case "north": 
-                Facing="west"; 
+                Facing="east"; 
                 break;
-            case "west":
+            case "east":
                 Facing="south"; 
                 break; 
             case "south": 
-                Facing="east";
+                Facing="west";
                 break;
-            case "east":
+            case "west":
                 Facing="north"; 
                 break; 
         }
