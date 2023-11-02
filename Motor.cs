@@ -13,8 +13,7 @@ class Motor
     private volatile bool keepRunning = false;
     private object lockDutyCycle = new object();
 
-    public Motor(int in1_, int in2_, int ena_, int frequency_)
-    {
+    public Motor(int in1_, int in2_, int ena_, int frequency_) {
         in1 = in1_;
         in2 = in2_;
         ena = ena_;
@@ -30,26 +29,23 @@ class Motor
         Stop();
     }
 
-    public void SetPower(double power){
+    public void SetPower(double power) {
         lock(lockDutyCycle){
             dutyCycle = power;
         }
     }
 
-    public void Forward()
-    {
+    public void Forward() {
         gpioController.Write(in1, PinValue.Low);
         gpioController.Write(in2, PinValue.High);
     }
 
-    public void Backward()
-    {
+    public void Backward() {
         gpioController.Write(in1, PinValue.High);
         gpioController.Write(in2, PinValue.Low);
     }
 
-    public void Stop()
-    {
+    public void Stop() {
         lock(lockDutyCycle){
             dutyCycle = 0;
         }

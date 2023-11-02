@@ -11,27 +11,22 @@ class GridBot
     private int PosY;
     private string Facing;
 
-    public GridBot(int rows, int cols)
-    {
+    public GridBot(int rows, int cols) {
         Gunnar = new AlphaBot(0.2);
         NumRows = rows;
         NumCols = cols;
     }
 
-    public void Place(int x, int y, string facing)
-    {
+    public void Place(int x, int y, string facing) {
         PosX = x;
         PosY = y;
         Facing = facing;
     }
 
-    private bool PositionValid(int x, int y) 
-    {
+    private bool PositionValid(int x, int y) {
         return !(x<0 || x>=NumRows || y<0 || y>=NumCols); 
     }
-
-    public void Move()
-    {
+    public void Move() {
         int tempX = PosX;
         int tempY = PosY; 
 
@@ -50,9 +45,8 @@ class GridBot
                 break; 
         }
         
-        if (PositionValid(tempX, tempY)) 
-        {
-            if (Gunnar.LineFollow()) {
+        if(PositionValid(tempX, tempY)) {
+            if(Gunnar.LineFollow()) {
                 PosX = tempX; 
                 PosY = tempY; 
 
@@ -65,19 +59,15 @@ class GridBot
 
                 Thread.Sleep(100);
                 Gunnar.MotionControl.Stop();            
-            }
-            else {
+            } else {
                 Console.WriteLine("Failed LineFollow() :((((((");
             }
-        }
-        else 
-        {
+        } else {
             Console.WriteLine("Invalid position!");
         }
     }
 
-    public void Left()
-    {
+    public void Left() {
         Gunnar.TurnLeft();
         switch(Facing) {
             case "north": 
@@ -95,8 +85,7 @@ class GridBot
         }
     }
 
-    public void Right()
-    {
+    public void Right() {
         Gunnar.TurnRight();
         switch(Facing) {
             case "north": 
@@ -114,9 +103,8 @@ class GridBot
         }
     }
 
-    public void Report()
-    {
-        Console.WriteLine("pos: (" + PosX + "," + PosY + ") facing: " + Facing);
+    public void Report(){
+        Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Facing);
     }
 
     public void RunFile(string filePath)  {
@@ -173,7 +161,61 @@ class GridBot
         }
     }
 
-    public void CleanUp(){
+    public void RunFile(string filePath)  {
+        if (File.Exists(filePath))
+        {
+            // Open the text file using a stream reader
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                string line;
+                // Read the stream to a string, and write the string to the console
+                while ((line = sr.ReadLine()) != null)
+                {
+                    //Console.WriteLine(line);
+                    Execute(line);
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine("The file does not exist.");
+        }
+    }
+    
+
+    private void Execute(string command){
+        string[] parts = command.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
+        if(parts.Length == 4 && parts[0] == "PLACE"){
+            Place(int.Parse(parts[1]), int.Parse(parts[2]), parts[3]);
+            Report();
+        }else{
+            switch(parts[0]){
+                case "MOVE":
+                    Move();
+                    Console.WriteLine("Move");
+                    Console.WriteLine("PosX: " + PosX);
+                    Console.WriteLine("PosY: " + PosY);
+                break;
+                case "LEFT":
+                    Left();
+                    Console.WriteLine("Left");
+                break;
+                case "RIGHT":
+                    Right();
+                    Console.WriteLine("Right");
+                    break;
+                case "REPORT":
+                    Report();
+                    Console.WriteLine("Report");
+                    break;
+                default:
+                    Console.WriteLine("Invalid command");
+                break;
+            }
+        }
+    }
+
+    public void CleanUp() {
         Gunnar.CleanUp();
     }
 }
