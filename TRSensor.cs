@@ -1,6 +1,6 @@
 using System.Device.Gpio;
 
-public class TRSensor{
+public class TRSensor {
 	private const int CS = 5;
 	private const int Clock = 25;
 	private const int Address = 24;
@@ -9,7 +9,7 @@ public class TRSensor{
 	private int numSensors = 5;
 	private GpioController gpioController;
 
-	public TRSensor(){
+	public TRSensor() {
 		gpioController = new GpioController();
 		gpioController.OpenPin(Clock, PinMode.Output);
 		gpioController.OpenPin(Address, PinMode.Output);
@@ -17,7 +17,7 @@ public class TRSensor{
 		gpioController.OpenPin(DataOut, PinMode.InputPullUp);
 	}
 
-	public int[] AnalogRead(){
+	public int[] AnalogRead() {
 		int[] Value = new int[numSensors + 1];
 		for (int j = 0; j < numSensors+1; j++){
 			gpioController.Write(CS, PinValue.Low);
@@ -64,5 +64,4 @@ public class TRSensor{
 
 		return blackLine;
 	}
-
 }

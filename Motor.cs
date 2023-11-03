@@ -49,34 +49,25 @@ class Motor
         lock(lockDutyCycle){
             dutyCycle = 0;
         }
-
-        //gpioController.Write(in1, PinValue.Low);
-        //gpioController.Write(in2, PinValue.Low);
     }
 
 
-    public void StartPwm()
-    {
+    public void StartPwm() {
             keepRunning = true;
             pwmThread = new Thread(PwmLoop);
             pwmThread.Start();
     }
     
-    public void StopPwm()
-    {
+    public void StopPwm() {
         keepRunning = false;
         pwmThread?.Join();
     }
 
-    public void PwmLoop()
-    {
+    public void PwmLoop() {
         double tempDutyCycle = 0;
 
-        while (keepRunning)
-        {
-
-            lock(lockDutyCycle)
-            {
+        while (keepRunning) {
+            lock(lockDutyCycle) {
                 tempDutyCycle = dutyCycle;
             }
             int period = (int)(1000.0 / frequency);

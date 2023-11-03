@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-class GridBot
-{
+class GridBot {
     private AlphaBot Gunnar;
 
     private static int NumRows;
@@ -56,7 +55,6 @@ class GridBot
                     Gunnar.MotionControl.Forward(0.1);
                     SensorValues = Gunnar.Trsensor.ReadLine();
                 }
-
                 Thread.Sleep(100);
                 Gunnar.MotionControl.Stop();            
             } else {

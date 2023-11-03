@@ -5,33 +5,28 @@ class TxtParser {
         Gunnar = gb; 
     }
 
-    public void RunFile(string filePath)  {
-        if (File.Exists(filePath))
-        {
+    public void RunFile(string filePath){
+        if (File.Exists(filePath)) {
             // Open the text file using a stream reader
-            using (StreamReader sr = new StreamReader(filePath))
-            {
+            using (StreamReader sr = new StreamReader(filePath)) {
                 string line;
                 // Read the stream to a string, and write the string to the console
-                while ((line = sr.ReadLine()) != null)
-                {
+                while ((line = sr.ReadLine()) != null) {
                     //Console.WriteLine(line);
                     Execute(line);
                 }
             }
-        }
-        else
-        {
+        } else {
             Console.WriteLine("The file does not exist.");
         }
     }
     
-    private void Execute(string command){
+    private void Execute(string command) {
         string[] parts = command.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
         if(parts.Length == 4 && parts[0] == "PLACE"){
             Gunnar.Place(int.Parse(parts[1]), int.Parse(parts[2]), parts[3].ToLower());
             Gunnar.Report();
-        }else{
+        } else {
             switch(parts[0]){
                 case "MOVE":
                     Gunnar.Move();
