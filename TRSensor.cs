@@ -72,9 +72,11 @@ public class TRSensor {
 
 		int i = 0;
 		for (int Value in SensorValues) {
-			Average = Value * i * 1000;
+			Average += Value * i * 1000;
 			Sum += Value;
 		}
+		
+		Console.WriteLine("POS:" + (Average / Sum))
 
 		return Average/Sum;
 	}
