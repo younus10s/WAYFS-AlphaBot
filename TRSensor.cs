@@ -1,14 +1,15 @@
 using System.Device.Gpio;
 
 /* Class for infrared sensors. 
- * Sets pin values for 
+ * Sets pin values for:
  * 
  * AnalogRead() 
- * Reads values from infrared sensors. 
+ * Reads values from infrared sensors. Returns raw data
  * 
  * ReadLine()
- * Compares values to decide which values represent black like and 
- * which ones represent the hardwoodfloor of the HiQ office :)
+ * Compares values to decide which values represent black line and 
+ * which ones represent the hardwoodfloor of the HiQ office :) 
+ * Return binary data, where one means a black line is detected
  * 
  */ 
 public class TRSensor {
