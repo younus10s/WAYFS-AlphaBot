@@ -1,5 +1,14 @@
 using System.Device.Gpio;
 
+
+/* Motor Class.
+ * Represents each of the motor's wheels.
+ * Each wheel is controlled via RPi's GPIO pins.
+ * The in(1/2) pins together set the mode of the wheel (forwards, backwards, stop).
+ * To achieve control over the speed PWM is used on the ena-pin.
+ * 
+ * SetPower(double DutyCycle)
+ */
 class Motor 
 {
     private GpioController gpioController;
@@ -8,16 +17,16 @@ class Motor
     private int ena;
 
     private Thread? pwmThread;
-    private int frequency;
-    private double dutyCycle = 0;
+    private int Frequency;
+    private double DutyCycle = 0;
     private volatile bool keepRunning = false;
     private object lockDutyCycle = new object();
 
-    public Motor(int in1_, int in2_, int ena_, int frequency_) {
+    public Motor(int in1_, int in2_, int ena_, int Frequency) {
         in1 = in1_;
         in2 = in2_;
         ena = ena_;
-        frequency = frequency_;
+        Frequency = Frequency;
 
         gpioController = new GpioController();
 
@@ -29,9 +38,9 @@ class Motor
         Stop();
     }
 
-    public void SetPower(double power) {
+    public void SetPower(double DutyCycle) {
         lock(lockDutyCycle){
-            dutyCycle = power;
+            DutyCycle = DutyCycle;
         }
     }
 
@@ -52,7 +61,7 @@ class Motor
     }
 
 
-    public void StartPwm() {
+    private void StartPwm() {
             keepRunning = true;
             pwmThread = new Thread(PwmLoop);
             pwmThread.Start();
@@ -63,7 +72,7 @@ class Motor
         pwmThread?.Join();
     }
 
-    public void PwmLoop() {
+    private void PwmLoop() {
         double tempDutyCycle = 0;
 
         while (keepRunning) {
