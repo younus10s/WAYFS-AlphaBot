@@ -1,65 +1,60 @@
-/*
- * A class that represent the robot. Accessing low level level
+/* A class that represent the robot. Accessing low level 
  * functionality (like movement and sensors) are done through this class.
  * 
  * TurnLeft() & TurnRight()
- * Function that make the robot, turn in a crossing, 90 degrees to the left or right respectively.
+ * Function that make the robot, turn in a black tape crossing, 90 degrees to the left or right respectively.
  * 
  * LineFollow()
- * A funciton that makes the robot follow a black line untill there is a crossing. 
+ * A funciton that makes the robot follow a black line until there is a tape crossing. 
  * Return true if the robot is moving elsewere false
-*/
+ * 
+ * CleanUp()
+ * Calls MotionControl to stop both left and right motor, should be called after running. 
+ */
 class AlphaBot
 {
     private MotionControl MotionControl = new MotionControl();
     private TRSensor TRSensor = new TRSensor();
     private double Power;
 
-    public AlphaBot(double Power) {
-        Power = Power;
+    public AlphaBot(double power) {
+        Power = power;
     }
 
     public void TurnLeft() {
         int[] SensorValues = TRSensor.ReadLine();
-
         MotionControl.Left(Power);
 
         while(SensorValues[2]==1) {
             SensorValues = TRSensor.ReadLine();
         }
-
         while(SensorValues[2]==0) {
             SensorValues = TRSensor.ReadLine();
         }
-
         MotionControl.Stop();
     }
 
     public void TurnRight() {
         int[] SensorValues = TRSensor.ReadLine();
-
         MotionControl.Right(Power);
         
         while(SensorValues[2]==1) {
             SensorValues = TRSensor.ReadLine();
         }
-
         while(SensorValues[2]==0) {
             SensorValues = TRSensor.ReadLine();
         }
-
         MotionControl.Stop();
     }
 
     public bool LineFollow() {
-        int[] SensorValues;
-    
         int[] forward = {0,0,1,0,0};
         int[] left1 =   {0,0,1,1,0};
         int[] left2 =   {0,0,0,1,0};
         int[] right1 =  {0,1,1,0,0};
         int[] right2 =  {0,1,0,0,0};
 
+        int[] SensorValues;
         MotionControl.Forward(Power);
 
         bool Continue = true;

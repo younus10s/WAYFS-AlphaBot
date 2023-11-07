@@ -1,6 +1,5 @@
 using System.Device.Gpio;
 
-
 /* Motor Class.
  * Represents each of the motor's wheels.
  * Each wheel is controlled via RPi's GPIO pins.
@@ -8,7 +7,11 @@ using System.Device.Gpio;
  * To achieve control over the speed PWM is used on the ena-pin.
  * 
  * SetPower(double DutyCycle)
+ * 
+ * PwmLoop() manually applies values high/low on pins as a solution for.
+ * This Class is multithreaded, it creates a spicific thread for the pwm functionality
  */
+
 class Motor 
 {
     private GpioController gpioController;
@@ -20,14 +23,13 @@ class Motor
     private int Frequency;
     private double DutyCycle = 0;
     private volatile bool keepRunning = false;
-    private object lockDutyCycle = new object();
+    private object LockDutyCycle = new object();
 
-    public Motor(int in1_, int in2_, int ena_, int Frequency) {
+    public Motor(int in1_, int in2_, int ena_, int frequency) {
         in1 = in1_;
         in2 = in2_;
         ena = ena_;
-        Frequency = Frequency;
-
+        Frequency = frequency;
         gpioController = new GpioController();
 
         gpioController.OpenPin(in1, PinMode.Output);
@@ -38,9 +40,9 @@ class Motor
         Stop();
     }
 
-    public void SetPower(double DutyCycle) {
-        lock(lockDutyCycle){
-            DutyCycle = DutyCycle;
+    public void SetPower(double dutyCycle) {
+        lock(LockDutyCycle){
+            DutyCycle = dutyCycle;
         }
     }
 
@@ -55,11 +57,10 @@ class Motor
     }
 
     public void Stop() {
-        lock(lockDutyCycle){
-            dutyCycle = 0;
+        lock(LockDutyCycle){
+            DutyCycle = 0;
         }
     }
-
 
     private void StartPwm() {
             keepRunning = true;
@@ -76,10 +77,10 @@ class Motor
         double tempDutyCycle = 0;
 
         while (keepRunning) {
-            lock(lockDutyCycle) {
-                tempDutyCycle = dutyCycle;
+            lock(LockDutyCycle) {
+                tempDutyCycle = DutyCycle;
             }
-            int period = (int)(1000.0 / frequency);
+            int period = (int)(1000.0 / Frequency);
             int pulseWidth = (int)(period * tempDutyCycle);
 
             gpioController.Write(ena, PinValue.High);
