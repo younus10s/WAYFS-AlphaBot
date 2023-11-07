@@ -1,3 +1,13 @@
+/*
+ * Text parser, used for extracting and executing commands and parameters from a text file.
+ * Call Runfile(filePath) to extract and execute the commands 
+ * Commands:
+ *  -Place X,Y,Direction
+ *  -Move
+ *  -Left
+ *  -Right
+ *  -Report
+*/
 class TxtParser {
     private GridBot Gunnar; 
 
@@ -9,7 +19,7 @@ class TxtParser {
         if (File.Exists(filePath)) {
             // Open the text file using a stream reader
             using (StreamReader sr = new StreamReader(filePath)) {
-                string line;
+                string? line;
                 // Read the stream to a string, and write the string to the console
                 while ((line = sr.ReadLine()) != null) {
                     //Console.WriteLine(line);
