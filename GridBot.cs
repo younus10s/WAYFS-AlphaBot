@@ -5,7 +5,9 @@
  * Place(int x, int y, string Heading)
  * Places the robot with (x,y) coords and a heading ("north", "south", "east", "west") in the grid 
  * 
- * Move() FORTSÄTT :P
+ * Move() 
+ * First checks if moving one step forward in the direction it is facing will take the robot out of the grid. 
+ * Then calls Alphabot's LineFollow(). 
  */
 class GridBot {
     private AlphaBot Gunnar;
