@@ -1,5 +1,12 @@
-using Microsoft.AspNetCore.Components;
-
+/* Class GridBot
+ * Class to Abstract the AlphaBot to a Grid Traversing Robot.
+ * Contains logic and functions to satisfy the HiQ gridbot code test 
+ * 
+ * Place(int x, int y, string Heading)
+ * Places the robot with (x,y) coords and a heading ("north", "south", "east", "west") in the grid 
+ * 
+ * Move() FORTSÄTT :P
+ */
 class GridBot {
     private AlphaBot Gunnar;
 
@@ -8,28 +15,25 @@ class GridBot {
 
     private int PosX;
     private int PosY;
-    private string Facing;
+    private string Heading;
 
-    public GridBot(int rows, int cols) {
+    public GridBot(int Rows, int Cols) {
         Gunnar = new AlphaBot(0.2);
-        NumRows = rows;
-        NumCols = cols;
+        NumRows = Rows;
+        NumCols = Cols;
     }
 
-    public void Place(int x, int y, string facing) {
-        PosX = x;
-        PosY = y;
-        Facing = facing;
+    public void Place(int PosX_, int PosY_, string Heading_) {
+        PosX = PosX_;
+        PosY = PosY_;
+        Heading = Heading_;
     }
 
-    private bool PositionValid(int x, int y) {
-        return !(x<0 || x>=NumRows || y<0 || y>=NumCols); 
-    }
     public void Move() {
         int tempX = PosX;
         int tempY = PosY; 
 
-        switch(Facing) {
+        switch(Heading) {
             case "north": 
                 tempY+=1; 
                 break;
@@ -67,44 +71,49 @@ class GridBot {
 
     public void Left() {
         Gunnar.TurnLeft();
-        switch(Facing) {
+        switch(Heading) {
             case "north": 
-                Facing="west"; 
+                Heading="west"; 
                 break;
             case "west":
-                Facing="south"; 
+                Heading="south"; 
                 break; 
             case "south": 
-                Facing="east";
+                Heading="east";
                 break;
             case "east":
-                Facing="north"; 
+                Heading="north"; 
                 break; 
         }
     }
 
     public void Right() {
         Gunnar.TurnRight();
-        switch(Facing) {
+        switch(Heading) {
             case "north": 
-                Facing="east"; 
+                Heading="east"; 
                 break;
             case "east":
-                Facing="south"; 
+                Heading="south"; 
                 break; 
             case "south": 
-                Facing="west";
+                Heading="west";
                 break;
             case "west":
-                Facing="north"; 
+                Heading="north"; 
                 break; 
         }
     }
 
     public void Report(){
-        Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Facing);
-    }    
-    
+        Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);
+    }
+
+    private bool PositionValid(int X, int Y)
+    {
+        return !(X < 0 || X >= NumRows || Y < 0 || Y >= NumCols);
+    }
+
     public void CleanUp() {
         Gunnar.CleanUp();
     }
