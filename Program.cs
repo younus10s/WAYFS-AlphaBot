@@ -8,13 +8,18 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication
 {
-     class Program
-    {
-        public static WebSocketHandler webSocketHandler = new WebSocketHandler();
+class Program
+{
+    public static WebSocketHandler webSocketHandler = new WebSocketHandler();
 
-        static async Task Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+    static async void Main(string[] args)
+    {
+        GridBot GridBot = new GridBot(5, 5);
+        GridBot.Move();
+
+        GridBot.CleanUp();
+
+        var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
 
             app.UseWebSockets();
@@ -33,6 +38,8 @@ namespace ConsoleApplication
             });
             
             await app.RunAsync();
-        }
+        
     }
+}
+
 }

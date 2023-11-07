@@ -1,87 +1,77 @@
-using System.Device.Gpio;
-using System.Device.Pwm; 
-
 class AlphaBot
 {
-    private const int left_in1 = 12;
-    private const int left_in2 = 13;
-    private const int left_ena = 6;
-    private const int right_in1 = 20;
-    private const int right_in2 = 21;
-    private const int right_ena = 26;
-    private PwmChannel pwm_a; 
-    private PwmChannel pwm_b;
+    public MotionControl MotionControl = new MotionControl();
+    public TRSensor Trsensor = new TRSensor();
+    private double power = 0.3;
 
-  
-    private GpioController gpioController;
+    public void TurnLeft(){
+        int[] SensorValues = Trsensor.ReadLine();
 
-    public AlphaBot()
-    {
-        gpioController = new GpioController();
+        MotionControl.Left(power);
 
-        gpioController.OpenPin(left_in1, PinMode.Output);
-        gpioController.OpenPin(left_in2, PinMode.Output);
-        gpioController.OpenPin(left_ena, PinMode.Output);
-        gpioController.OpenPin(right_in1, PinMode.Output);
-        gpioController.OpenPin(right_in2, PinMode.Output);
-        gpioController.OpenPin(right_ena, PinMode.Output);
+        while(SensorValues[2]==1){
+            SensorValues = Trsensor.ReadLine();
+        }
 
-        //gpioController.Write(left_ena, PinValue.High);
-        //gpioController.Write(right_ena, PinValue.High);
+        while(SensorValues[2]==0){
+            SensorValues = Trsensor.ReadLine();
+        }
 
-        pwm_a = PwmChannel.Create(0, 0, 400, 0.01);
-        pwm_b = PwmChannel.Create(0, 1, 400, 0.01);
-        pwm_a.Start();
-        pwm_b.Start();
-
-        //Console.WriteLine("isPinOpen: " + gpioController.IsPinOpen(right_ena));
-        //Console.WriteLine(gpioController.Read(right_ena));
-
-        Stop();
+        MotionControl.Stop();
     }
 
-    public void Forward()
-    {
-        // pwm_a.DutyCycle = pa;
-        // pwm_b.DutyCycle = pb;
+    public void TurnRight(){
+        int[] SensorValues = Trsensor.ReadLine();
 
-        gpioController.Write(left_in1, PinValue.High);
-        gpioController.Write(left_in2, PinValue.Low);
-        gpioController.Write(right_in1, PinValue.High);
-        gpioController.Write(right_in2, PinValue.Low);
+        MotionControl.Right(power);
+        
+        while(SensorValues[2]==1){
+            SensorValues = Trsensor.ReadLine();
+        }
 
-        Console.WriteLine("pwm_a.DutyCycle: " + pwm_a.DutyCycle);
+        while(SensorValues[2]==0){
+            SensorValues = Trsensor.ReadLine();
+        }
+
+        MotionControl.Stop();
     }
 
-    public void Stop()
-    {
-        gpioController.Write(left_in1, PinValue.Low);
-        gpioController.Write(left_in2, PinValue.Low);
-        gpioController.Write(right_in1, PinValue.Low);
-        gpioController.Write(right_in2, PinValue.Low);
+    public void LineFollow(){
+        int[] SensorValues;
+    
+        int[] forward = {0,0,1,0,0};
+        int[] left1 =   {0,0,1,1,0};
+        int[] left2 =   {0,0,0,1,0};
+        int[] right1 =  {0,1,1,0,0};
+        int[] right2 =  {0,1,0,0,0};
+
+        MotionControl.Forward(power);
+
+        bool Continue = true;
+
+        while(Continue){
+            SensorValues = Trsensor.ReadLine();
+
+            if(SensorValues.Sum() >= 3 || SensorValues.Sum() == 0){
+                MotionControl.Stop();
+                Continue = false;
+            }
+            else if(SensorValues.SequenceEqual(forward)){
+                MotionControl.Forward(power);
+            }
+            else if(SensorValues.SequenceEqual(left1) || SensorValues.SequenceEqual(left2) || SensorValues[4]==1){
+                MotionControl.SetPowerRight(power*0.9);
+            } 
+            else if(SensorValues.SequenceEqual(right1) || SensorValues.SequenceEqual(right2) || SensorValues[0]==1){
+                MotionControl.SetPowerLeft(power*0.9);
+            }else{
+                Console.WriteLine("Unhandeled case");
+                Continue = false;
+            }
+        }
     }
 
-    public void Backward()
-    {
-        gpioController.Write(left_in1, PinValue.Low);
-        gpioController.Write(left_in2, PinValue.High);
-        gpioController.Write(right_in1, PinValue.Low);
-        gpioController.Write(right_in2, PinValue.High);
-    }
-
-    public void Left()
-    {
-        gpioController.Write(left_in1, PinValue.Low);
-        gpioController.Write(left_in2, PinValue.High);
-        gpioController.Write(right_in1, PinValue.High);
-        gpioController.Write(right_in2, PinValue.Low);
-    }
-
-    public void Right()
-    {
-        gpioController.Write(left_in1, PinValue.High);
-        gpioController.Write(left_in2, PinValue.Low);
-        gpioController.Write(right_in1, PinValue.Low);
-        gpioController.Write(right_in2, PinValue.High);
+    public void CleanUp(){
+        MotionControl.CleanUp();
     }
 }
