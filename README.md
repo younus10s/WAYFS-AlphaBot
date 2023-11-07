@@ -21,3 +21,26 @@ source ~/.bashrc
 ## Add GPIO package for pin access:
 
 dotnet add package System.Device.Gpio --version 2.2.0-*
+
+## Usage
+
+To run the Robot, modify the Program.cs main method as needed, then run it from a command line. 
+The GridBot, and AlphaBot, classes contain functionality to control the Robot's behaviour.
+The Alphabot is general purpose, and the GridBot abstracts its functionality and adds behaviour specific to traversing a grid.
+
+### Programmatic commands
+The first option is to control the robot programmatically. Both Alphabot, and GridBot instances can be controlled this way.
+Find their documentation in their respective files.
+
+### .txt file commands
+The GridBot has the option of being controlled via a .txt file of commands. 
+To do so, create a GridBot and a TxtParser and attach the GridBot to the TxtParser.
+Then use the TxtParser.RunFile(string FileName) function to run the commands in the file.
+
+The commands have to be of the form found below, and separated by a line separator.
+
+Commands:
+* Place X,Y,Direction - Places the robot on a (x,y) virtual grid. The direction is ["NORTH", "WEST", "SOUTH", "EAST"] This command should be the first one to execute
+* MOVE - Allows the robot to move relative to the direction it faces
+* LEFT - Makes the robot turn anti-clock wise
+* RIGHT - Makes the robot turn clock wise
