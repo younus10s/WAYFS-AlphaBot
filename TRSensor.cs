@@ -1,11 +1,21 @@
 using System.Device.Gpio;
 
+/* Class for infrared sensors. 
+ * Sets pin values for 
+ * 
+ * AnalogRead() 
+ * Reads values from infrared sensors. 
+ * 
+ * ReadLine()
+ * Compares values to decide which values represent black like and 
+ * which ones represent the hardwoodfloor of the HiQ office :)
+ * 
+ */ 
 public class TRSensor {
 	private const int CS = 5;
 	private const int Clock = 25;
 	private const int Address = 24;
 	private const int DataOut = 23;
-
 	private int numSensors = 5;
 	private GpioController gpioController;
 
@@ -19,6 +29,7 @@ public class TRSensor {
 
 	public int[] AnalogRead() {
 		int[] Value = new int[numSensors + 1];
+
 		for (int j = 0; j < numSensors+1; j++){
 			gpioController.Write(CS, PinValue.Low);
 			for (int i = 0; i < 4; i++){
@@ -32,7 +43,7 @@ public class TRSensor {
 				gpioController.Write(Clock, PinValue.High);
 				gpioController.Write(Clock, PinValue.Low);
 			}
-			for(int i = 0; i < 6; i++){
+			for(int i = 0; i < numSensors+1; i++){
 				Value[j] <<= 1;
 				if(gpioController.Read(DataOut) == PinValue.High)
 					Value[j] |= 0x01;
