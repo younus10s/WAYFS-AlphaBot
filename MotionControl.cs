@@ -1,6 +1,7 @@
 /*
-Motion control methods for AlphaBot implementing from Motor for added accuracy. 
-Obs that CleanUp() should be ran after running the methods to stop both motors. 
+ * Motion control methods for AlphaBot implementing from Motor for added accuracy. 
+ * Each wheel is represented seperatly with LeftMoter and RightMotor and can be accessed through this class.
+ * Obs that CleanUp() should be ran after running the methods to stop both motors. 
 */
 class MotionControl
 {
