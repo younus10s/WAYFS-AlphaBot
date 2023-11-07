@@ -65,6 +65,7 @@ class AlphaBot
             if(SensorValues.Sum() >= 3) {
                 MotionControl.Stop();
                 Continue = false;
+                Console.WriteLine("SensorValues >=3 : " + string.Join(", ", SensorValues));
             } else if(SensorValues.SequenceEqual(forward)) {
                 MotionControl.Forward(Power);
             } else if(SensorValues.SequenceEqual(left1) || SensorValues.SequenceEqual(left2) || SensorValues[4]==1) {
@@ -73,7 +74,7 @@ class AlphaBot
                 MotionControl.SetPowerLeft(Power*0.9);
             } else {
                 Console.WriteLine("Unhandeled case");
-                Console.WriteLine("SensonValues: " + string.Join(", ", SensorValues));
+                Console.WriteLine("SensorValues: " + string.Join(", ", SensorValues));
 
                 Continue = false;
                 return false; 
