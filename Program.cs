@@ -35,7 +35,7 @@ class Program
 
         Gunnar.CleanUp();
 
-        Program.startApp(args);
+        //Program.startApp(args);
        
         
     }

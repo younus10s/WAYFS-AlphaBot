@@ -1,5 +1,17 @@
 using System.Device.Gpio;
 
+/* Motor Class.
+ * Represents each of the motor's wheels.
+ * Each wheel is controlled via RPi's GPIO pins.
+ * The in(1/2) pins together set the mode of the wheel (forwards, backwards, stop).
+ * To achieve control over the speed PWM is used on the ena-pin.
+ * 
+ * SetPower(double DutyCycle)
+ * 
+ * PwmLoop() manually applies values high/low on pins as a solution for.
+ * This Class is multithreaded, it creates a spicific thread for the pwm functionality
+ */
+
 class Motor 
 {
     private GpioController gpioController;
@@ -8,18 +20,16 @@ class Motor
     private int ena;
 
     private Thread? pwmThread;
-    private int frequency;
-    private double dutyCycle = 0;
+    private int Frequency;
+    private double DutyCycle = 0;
     private volatile bool keepRunning = false;
-    private object lockDutyCycle = new object();
+    private object LockDutyCycle = new object();
 
-    public Motor(int in1_, int in2_, int ena_, int frequency_)
-    {
+    public Motor(int in1_, int in2_, int ena_, int frequency) {
         in1 = in1_;
         in2 = in2_;
         ena = ena_;
-        frequency = frequency_;
-
+        Frequency = frequency;
         gpioController = new GpioController();
 
         gpioController.OpenPin(in1, PinMode.Output);
@@ -30,61 +40,47 @@ class Motor
         Stop();
     }
 
-    public void SetPower(double power){
-        lock(lockDutyCycle){
-            dutyCycle = power;
+    public void SetPower(double dutyCycle) {
+        lock(LockDutyCycle){
+            DutyCycle = dutyCycle;
         }
     }
 
-    public void Forward()
-    {
+    public void Forward() {
         gpioController.Write(in1, PinValue.Low);
         gpioController.Write(in2, PinValue.High);
     }
 
-    public void Backward()
-    {
+    public void Backward() {
         gpioController.Write(in1, PinValue.High);
         gpioController.Write(in2, PinValue.Low);
     }
 
-    public void Stop()
-    {
-        lock(lockDutyCycle){
-            dutyCycle = 0;
+    public void Stop() {
+        lock(LockDutyCycle){
+            DutyCycle = 0;
         }
-
-        //gpioController.Write(in1, PinValue.Low);
-        //gpioController.Write(in2, PinValue.Low);
     }
 
-
-    public void StartPwm()
-    {
+    private void StartPwm() {
             keepRunning = true;
             pwmThread = new Thread(PwmLoop);
             pwmThread.Start();
     }
     
-    public void StopPwm()
-    {
+    public void StopPwm() {
         keepRunning = false;
         pwmThread?.Join();
-	Console.WriteLine("Got Here");
     }
 
-    public void PwmLoop()
-    {
+    private void PwmLoop() {
         double tempDutyCycle = 0;
 
-        while (keepRunning)
-        {
-
-            lock(lockDutyCycle)
-            {
-                tempDutyCycle = dutyCycle;
+        while (keepRunning) {
+            lock(LockDutyCycle) {
+                tempDutyCycle = DutyCycle;
             }
-            int period = (int)(1000.0 / frequency);
+            int period = (int)(1000.0 / Frequency);
             int pulseWidth = (int)(period * tempDutyCycle);
 
             gpioController.Write(ena, PinValue.High);
