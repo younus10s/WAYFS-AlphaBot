@@ -1,53 +1,56 @@
 /*
- * A class that represent the robot. Accessing low level level functionality (like movement and sensors) are 
- * done through this class
+ * A class that represent the robot. Accessing low level level
+ * functionality (like movement and sensors) are done through this class.
+ * 
+ * TurnLeft() & TurnRight()
+ * Function that make the robot, turn in a crossing, 90 degrees to the left or right respectively.
+ * 
+ * LineFollow()
+ * A funciton that makes the robot follow a black line untill there is a crossing. 
+ * Return true if the robot is moving elsewere false
 */
 class AlphaBot
 {
-    public MotionControl MotionControl = new MotionControl();
-    public TRSensor Trsensor = new TRSensor();
-    private double power;
+    private MotionControl MotionControl = new MotionControl();
+    private TRSensor TRSensor = new TRSensor();
+    private double Power;
 
-    public AlphaBot(double power_) {
-        power = power_;
+    public AlphaBot(double Power) {
+        Power = Power;
     }
 
-    // A function that make the robot turn in a crossing (90 digree) to the left
     public void TurnLeft() {
-        int[] SensorValues = Trsensor.ReadLine();
+        int[] SensorValues = TRSensor.ReadLine();
 
-        MotionControl.Left(power);
+        MotionControl.Left(Power);
 
         while(SensorValues[2]==1) {
-            SensorValues = Trsensor.ReadLine();
+            SensorValues = TRSensor.ReadLine();
         }
 
         while(SensorValues[2]==0) {
-            SensorValues = Trsensor.ReadLine();
+            SensorValues = TRSensor.ReadLine();
         }
 
         MotionControl.Stop();
     }
 
-    // A function that make the robot turn in a crossing (90 digree) to the right
     public void TurnRight() {
-        int[] SensorValues = Trsensor.ReadLine();
+        int[] SensorValues = TRSensor.ReadLine();
 
-        MotionControl.Right(power);
+        MotionControl.Right(Power);
         
         while(SensorValues[2]==1) {
-            SensorValues = Trsensor.ReadLine();
+            SensorValues = TRSensor.ReadLine();
         }
 
         while(SensorValues[2]==0) {
-            SensorValues = Trsensor.ReadLine();
+            SensorValues = TRSensor.ReadLine();
         }
 
         MotionControl.Stop();
     }
 
-    // A funciton that makes the robot follow a black line untill there is a crossing. 
-    //Return true if the robot is moving elsewere false
     public bool LineFollow() {
         int[] SensorValues;
     
@@ -57,27 +60,25 @@ class AlphaBot
         int[] right1 =  {0,1,1,0,0};
         int[] right2 =  {0,1,0,0,0};
 
-        MotionControl.Forward(power);
+        MotionControl.Forward(Power);
 
         bool Continue = true;
 
         while(Continue) {
-            SensorValues = Trsensor.ReadLine();
+            SensorValues = TRSensor.ReadLine();
 
             if(SensorValues.Sum() >= 3) {
                 MotionControl.Stop();
                 Continue = false;
             } else if(SensorValues.SequenceEqual(forward)) {
-                MotionControl.Forward(power);
+                MotionControl.Forward(Power);
             } else if(SensorValues.SequenceEqual(left1) || SensorValues.SequenceEqual(left2) || SensorValues[4]==1) {
-                MotionControl.SetPowerRight(power*0.9);
+                MotionControl.SetPowerRight(Power*0.9);
             } else if(SensorValues.SequenceEqual(right1) || SensorValues.SequenceEqual(right2) || SensorValues[0]==1) {
-                MotionControl.SetPowerLeft(power*0.9);
+                MotionControl.SetPowerLeft(Power*0.9);
             } else {
                 Console.WriteLine("Unhandeled case");
-
-                string printSensor = string.Join(", ", SensorValues);
-                Console.WriteLine("SensonValues: " + printSensor);
+                Console.WriteLine("SensonValues: " + string.Join(", ", SensorValues));
 
                 Continue = false;
                 return false; 
