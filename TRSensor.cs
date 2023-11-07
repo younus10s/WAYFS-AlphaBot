@@ -1,79 +1,84 @@
 using System.Device.Gpio;
 
-/* Class for infrared sensors. 
- * Sets pin values for:
+/* Class TRSensor
+ * Class to handle sensor input from the IR Sensors on the bottom of the robot.
  * 
  * AnalogRead() 
- * Reads values from infrared sensors. Returns raw data
+ * Reads values from infrared sensors. Returns raw data as an int vector of size 5
  * 
  * ReadLine()
- * Compares values to decide which values represent black line and 
- * which ones represent the hardwoodfloor of the HiQ office :) 
- * Return binary data, where one means a black line is detected
- * 
+ * Applies thresholding to the data recieved from the sensors to
+ * destinguish a black line from another material under he robot.
+ * Returns binary data, where one means a black line is detected
  */ 
 public class TRSensor {
 	private const int CS = 5;
 	private const int Clock = 25;
 	private const int Address = 24;
 	private const int DataOut = 23;
-	private int numSensors = 5;
-	private GpioController gpioController;
+	private int NumSensors = 5;
+	private GpioController GpioController;
 
 	public TRSensor() {
-		gpioController = new GpioController();
-		gpioController.OpenPin(Clock, PinMode.Output);
-		gpioController.OpenPin(Address, PinMode.Output);
-		gpioController.OpenPin(CS, PinMode.Output);
-		gpioController.OpenPin(DataOut, PinMode.InputPullUp);
+		GpioController = new GpioController();
+		GpioController.OpenPin(Clock, PinMode.Output);
+		GpioController.OpenPin(Address, PinMode.Output);
+		GpioController.OpenPin(CS, PinMode.Output);
+		GpioController.OpenPin(DataOut, PinMode.InputPullUp);
 	}
 
 	public int[] AnalogRead() {
-		int[] Value = new int[numSensors + 1];
+		int[] Value = new int[NumSensors + 1];
 
-		for (int j = 0; j < numSensors+1; j++){
-			gpioController.Write(CS, PinValue.Low);
+		for (int j = 0; j < NumSensors+1; j++){
+			GpioController.Write(CS, PinValue.Low);
+			
 			for (int i = 0; i < 4; i++){
-				if((((j) >> (3 - i)) & 0x01) != 0)
-					gpioController.Write(Address, PinValue.High);
-				else
-					gpioController.Write(Address, PinValue.Low);
+				if ((((j) >> (3 - i)) & 0x01) != 0){
+					GpioController.Write(Address, PinValue.High);
+				}
+				else{
+					GpioController.Write(Address, PinValue.Low);
+				}
+				
 				Value[j] <<= 1;
-				if(gpioController.Read(DataOut) == PinValue.High)
+				
+				if(GpioController.Read(DataOut) == PinValue.High){
 					Value[j] |= 0x01;
-				gpioController.Write(Clock, PinValue.High);
-				gpioController.Write(Clock, PinValue.Low);
+				}
+
+				GpioController.Write(Clock, PinValue.High);
+				GpioController.Write(Clock, PinValue.Low);
 			}
-			for(int i = 0; i < numSensors+1; i++){
+			for(int i = 0; i < NumSensors+1; i++){
 				Value[j] <<= 1;
-				if(gpioController.Read(DataOut) == PinValue.High)
+				
+				if(GpioController.Read(DataOut) == PinValue.High){
 					Value[j] |= 0x01;
-				gpioController.Write(Clock, PinValue.High);
-                                gpioController.Write(Clock, PinValue.Low);
+				}
+
+				GpioController.Write(Clock, PinValue.High);
+                GpioController.Write(Clock, PinValue.Low);
 			}
+
 			Thread.Sleep(1);
-			gpioController.Write(CS, PinValue.High);
+			GpioController.Write(CS, PinValue.High);
 		}
 		return Value[1..];
 	}
 
 	public int[] ReadLine(){
-		int[] Value = AnalogRead();
+		int[] SensorData = AnalogRead();
 
-		int[] blackLine = new int[Value.Length];
-		for(int i = 0; i < Value.Length; i++){
-			if(Value[i] < 600 && Value[i] > 0)
-				blackLine[i] = 1;
+		int[] ThresholdedData = new int[SensorData.Length];
+
+		for(int i = 0; i < SensorData.Length; i++){
+			if(SensorData[i] < 600 && SensorData[i] > 0)
+				ThresholdedData[i] = 1;
 			else
-				blackLine[i] = 0;
+				ThresholdedData[i] = 0;
 		}
 
-		//test 
-		//string printValue = string.Join(", ", Value);
-		//Console.WriteLine("AnalogRead: \t" + printValue);
-		//string printBlack = string.Join(", ", blackLine);
-		//Console.WriteLine("printBlack: \t" + printBlack);
-
-		return blackLine;
+		return ThresholdedData;
 	}
 }
