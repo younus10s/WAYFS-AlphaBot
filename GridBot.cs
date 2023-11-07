@@ -20,7 +20,7 @@ class GridBot {
 
     private int PosX;
     private int PosY;
-    private string Heading;
+    private string Heading = "";
 
     public GridBot(int Rows, int Cols) {
         Gunnar = new AlphaBot(0.2);
@@ -58,11 +58,11 @@ class GridBot {
                 PosX = tempX; 
                 PosY = tempY; 
 
-                int[] SensorValues = Gunnar.Trsensor.ReadLine();
+                int[] SensorValues = Gunnar.TRSensor.ReadLine();
 
                 while(SensorValues.Sum() >= 3){
                     Gunnar.MotionControl.Forward(0.1);
-                    SensorValues = Gunnar.Trsensor.ReadLine();
+                    SensorValues = Gunnar.TRSensor.ReadLine();
                 }
                 Thread.Sleep(100);
                 Gunnar.MotionControl.Stop();            
