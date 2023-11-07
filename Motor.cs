@@ -8,7 +8,8 @@ using System.Device.Gpio;
  * 
  * SetPower(double DutyCycle)
  * 
- * PwmLoop() manually applies values high/low on pins as a solution for . 
+ * PwmLoop() manually applies values high/low on pins as a solution for.
+ * This Class is multithreaded, it creates a spicific thread for the pwm functionality
  */
 
 class Motor 
@@ -22,7 +23,7 @@ class Motor
     private int Frequency;
     private double DutyCycle = 0;
     private volatile bool keepRunning = false;
-    private object lockDutyCycle = new object();
+    private object LockDutyCycle = new object();
 
     public Motor(int in1_, int in2_, int ena_, int frequency) {
         in1 = in1_;
@@ -40,7 +41,7 @@ class Motor
     }
 
     public void SetPower(double dutyCycle) {
-        lock(lockDutyCycle){
+        lock(LockDutyCycle){
             DutyCycle = dutyCycle;
         }
     }
@@ -56,8 +57,8 @@ class Motor
     }
 
     public void Stop() {
-        lock(lockDutyCycle){
-            dutyCycle = 0;
+        lock(LockDutyCycle){
+            DutyCycle = 0;
         }
     }
 
@@ -76,8 +77,8 @@ class Motor
         double tempDutyCycle = 0;
 
         while (keepRunning) {
-            lock(lockDutyCycle) {
-                tempDutyCycle = dutyCycle;
+            lock(LockDutyCycle) {
+                tempDutyCycle = DutyCycle;
             }
             int period = (int)(1000.0 / Frequency);
             int pulseWidth = (int)(period * tempDutyCycle);
