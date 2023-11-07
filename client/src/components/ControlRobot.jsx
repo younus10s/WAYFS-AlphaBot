@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import CommandsModal from './CommandsModal';
+import React, { useState } from 'react';
 
 function ControlRobot() {
-    const [sentData, setSentData] = useState([]);
     const [connected, setConnected] = useState(false);
-    const [buttonClickValue, setButtonClickValue] = useState(null);
     const [commands, setCommands] = useState([]);
-
-
 
     const sendCommands = () => {
 
@@ -25,8 +20,6 @@ function ControlRobot() {
 
         console.log(commands);
 
-
-
         // webSocket.onmessage = (event) => {
         //     // Parse message from string into an array of doubles
         //     console.log(typeof event.data)
@@ -34,7 +27,6 @@ function ControlRobot() {
 
         //     setSentData(doubles);
         // };
-
 
         webSocket.onclose = (event) => {
             if (event.wasClean) {
@@ -52,7 +44,6 @@ function ControlRobot() {
 
 
     const removeCommand = (indexToRemove) => {
-        // Create a new array with the command removed
         const updatedCommands = commands.filter((_, index) => index !== indexToRemove);
         setCommands(updatedCommands);
     };
@@ -60,8 +51,6 @@ function ControlRobot() {
     return (
         <div>
             <div className="btn-group" role="group" aria-label="Default button group">
-                {/* <button className="btn btn-secondary button-style" onClick={() => Connect(1)}>Click here to make robot follow line</button> */}
-
                 <div className="container">
                     <div className='row p-2 bg-white self-start max-w-screen-md'>
                         <div className='col m-6'>Add movements to robot and press "Send"</div>
@@ -78,7 +67,6 @@ function ControlRobot() {
                             </ul>
                         </div>
                     </div>
-
                     <div className='row m-10'>
                         <div className='col'>
                             <button type="button" onClick={() => addCommand("Left")} className="btn bg-secondary-color text-white m-1 hover:bg-slate-700">Left</button>
@@ -92,11 +80,7 @@ function ControlRobot() {
                         </div>
                     </div>
                 </div>
-            </div >
-            {/* {buttonClickValue === 1 &&
-                <><p>first value: {sentData[0]}, second value: {sentData[1]}, third value: {sentData[2]}</p>
-                </>
-            } */}
+            </div>
         </div >
     );
 }

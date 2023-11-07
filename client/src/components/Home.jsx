@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
 
+/**
+ * Component to render start/home page for app.
+ */
 function Home() {
 
     return (

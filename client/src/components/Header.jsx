@@ -1,9 +1,12 @@
-
 import Home from './Home';
 import ControlRobot from './ControlRobot';
 import { Route, Routes, Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 
+/**
+ * Component to render a header for each page.
+ * Used in App.jsx file to be rendered on every page in app.
+ */
 function Header() {
     return (
         <>
