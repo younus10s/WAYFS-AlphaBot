@@ -76,7 +76,7 @@ public class TRSensor {
 				ThresholdedData[i] = 0;
 		}
 
-		// test 
+		//sensor value test
 		//Console.WriteLine("data: \t" + string.Join(", ", SensorData) + 
 		//						"\t\t" + string.Join(", ", ThresholdedData));
 
