@@ -65,20 +65,22 @@ public class TRSensor {
 	}
 
 	public double GetPosition() {
-		int Average = 0;
-		int Sum = 0;
+		double Average = 0.0;
+		double Sum = 0.0;
 
 		int[] SensorValues = AnalogRead();
 
 		int i = 0;
-		for (int Value in SensorValues) {
-			Average += Value * i * 1000;
-			Sum += Value;
+		foreach (int Value in SensorValues) {
+			Average += (float) (Value * i * 1000);
+			Sum += (float) Value;
+			i++;
 		}
-		
-		Console.WriteLine("POS:" + (Average / Sum))
+		double Val = (Average / Sum);
 
-		return Average/Sum;
+		Console.WriteLine("POS:" + Val);
+
+		return Val;
 	}
 
 	public int[] ReadLine() {

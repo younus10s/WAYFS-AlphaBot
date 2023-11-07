@@ -83,13 +83,13 @@ class AlphaBot
         return true; 
     }
 
-    public bool LineFollowPID(int X=30, int Y=10000, int Z=0.5)
+    public bool LineFollowPID(double X, double Y, double Z)
     {
-        float Position = 0;
-        float LastPosition = 0;
+        double Position = 0;
+        double LastPosition = 0;
 
-        float Derivative;
-        float Integral = 0;
+        double Derivative;
+        double Integral = 0;
 
         double SteeringInput;
 
@@ -124,11 +124,11 @@ class AlphaBot
 
         //Need to figure this out!!
         if (SteeringInput < 0) {
-            MotionControl.SetPowerLeft(Power);
-            MotionControl.SetPowerRight(Power + SteeringInput);
-        } else {
-            MotionControl.SetPowerLeft(Power - SteeringInput);
+            MotionControl.SetPowerLeft(Power + SteeringInput);
             MotionControl.SetPowerRight(Power);
+        } else {
+            MotionControl.SetPowerLeft(Power);
+            MotionControl.SetPowerRight(Power - SteeringInput);
         }
     }
 
