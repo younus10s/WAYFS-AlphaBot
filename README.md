@@ -40,7 +40,7 @@ Then use the TxtParser.RunFile(string FileName) function to run the commands in 
 The commands have to be of the form found below, and separated by a line separator.
 
 Commands:
-* Place X,Y,Direction 	Places the robot on a (x,y) virtual grid. The direction is ["NORTH", "WEST", "SOUTH", "EAST"] This command should be the first one to execute
-* MOVE					Allows the robot to move relative to the direction it faces
-* LEFT					Makes the robot turn anti-clock wise
-* RIGHT					Makes the robot turn clock wise
+* Place X,Y,Direction   Places the robot on a (x,y) virtual grid. The direction is ["NORTH", "WEST", "SOUTH", "EAST"] This command should be the first one to execute
+* MOVE                  Allows the robot to move relative to the direction it faces
+* LEFT                  Makes the robot turn anti-clock wise
+* RIGHT                 Makes the robot turn clock wise
