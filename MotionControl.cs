@@ -1,3 +1,7 @@
+/*
+Motion control methods for AlphaBot implementing from Motor for added accuracy. 
+Obs that CleanUp() should be ran after running the methods to stop both motors. 
+*/
 class MotionControl
 {
     private const int left_in1 = 12;
@@ -8,7 +12,6 @@ class MotionControl
     private const int right_ena = 26;
 
     private const int frequency = 50;
-
     private Motor LeftMotor;
     private Motor RightMotor;
 
