@@ -1,7 +1,25 @@
-/*
+/* Class MotionControl
+ * 
  * Motion control methods for AlphaBot implementing from Motor for added accuracy. 
  * Each wheel is represented seperatly with LeftMoter and RightMotor and can be accessed through this class.
- * Obs that CleanUp() should be ran after running the methods to stop both motors. 
+ * 
+ * Stop()
+ * Stops the robot
+ * 
+ * Forward(double Power)
+ * Makes robot go straight at set Power
+ * 
+ * Backward(double Power)
+ * Makes robot go backwards at set Power
+ * 
+ * Left(double Power) & Right(double Power)
+ * Makes the robot turn in place either left or right at set Power
+ * 
+ * SetPowerLeft(double Power) & SetPowerRight(double Power)
+ * Sets power to each wheel individually.
+ *
+ * CleanUp()
+ * Should be ran when MotionControl goes out of scope to stop both motors. 
 */
 class MotionControl
 {
@@ -12,13 +30,13 @@ class MotionControl
     private const int right_in2 = 21;
     private const int right_ena = 26;
 
-    private const int frequency = 50;
+    private const int Frequency = 50;
     private Motor LeftMotor;
     private Motor RightMotor;
 
     public MotionControl() {
-        LeftMotor = new Motor(left_in1, left_in2, left_ena, frequency);
-        RightMotor = new Motor(right_in1, right_in2, right_ena, frequency);
+        LeftMotor = new Motor(left_in1, left_in2, left_ena, Frequency);
+        RightMotor = new Motor(right_in1, right_in2, right_ena, Frequency);
     }
 
     public void CleanUp() {
