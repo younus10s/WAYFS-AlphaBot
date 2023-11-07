@@ -1,3 +1,7 @@
+/*
+ * A class that represent the robot. Accessing low level level functionality (like movement and sensors) are 
+ * done through this class
+*/
 class AlphaBot
 {
     public MotionControl MotionControl = new MotionControl();
@@ -8,7 +12,7 @@ class AlphaBot
         power = power_;
     }
 
-
+    // A function that make the robot turn in a crossing (90 digree) to the left
     public void TurnLeft() {
         int[] SensorValues = Trsensor.ReadLine();
 
@@ -22,10 +26,10 @@ class AlphaBot
             SensorValues = Trsensor.ReadLine();
         }
 
-        //Thread.Sleep(100);
         MotionControl.Stop();
     }
 
+    // A function that make the robot turn in a crossing (90 digree) to the right
     public void TurnRight() {
         int[] SensorValues = Trsensor.ReadLine();
 
@@ -39,10 +43,11 @@ class AlphaBot
             SensorValues = Trsensor.ReadLine();
         }
 
-        //Thread.Sleep(100);
         MotionControl.Stop();
     }
 
+    // A funciton that makes the robot follow a black line untill there is a crossing. 
+    //Return true if the robot is moving elsewere false
     public bool LineFollow() {
         int[] SensorValues;
     
