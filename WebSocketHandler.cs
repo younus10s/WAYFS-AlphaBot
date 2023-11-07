@@ -8,7 +8,9 @@ using Newtonsoft.Json;
 namespace ConsoleApplication {
 public class WebSocketHandler
     {
-        public async Task HandleWebSocketAsync(WebSocket webSocket)
+
+        private string clientMessage = "";
+        public async Task<string> HandleWebSocketAsync(WebSocket webSocket)
         {
             try
             {
@@ -21,10 +23,10 @@ public class WebSocketHandler
 
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
-                        string clientMessage = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                        Console.WriteLine($"Received from client: {clientMessage}");
+                        clientMessage = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
-
+                        Console.WriteLine($"Received from client: {clientMessage} \n");
+                        Console.WriteLine($"Type: {clientMessage.GetType()}");
                         // Send a JSON string of doubles
                         
                         double[] data = new double[] { 1.23, 4.56, 7.89 }; // Replace with your data
@@ -38,6 +40,7 @@ public class WebSocketHandler
                         // string serverMessage = "This is a server message.";
                         // byte[] serverMessageBytes = Encoding.UTF8.GetBytes(serverMessage);
                         // await webSocket.SendAsync(new ArraySegment<byte>(serverMessageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
+                
                     }
                 }
             }
@@ -45,6 +48,8 @@ public class WebSocketHandler
             {
                 Console.WriteLine($"WebSocket error: {ex.Message}");
             }
+            
+            return clientMessage;
         }
     }
 }

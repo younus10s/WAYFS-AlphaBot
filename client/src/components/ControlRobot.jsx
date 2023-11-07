@@ -14,6 +14,7 @@ function ControlRobot() {
         webSocket.onopen = () => {
             console.log('WebSocket connected');
             webSocket.send(commands);
+            console.log(commands);
             setConnected(true);
         };
 
@@ -68,9 +69,9 @@ function ControlRobot() {
                     </div>
                     <div className='row m-10'>
                         <div className='col'>
-                            <button type="button" onClick={() => addCommand("Left")} className="btn bg-secondary-color text-white m-1 hover:bg-slate-700">Left</button>
-                            <button type="button" onClick={() => addCommand("Forward")} className="btn bg-secondary-color text-white m-1  hover:bg-slate-700">Forward</button>
-                            <button type="button" onClick={() => addCommand("Right")} className="btn bg-secondary-color text-white m-1 hover:bg-slate-700">Right</button>
+                            <button type="button" onClick={() => addCommand("LEFT")} className="btn bg-secondary-color text-white m-1 hover:bg-slate-700">Left</button>
+                            <button type="button" onClick={() => addCommand("MOVE")} className="btn bg-secondary-color text-white m-1  hover:bg-slate-700">Forward</button>
+                            <button type="button" onClick={() => addCommand("RIGHT")} className="btn bg-secondary-color text-white m-1 hover:bg-slate-700">Right</button>
                         </div>
                     </div>
                     <div className='row'>
