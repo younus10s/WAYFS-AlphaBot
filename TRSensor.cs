@@ -70,7 +70,7 @@ public class TRSensor {
 		int[] ThresholdedData = new int[SensorData.Length];
 
 		for(int i = 0; i < SensorData.Length; i++){
-			if(SensorData[i] < 600 && SensorData[i] > 0)
+			if(SensorData[i] < 550 && SensorData[i] > 0)
 				ThresholdedData[i] = 1;
 			else
 				ThresholdedData[i] = 0;
