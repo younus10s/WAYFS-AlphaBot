@@ -13,8 +13,8 @@
  */
 class AlphaBot
 {
-    private MotionControl MotionControl = new MotionControl();
-    private TRSensor TRSensor = new TRSensor();
+    public MotionControl MotionControl = new MotionControl();
+    public TRSensor TRSensor = new TRSensor();
     private double Power;
 
     public AlphaBot(double power) {
