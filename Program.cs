@@ -14,31 +14,52 @@ class Program
 
     static async void Main(string[] args)
     {
-        GridBot GridBot = new GridBot(5, 5);
-        GridBot.Move();
+        GridBot Gunnar = new GridBot(5, 5);
+        TxtParser TParser = new TxtParser(Gunnar);
+        TParser.RunFile("robot.txt");
 
-        GridBot.CleanUp();
+        // Gunnar.Place(2,1,"north");
+        // Console.WriteLine("Forwards");
+        // Gunnar.Move();
+        // Gunnar.Report(); 
+        // Console.WriteLine("Left");
+        // Gunnar.Left();
+        // Console.WriteLine("Forwards");
+        // Gunnar.Move();
+        // Gunnar.Report(); 
+        // Console.WriteLine("Right");
+        // Gunnar.Right();
+        // Console.WriteLine("Forwards");
+        // Gunnar.Move();
+        // Gunnar.Report(); 
 
-        var builder = WebApplication.CreateBuilder(args);
-            var app = builder.Build();
+        Gunnar.CleanUp();
 
-            app.UseWebSockets();
-
-            app.Use(async (context, next) =>
-            {
-                if (context.WebSockets.IsWebSocketRequest)
-                {
-                    WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                    await webSocketHandler.HandleWebSocketAsync(webSocket);
-                }
-                else
-                {
-                    await next();
-                }
-            });
-            
-            await app.RunAsync();
+        Program.startApp(args);
+       
         
+    }
+
+    public async void startApp(string [] args){
+        var builder = WebApplication.CreateBuilder(args);
+                    var app = builder.Build();
+
+                    app.UseWebSockets();
+
+                    app.Use(async (context, next) =>
+                    {
+                        if (context.WebSockets.IsWebSocketRequest)
+                        {
+                            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                            await webSocketHandler.HandleWebSocketAsync(webSocket);
+                        }
+                        else
+                        {
+                            await next();
+                        }
+                    });
+                    
+                    await app.RunAsync();
     }
 }
 

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-
+/**
+ * Component to control robot by adding, removing and sending a string of commands.
+ * Commands are sent by starting a websocket.
+ */
 function ControlRobot() {
     const [connected, setConnected] = useState(false);
     const [commands, setCommands] = useState([]);
@@ -18,14 +21,10 @@ function ControlRobot() {
             console.error('WebSocket error: ' + error);
         };
 
-        console.log(commands);
-
         // webSocket.onmessage = (event) => {
         //     // Parse message from string into an array of doubles
         //     console.log(typeof event.data)
         //     const doubles = JSON.parse(event.data);
-
-        //     setSentData(doubles);
         // };
 
         webSocket.onclose = (event) => {
