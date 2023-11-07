@@ -49,12 +49,15 @@ class TxtParser {
                 break;
             case "MOVE":
                 Gunnar.Move();
+                Console.WriteLine("MOVE");
             break;
             case "LEFT":
                 Gunnar.Left();
+                Console.WriteLine("LEFT");
             break;
             case "RIGHT":
                 Gunnar.Right();
+                Console.WriteLine("RIGHT");
                 break;
             case "REPORT":
                 Gunnar.Report();
