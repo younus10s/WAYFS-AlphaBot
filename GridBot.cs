@@ -14,10 +14,8 @@
  */
 class GridBot {
     private AlphaBot Gunnar;
-
     private static int NumRows;
     private static int NumCols;
-
     private int PosX;
     private int PosY;
     private string Heading = "";

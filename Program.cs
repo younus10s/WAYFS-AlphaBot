@@ -4,7 +4,7 @@ class Program {
         GridBot Gunnar = new GridBot(5, 5);
         TxtParser TParser = new TxtParser(Gunnar);
         TParser.RunFile("robot.txt");
-
+ 
         // Gunnar.Place(2,1,"north");
         // Console.WriteLine("Forwards");
         // Gunnar.Move();

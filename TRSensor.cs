@@ -46,7 +46,6 @@ public class TRSensor {
 				if(GpioController.Read(DataOut) == PinValue.High){
 					Value[j] |= 0x01;
 				}
-
 				GpioController.Write(Clock, PinValue.High);
 				GpioController.Write(Clock, PinValue.Low);
 			}
@@ -56,11 +55,9 @@ public class TRSensor {
 				if(GpioController.Read(DataOut) == PinValue.High){
 					Value[j] |= 0x01;
 				}
-
 				GpioController.Write(Clock, PinValue.High);
                 GpioController.Write(Clock, PinValue.Low);
 			}
-
 			Thread.Sleep(1);
 			GpioController.Write(CS, PinValue.High);
 		}
@@ -78,6 +75,9 @@ public class TRSensor {
 			else
 				ThresholdedData[i] = 0;
 		}
+
+		// test 
+		Console.WriteLine(SensorData); 
 
 		return ThresholdedData;
 	}
