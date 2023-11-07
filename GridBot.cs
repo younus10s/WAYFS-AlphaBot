@@ -8,6 +8,9 @@
  * Move() 
  * First checks if moving one step forward in the direction it is facing will take the robot out of the grid. 
  * Then calls Alphabot's LineFollow(). 
+ * 
+ * Left() /Right()
+ * Make the robot turns 90 degree on a crossing
  */
 class GridBot {
     private AlphaBot Gunnar;
