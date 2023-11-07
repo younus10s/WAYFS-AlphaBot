@@ -64,7 +64,22 @@ public class TRSensor {
 		return Value[1..];
 	}
 
-	public int[] ReadLine(){
+	public double GetPosition() {
+		int Average = 0;
+		int Sum = 0;
+
+		int[] SensorValues = AnalogRead();
+
+		int i = 0;
+		for (int Value in SensorValues) {
+			Average = Value * i * 1000;
+			Sum += Value;
+		}
+
+		return Average/Sum;
+	}
+
+	public int[] ReadLine() {
 		int[] SensorData = AnalogRead();
 
 		int[] ThresholdedData = new int[SensorData.Length];

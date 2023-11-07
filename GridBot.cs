@@ -52,7 +52,7 @@ class GridBot {
         }
         
         if(PositionValid(tempX, tempY)) {
-            if(Gunnar.LineFollow()) {
+            if(Gunnar.LineFollowPID()) {
                 PosX = tempX; 
                 PosY = tempY; 
 

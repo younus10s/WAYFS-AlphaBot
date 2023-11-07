@@ -82,6 +82,66 @@ class AlphaBot
         return true; 
     }
 
+    public bool LineFollowPID(int X=30, int Y=10000, int Z=0.5)
+    {
+        float Position = 0;
+        float LastPosition = 0;
+
+        float Derivative;
+        float Integral = 0;
+
+        double SteeringInput;
+
+        while (Following()) {
+            Position = TRSensor.GetPosition();
+
+            Derivative = Position - LastPosition;
+            Integral += Position;
+
+            SteeringInput = Position / X + Integral / Y + Derivative / Z;
+
+            Steer(SteeringInput);
+
+            LastPosition = Position;
+
+        }
+
+        MotionControl.Stop();
+
+        return true; //No error source?
+    }
+
+    private void Steer(double SteeringInput)
+    {
+        if (SteeringInput > Power) {
+            SteeringInput = Power;
+        }
+
+        if (SteeringInput < -Power) {
+            SteeringInput = -Power;
+        }
+
+        //Need to figure this out!!
+        if (SteeringInput < 0) {
+            MotionControl.SetPowerLeft(Power);
+            MotionControl.SetPowerRight(Power + SteeringInput);
+        } else {
+            MotionControl.SetPowerLeft(Power - SteeringInput);
+            MotionControl.SetPowerRight(Power);
+        }
+    }
+
+    private bool Following()
+    {
+        int[] SensorValues = TRSensor.ReadLine();
+
+        if (SensorValues.Sum() >= 3) {
+            return false;
+        }
+
+        return true;
+    }
+
     public void CleanUp() {
         MotionControl.CleanUp();
     }
