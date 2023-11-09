@@ -17,8 +17,12 @@ class AlphaBot
     public TRSensor TRSensor = new TRSensor();
     private double Power;
 
-    public AlphaBot(double power) {
+    public AlphaBot(double power, bool Calibrate) {
         Power = power;
+
+        if (Calibrate) {
+            TRSensor.Calibrate(MotionControl);
+        }
     }
 
     public void TurnLeft() {
@@ -65,7 +69,7 @@ class AlphaBot
             if(SensorValues.Sum() >= 3) {
                 MotionControl.Stop();
                 Continue = false;
-                Console.WriteLine("SensorValues >=3 : " + string.Join(", ", SensorValues));
+                //Console.WriteLine("SensorValues >=3 : " + string.Join(", ", SensorValues));
             } else if(SensorValues.SequenceEqual(forward)) {
                 MotionControl.Forward(Power);
             } else if(SensorValues.SequenceEqual(left1) || SensorValues.SequenceEqual(left2) || SensorValues[4]==1) {
@@ -104,7 +108,6 @@ class AlphaBot
             Steer(SteeringInput);
 
             LastPosition = Position;
-
         }
 
         MotionControl.Stop();
@@ -122,7 +125,6 @@ class AlphaBot
             SteeringInput = -Power;
         }
 
-        //Need to figure this out!!
         if (SteeringInput < 0) {
             MotionControl.SetPowerLeft(Power + SteeringInput);
             MotionControl.SetPowerRight(Power);

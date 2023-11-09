@@ -19,12 +19,60 @@ public class TRSensor {
 	private int NumSensors = 5;
 	private GpioController GpioController;
 
+	private bool Calibrated = false;
+
+	private int MinReading;
+	private int MaxReading;
+
 	public TRSensor() {
 		GpioController = new GpioController();
 		GpioController.OpenPin(Clock, PinMode.Output);
 		GpioController.OpenPin(Address, PinMode.Output);
 		GpioController.OpenPin(CS, PinMode.Output);
 		GpioController.OpenPin(DataOut, PinMode.InputPullUp);
+	}
+
+	//hitta max & min
+	public void Calibrate(MotionControl MotionControl)
+	{
+		MotionControl.Left(0.3);
+
+		for (int i = 0; i < 100; i++) {
+			int[] Values = AnalogRead();
+
+            Console.WriteLine("Values: " + string.Join(", ", Values));
+
+            TmpMax = Values.Max();
+			TmpMin = Values.Min();
+
+			MaxReading = (TmpMax > MaxReading) ? TmpMax : MaxReading;
+            MinReading = (TmpMin > MinReading) ? TmpMin : MinReading;
+        }
+
+		Console.WriteLine("Done! Put me back please :D");
+		string derp = Console.ReadLine();
+
+		Console.WriteLine("Max: " + MaxReading);
+        Console.WriteLine("Min: " + MinReading);
+
+        Calibrated = true;
+    }
+
+	public int[] ReadCalbrated()
+	{
+		if (!Calibrated) {
+			throw new Exception("The TRSensor is not calibrated. Exiting...");
+		}
+
+		int[] Values = AnalogRead();
+
+		foreach (int i in Values) {
+			i = 1000 - ((i - MinReading) * 1000 / MaxReading);
+		}
+
+        Console.WriteLine("Calibrated Values: " + string.Join(", ", Values));
+
+        return Values;
 	}
 
 	public int[] AnalogRead() {
@@ -68,13 +116,13 @@ public class TRSensor {
 		double Average = 0.0;
 		double Sum = 0.0;
 
-		int[] SensorValues = AnalogRead();
+		int[] SensorValues = ReadCalbrated();
 
-		int i = 0;
+		int Sensor = 0;
 		foreach (int Value in SensorValues) {
-			Average += (float) (Value * i * 1000);
+			Average += (float) (Value * Sensor * 1000);
 			Sum += (float) Value;
-			i++;
+			Sensor++;
 		}
 		double Val = (Average / Sum);
 
