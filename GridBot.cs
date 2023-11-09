@@ -21,7 +21,7 @@ class GridBot {
     private string Heading = "";
 
     public GridBot(int Rows, int Cols) {
-        Gunnar = new AlphaBot(0.2, true);
+        Gunnar = new AlphaBot(0.3, true);
         NumRows = Rows;
         NumCols = Cols;
     }
@@ -52,7 +52,7 @@ class GridBot {
         }
         
         if(PositionValid(tempX, tempY)) {
-            if(Gunnar.LineFollowPID(30, 10000, 0.5)) {
+            if(Gunnar.LineFollowPID()) {
                 PosX = tempX; 
                 PosY = tempY; 
 

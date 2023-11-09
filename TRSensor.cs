@@ -118,7 +118,7 @@ public class TRSensor {
 		}
 
         //Console.WriteLine("Values:            " + string.Join(", ", Values));
-        Console.WriteLine("Calibrated Values: " + string.Join(", ", CalibratedValues));
+        //Console.WriteLine("Calibrated Values: " + string.Join(", ", CalibratedValues));
 
         return CalibratedValues;
 	}
@@ -127,7 +127,7 @@ public class TRSensor {
 		double Average = 0.0;
 		double Sum = 0.0;
 
-		int Threshold = 150;
+		int Threshold = 200;
 
 		int[] SensorValues = ReadCalbrated();
 
@@ -144,11 +144,7 @@ public class TRSensor {
 			throw new Exception("All sensor values are 0. Exiting...");
 		}
 
-		double Val = (Average / Sum);
-
-		Console.WriteLine("POS:" + Val);
-
-		return Val;
+		return (Average / Sum) - 2000;
 	}
 
 	public int[] ReadLine() {

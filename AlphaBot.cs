@@ -87,13 +87,19 @@ class AlphaBot
         return true; 
     }
 
-    public bool LineFollowPID(double X, double Y, double Z)
+    public bool LineFollowPID()
     {
-        double Position = 0;
-        double LastPosition = 0;
+        double ScalingFactor = 200;
 
+        double X = 30*ScalingFactor;
+        double Y = 1000*ScalingFactor;
+        double Z = 10*ScalingFactor;
+
+        double Position;
         double Derivative;
         double Integral = 0;
+
+        double LastPosition = 0;
 
         double SteeringInput;
 
@@ -104,6 +110,9 @@ class AlphaBot
             Integral += Position;
 
             SteeringInput = Position / X + Integral / Y + Derivative / Z;
+
+            Console.WriteLine("Position: " + Position + ", Steering: " + SteeringInput);
+            Console.WriteLine("POS: " + Position / X + ", INT: " + Integral / Y + ", DER: " + Derivative / Z);
 
             Steer(SteeringInput);
 
@@ -126,11 +135,11 @@ class AlphaBot
         }
 
         if (SteeringInput < 0) {
-            MotionControl.SetPowerLeft(Power);
-            MotionControl.SetPowerRight(Power + SteeringInput);
-        } else {
-            MotionControl.SetPowerLeft(Power - SteeringInput);
+            MotionControl.SetPowerLeft(Power + SteeringInput);
             MotionControl.SetPowerRight(Power);
+        } else {
+            MotionControl.SetPowerLeft(Power);
+            MotionControl.SetPowerRight(Power - SteeringInput);
         }
     }
 
