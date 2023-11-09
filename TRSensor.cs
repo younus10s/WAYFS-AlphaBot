@@ -21,8 +21,8 @@ public class TRSensor {
 
 	private bool Calibrated = false;
 
-	private int MinReading;
-	private int MaxReading;
+	private int MinReading = int.MaxValue;
+	private int MaxReading = int.MinValue;
 
 	public TRSensor() {
 		GpioController = new GpioController();
@@ -69,7 +69,7 @@ public class TRSensor {
 		int[] Values = AnalogRead();
 		int[] CalibratedValues = {0,0,0,0,0};
 
-		for (int i = 0; i < Values.Length, i++) {
+		for (int i = 0; i < Values.Length; i++) {
             Values[i] = (Values[i] > MaxReading) ? MaxReading : Values[i];
             Values[i] = (Values[i] < MinReading) ? MinReading : Values[i];
 
