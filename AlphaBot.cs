@@ -138,7 +138,7 @@ class AlphaBot
     {
         int[] SensorValues = TRSensor.ReadLine();
 
-        if (SensorValues.Sum() >= 3) {
+        if (SensorValues.Sum() >= 3 || SensorValues.Sum() == 0) {
             return false;
         }
 

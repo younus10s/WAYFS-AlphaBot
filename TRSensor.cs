@@ -133,10 +133,15 @@ public class TRSensor {
 
 		for(int i = 0; i < SensorValues.Length; i++) {
 			int Value = SensorValues[i];
-			//Value = (Value > Threshold) ? Value : 0;
+			Value = (Value > Threshold) ? Value : 0;
 
 			Average += (float) (Value * i * 1000);
 			Sum += (float) Value;
+		}
+
+		if (Sum == 0)
+		{
+			throw new Exception("All sensor values are 0. Exiting...");
 		}
 
 		double Val = (Average / Sum);
