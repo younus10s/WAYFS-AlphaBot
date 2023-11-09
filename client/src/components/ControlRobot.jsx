@@ -9,8 +9,9 @@ function ControlRobot() {
 
     const sendCommands = () => {
 
-        const webSocket = new WebSocket('ws://192.168.158.236:5175');
-
+        const webSocket = new WebSocket('ws://localhost:5175');
+        // When running server in localhost: ws://localhost:5175
+        // When running server in RPi: ws://192.168.158.236:5175
         webSocket.onopen = () => {
             console.log('WebSocket connected');
             webSocket.send(commands);
