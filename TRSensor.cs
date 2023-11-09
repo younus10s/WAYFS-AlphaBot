@@ -67,18 +67,23 @@ public class TRSensor {
 		}
 
 		int[] Values = AnalogRead();
+		int[] CalibratedValues = {0,0,0,0,0};
 
-		foreach (int i in Values) {
-			int Value = i;
-			Value = (Value > MaxReading) ? MaxReading : Value;
-			Value = (Value < MinReading) ? MinReading : Value;
+		for (int i = 0; i < Values.Length, i++) {
+            Values[i] = (Values[i] > MaxReading) ? MaxReading : Values[i];
+            Values[i] = (Values[i] < MinReading) ? MinReading : Values[i];
 
-			Value = 1000 - ((Value - MinReading) * 1000 / MaxReading);
+			int x = Values[i] - MinReading;
+			x = x * 1000 / MaxReading;
+			x = 1000 - x;
+
+			CalibratedValues[i] = 1000 - ((Values[i] - MinReading) * 1000 / MaxReading);
 		}
 
-        Console.WriteLine("Calibrated Values: " + string.Join(", ", Values));
+        Console.WriteLine("Values:            " + string.Join(", ", Values));
+        Console.WriteLine("Calibrated Values: " + string.Join(", ", CalibratedValues));
 
-        return Values;
+        return CalibratedValues;
 	}
 
 	public int[] AnalogRead() {
