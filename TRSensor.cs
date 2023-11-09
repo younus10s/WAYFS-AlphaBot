@@ -117,7 +117,7 @@ public class TRSensor {
 			CalibratedValues[i] = 1000 - ((Values[i] - MinReading) * 1000 / MaxReading);
 		}
 
-        Console.WriteLine("Values:            " + string.Join(", ", Values));
+        //Console.WriteLine("Values:            " + string.Join(", ", Values));
         Console.WriteLine("Calibrated Values: " + string.Join(", ", CalibratedValues));
 
         return CalibratedValues;
@@ -131,13 +131,12 @@ public class TRSensor {
 
 		int[] SensorValues = ReadCalbrated();
 
-		int Sensor = 0;
-		foreach (int Value in SensorValues) {
-			Value = (Value > Threshold) ? Value : 0
+		for(int i = 0; i < SensorValues.Length; i++) {
+			int Value = SensorValues[i];
+			//Value = (Value > Threshold) ? Value : 0;
 
-			Average += (float) (Value * Sensor * 1000);
+			Average += (float) (Value * i * 1000);
 			Sum += (float) Value;
-			Sensor++;
 		}
 
 		double Val = (Average / Sum);
