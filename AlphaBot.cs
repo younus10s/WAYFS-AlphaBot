@@ -27,7 +27,7 @@ class AlphaBot
 
     public void TurnLeft() {
         int[] SensorValues = TRSensor.ReadLine();
-        MotionControl.Left(Power);
+        MotionControl.Left(Power/2);
 
         while(SensorValues[2]==1) {
             SensorValues = TRSensor.ReadLine();
@@ -40,7 +40,7 @@ class AlphaBot
 
     public void TurnRight() {
         int[] SensorValues = TRSensor.ReadLine();
-        MotionControl.Right(Power);
+        MotionControl.Right(Power/2);
         
         while(SensorValues[2]==1) {
             SensorValues = TRSensor.ReadLine();
@@ -55,8 +55,8 @@ class AlphaBot
     {
         double ScalingFactor = 200;
 
-        double X = 30*ScalingFactor;
-        double Y = 1000*ScalingFactor;
+        double X = 50*ScalingFactor;
+        double Y = 10000*ScalingFactor;
         double Z = 10*ScalingFactor;
 
         double Position;
@@ -112,6 +112,7 @@ class AlphaBot
         if (SensorValues.Sum() >= 3) return false;
             
         if(SensorValues.Sum() == 0) {
+            CleanUp();
             throw new Exception("Can not find the line any more!");
             return false;
         }

@@ -21,7 +21,7 @@ class GridBot {
     private string Heading = "";
 
     public GridBot(int Rows, int Cols) {
-        Gunnar = new AlphaBot(0.3, true);
+        Gunnar = new AlphaBot(0.4, true);
         NumRows = Rows;
         NumCols = Cols;
     }
