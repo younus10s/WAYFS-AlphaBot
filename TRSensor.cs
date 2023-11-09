@@ -67,6 +67,9 @@ public class TRSensor {
 		int[] Values = AnalogRead();
 
 		foreach (int i in Values) {
+			i = (i > MaxReading) ? MaxReading : i;
+			i = (i < MinReading) ? MinReading : i;
+
 			i = 1000 - ((i - MinReading) * 1000 / MaxReading);
 		}
 
