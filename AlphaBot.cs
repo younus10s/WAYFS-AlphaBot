@@ -112,7 +112,7 @@ class AlphaBot
 
         MotionControl.Stop();
 
-        return true; //No error source?
+        return true;
     }
 
     private void Steer(double SteeringInput)
@@ -126,11 +126,11 @@ class AlphaBot
         }
 
         if (SteeringInput < 0) {
-            MotionControl.SetPowerLeft(Power + SteeringInput);
-            MotionControl.SetPowerRight(Power);
-        } else {
             MotionControl.SetPowerLeft(Power);
-            MotionControl.SetPowerRight(Power - SteeringInput);
+            MotionControl.SetPowerRight(Power + SteeringInput);
+        } else {
+            MotionControl.SetPowerLeft(Power - SteeringInput);
+            MotionControl.SetPowerRight(Power);
         }
     }
 

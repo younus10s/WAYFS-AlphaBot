@@ -60,32 +60,6 @@ public class TRSensor {
         Calibrated = true;
     }
 
-	public int[] ReadCalbrated()
-	{
-		if (!Calibrated) {
-			throw new Exception("The TRSensor is not calibrated. Exiting...");
-		}
-
-		int[] Values = AnalogRead();
-		int[] CalibratedValues = {0,0,0,0,0};
-
-		for (int i = 0; i < Values.Length; i++) {
-            Values[i] = (Values[i] > MaxReading) ? MaxReading : Values[i];
-            Values[i] = (Values[i] < MinReading) ? MinReading : Values[i];
-
-			int x = Values[i] - MinReading;
-			x = x * 1000 / MaxReading;
-			x = 1000 - x;
-
-			CalibratedValues[i] = 1000 - ((Values[i] - MinReading) * 1000 / MaxReading);
-		}
-
-        Console.WriteLine("Values:            " + string.Join(", ", Values));
-        Console.WriteLine("Calibrated Values: " + string.Join(", ", CalibratedValues));
-
-        return CalibratedValues;
-	}
-
 	public int[] AnalogRead() {
 		int[] Value = new int[NumSensors + 1];
 
@@ -123,18 +97,49 @@ public class TRSensor {
 		return Value[1..];
 	}
 
+	public int[] ReadCalbrated()
+	{
+		if (!Calibrated) {
+			throw new Exception("The TRSensor is not calibrated. Exiting...");
+		}
+
+		int[] Values = AnalogRead();
+		int[] CalibratedValues = {0,0,0,0,0};
+
+		for (int i = 0; i < Values.Length; i++) {
+            Values[i] = (Values[i] > MaxReading) ? MaxReading : Values[i];
+            Values[i] = (Values[i] < MinReading) ? MinReading : Values[i];
+
+			int x = Values[i] - MinReading;
+			x = x * 1000 / MaxReading;
+			x = 1000 - x;
+
+			CalibratedValues[i] = 1000 - ((Values[i] - MinReading) * 1000 / MaxReading);
+		}
+
+        Console.WriteLine("Values:            " + string.Join(", ", Values));
+        Console.WriteLine("Calibrated Values: " + string.Join(", ", CalibratedValues));
+
+        return CalibratedValues;
+	}
+
 	public double GetPosition() {
 		double Average = 0.0;
 		double Sum = 0.0;
+
+		int Threshold = 150;
 
 		int[] SensorValues = ReadCalbrated();
 
 		int Sensor = 0;
 		foreach (int Value in SensorValues) {
+			Value = (Value > Threshold) ? Value : 0
+
 			Average += (float) (Value * Sensor * 1000);
 			Sum += (float) Value;
 			Sensor++;
 		}
+
 		double Val = (Average / Sum);
 
 		Console.WriteLine("POS:" + Val);
