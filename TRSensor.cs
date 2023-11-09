@@ -32,7 +32,6 @@ public class TRSensor {
 		GpioController.OpenPin(DataOut, PinMode.InputPullUp);
 	}
 
-	//hitta max & min
 	public void Calibrate(MotionControl MotionControl)
 	{
 		MotionControl.Left(0.3);
@@ -42,18 +41,21 @@ public class TRSensor {
 
             Console.WriteLine("Values: " + string.Join(", ", Values));
 
-            TmpMax = Values.Max();
-			TmpMin = Values.Min();
+            int TmpMax = Values.Max();
+			int TmpMin = Values.Min();
 
 			MaxReading = (TmpMax > MaxReading) ? TmpMax : MaxReading;
-            MinReading = (TmpMin > MinReading) ? TmpMin : MinReading;
+            MinReading = (TmpMin < MinReading) ? TmpMin : MinReading;
         }
 
-		Console.WriteLine("Done! Put me back please :D");
-		string derp = Console.ReadLine();
+		MotionControl.Stop();
 
 		Console.WriteLine("Max: " + MaxReading);
         Console.WriteLine("Min: " + MinReading);
+
+		Console.WriteLine("Done! Put me back please :D");
+		Console.WriteLine("Press any Key to continue...");
+		Console.ReadLine();
 
         Calibrated = true;
     }
@@ -67,10 +69,11 @@ public class TRSensor {
 		int[] Values = AnalogRead();
 
 		foreach (int i in Values) {
-			i = (i > MaxReading) ? MaxReading : i;
-			i = (i < MinReading) ? MinReading : i;
+			int Value = i;
+			Value = (Value > MaxReading) ? MaxReading : Value;
+			Value = (Value < MinReading) ? MinReading : Value;
 
-			i = 1000 - ((i - MinReading) * 1000 / MaxReading);
+			Value = 1000 - ((Value - MinReading) * 1000 / MaxReading);
 		}
 
         Console.WriteLine("Calibrated Values: " + string.Join(", ", Values));
