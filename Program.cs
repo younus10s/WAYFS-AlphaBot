@@ -16,11 +16,11 @@ class Program
 
         static async Task Main(string[] args)
         {
-            //GridBot Gunnar = new GridBot(5, 5);
+            GridBot Gunnar = new GridBot(5, 5);
             // TxtParser TParser = new TxtParser(Gunnar);
             // TParser.RunFile("robot.txt");
 
-            //CommandParser cmdParser = new CommandParser(Gunnar);
+            CommandParser cmdParser = new CommandParser(Gunnar);
             
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
@@ -33,14 +33,16 @@ class Program
                         {
                             WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                             clientMessage = await webSocketHandler.HandleWebSocketAsync(webSocket);
+
+
+                            cmdParser.RunCommands(clientMessage);
                         } else {
                                 await next();
                         }
                 });
-            
-            //cmdParser.RunCommands(clientMessage);
         
             await app.RunAsync();
+
 
             }
 }

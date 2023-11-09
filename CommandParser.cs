@@ -1,19 +1,3 @@
-/* Class TxtParser
- * Parser used for extracting and executing commands from a text file.
- * 
- * Runfile(string FilePath)
- * Extract and execute the Commands found in .txt file FilePath.
- * Commands for file in FilePath:
- *   Place X,Y,Direction
- *   Move
- *   Left
- *   Right
- *   Report
- * 
- * Execute() 
- * Find words and run the corresponding method for GridBot.  
- */
-
 class CommandParser {
     private GridBot Gunnar; 
 
@@ -27,10 +11,15 @@ class CommandParser {
 
         int i = 0;
 
+        // Default place - change this later
+        Gunnar.Place(0,0,"NORTH");
+        
         while (Parts[i] != null) {
              Execute(Parts[i]);
              i++;
         }
+
+        Gunnar.Report();
             
     }
     
@@ -38,13 +27,14 @@ class CommandParser {
         //string[] Parts = Command.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
         switch(Command){
-            case "PLACE":
+            //case "PLACE":
                 // if (Parts.Length == 4){
                 //     Gunnar.Place(int.Parse(Parts[1]), int.Parse(Parts[2]), Parts[3].ToLower());
                 // }else{
                 //     Console.WriteLine("Invalid Command PLACE");
                 // }
-                break;
+                
+            //    break;
             case "MOVE":
                 Gunnar.Move();
             break;
@@ -54,9 +44,9 @@ class CommandParser {
             case "RIGHT":
                 Gunnar.Right();
                 break;
-            case "REPORT":
-                Gunnar.Report();
-                break;
+            // case "REPORT":
+            //     Gunnar.Report();
+            //     break;
             default:
                 Console.WriteLine("Invalid Command OTHER");
             break;
