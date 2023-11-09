@@ -15,9 +15,9 @@
  */
 
 public class AppCmdParser {
-    public GridBot? Gunnar; 
+    public GridBot Gunnar; 
 
-    public AppCmdParser(GridBot? gridBot = null) {
+    public AppCmdParser(GridBot gridBot) {
         Gunnar = gridBot;
     }
 
@@ -46,16 +46,16 @@ public class AppCmdParser {
                 // }
                 break;
             case "MOVE":
-                //Gunnar.Move();
+                Gunnar.Move();
             break;
             case "LEFT":
-                //Gunnar.Left();
+                Gunnar.Left();
             break;
             case "RIGHT":
-                //Gunnar.Right();
+                Gunnar.Right();
                 break;
             case "REPORT":
-                //Gunnar.Report();
+                Gunnar.Report();
                 break;
             default:
                 Console.WriteLine("Invalid Command OTHER");
