@@ -6,7 +6,7 @@
  * 
  * LineFollow()
  * A funciton that makes the robot follow a black line until there is a tape crossing. 
- * Return true if the robot is moving elsewere false
+ * Return true if the robot is moving elsewere false.
  * 
  * CleanUp()
  * Calls MotionControl to stop both left and right motor, should be called after running. 
@@ -51,43 +51,7 @@ class AlphaBot
         MotionControl.Stop();
     }
 
-    public bool LineFollow() {
-        int[] forward = {0,0,1,0,0};
-        int[] left1 =   {0,0,1,1,0};
-        int[] left2 =   {0,0,0,1,0};
-        int[] right1 =  {0,1,1,0,0};
-        int[] right2 =  {0,1,0,0,0};
-
-        int[] SensorValues;
-        MotionControl.Forward(Power);
-
-        bool Continue = true;
-
-        while(Continue) {
-            SensorValues = TRSensor.ReadLine();
-
-            if(SensorValues.Sum() >= 3) {
-                MotionControl.Stop();
-                Continue = false;
-                //Console.WriteLine("SensorValues >=3 : " + string.Join(", ", SensorValues));
-            } else if(SensorValues.SequenceEqual(forward)) {
-                MotionControl.Forward(Power);
-            } else if(SensorValues.SequenceEqual(left1) || SensorValues.SequenceEqual(left2) || SensorValues[4]==1) {
-                MotionControl.SetPowerRight(Power*0.9);
-            } else if(SensorValues.SequenceEqual(right1) || SensorValues.SequenceEqual(right2) || SensorValues[0]==1) {
-                MotionControl.SetPowerLeft(Power*0.9);
-            } else {
-                Console.WriteLine("Unhandeled case");
-                Console.WriteLine("SensorValues: " + string.Join(", ", SensorValues));
-
-                Continue = false;
-                return false; 
-            }
-        }
-        return true; 
-    }
-
-    public bool LineFollowPID()
+    public void LineFollow()
     {
         double ScalingFactor = 200;
 
@@ -120,8 +84,6 @@ class AlphaBot
         }
 
         MotionControl.Stop();
-
-        return true;
     }
 
     private void Steer(double SteeringInput)
@@ -147,7 +109,10 @@ class AlphaBot
     {
         int[] SensorValues = TRSensor.ReadLine();
 
-        if (SensorValues.Sum() >= 3 || SensorValues.Sum() == 0) {
+        if (SensorValues.Sum() >= 3) return false;
+            
+        if(SensorValues.Sum() == 0) {
+            throw new Exception("Can not find the line any more!");
             return false;
         }
 

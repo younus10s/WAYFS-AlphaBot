@@ -3,8 +3,14 @@ using System.Device.Gpio;
 /* Class TRSensor
  * Class to handle sensor input from the IR Sensors on the bottom of the robot.
  * 
- * AnalogRead() 
- * Reads values from infrared sensors. Returns raw data as an int vector of size 5
+ * Calibrate()
+ * Moves the robot in a circle to find the highest and lowest sensor readings.
+ * Uses these valuse as parameters for calibrating sensor reading in ReadCalibrated().
+ * Running Calibrate is a prereqiusite for running ReadCalibrated().
+ * Robot needs to be on a line.
+ * 
+ * ReadCalibrated() 
+ * Returns Sensor readings on the form int [0,1000]. 0 corresponds to no line, and vice versa.
  * 
  * ReadLine()
  * Applies thresholding to the data recieved from the sensors to
@@ -39,8 +45,6 @@ public class TRSensor {
 		for (int i = 0; i < 100; i++) {
 			int[] Values = AnalogRead();
 
-            Console.WriteLine("Values: " + string.Join(", ", Values));
-
             int TmpMax = Values.Max();
 			int TmpMin = Values.Min();
 
@@ -50,52 +54,12 @@ public class TRSensor {
 
 		MotionControl.Stop();
 
-		Console.WriteLine("Max: " + MaxReading);
-        Console.WriteLine("Min: " + MinReading);
-
 		Console.WriteLine("Done! Put me back please :D");
 		Console.WriteLine("Press any Key to continue...");
 		Console.ReadLine();
 
         Calibrated = true;
     }
-
-	public int[] AnalogRead() {
-		int[] Value = new int[NumSensors + 1];
-
-		for (int j = 0; j < NumSensors+1; j++){
-			GpioController.Write(CS, PinValue.Low);
-			
-			for (int i = 0; i < 4; i++){
-				if ((((j) >> (3 - i)) & 0x01) != 0){
-					GpioController.Write(Address, PinValue.High);
-				}
-				else{
-					GpioController.Write(Address, PinValue.Low);
-				}
-				
-				Value[j] <<= 1;
-				
-				if(GpioController.Read(DataOut) == PinValue.High){
-					Value[j] |= 0x01;
-				}
-				GpioController.Write(Clock, PinValue.High);
-				GpioController.Write(Clock, PinValue.Low);
-			}
-			for(int i = 0; i < NumSensors+1; i++){
-				Value[j] <<= 1;
-				
-				if(GpioController.Read(DataOut) == PinValue.High){
-					Value[j] |= 0x01;
-				}
-				GpioController.Write(Clock, PinValue.High);
-                GpioController.Write(Clock, PinValue.Low);
-			}
-			Thread.Sleep(1);
-			GpioController.Write(CS, PinValue.High);
-		}
-		return Value[1..];
-	}
 
 	public int[] ReadCalbrated()
 	{
@@ -116,9 +80,6 @@ public class TRSensor {
 
 			CalibratedValues[i] = 1000 - ((Values[i] - MinReading) * 1000 / MaxReading);
 		}
-
-        //Console.WriteLine("Values:            " + string.Join(", ", Values));
-        //Console.WriteLine("Calibrated Values: " + string.Join(", ", CalibratedValues));
 
         return CalibratedValues;
 	}
@@ -164,5 +125,42 @@ public class TRSensor {
 		//						"\t\t" + string.Join(", ", ThresholdedData));
 
 		return ThresholdedData;
+	}
+
+	private int[] AnalogRead() {
+		int[] Value = new int[NumSensors + 1];
+
+		for (int j = 0; j < NumSensors+1; j++){
+			GpioController.Write(CS, PinValue.Low);
+			
+			for (int i = 0; i < 4; i++){
+				if ((((j) >> (3 - i)) & 0x01) != 0){
+					GpioController.Write(Address, PinValue.High);
+				}
+				else{
+					GpioController.Write(Address, PinValue.Low);
+				}
+				
+				Value[j] <<= 1;
+				
+				if(GpioController.Read(DataOut) == PinValue.High){
+					Value[j] |= 0x01;
+				}
+				GpioController.Write(Clock, PinValue.High);
+				GpioController.Write(Clock, PinValue.Low);
+			}
+			for(int i = 0; i < NumSensors+1; i++){
+				Value[j] <<= 1;
+				
+				if(GpioController.Read(DataOut) == PinValue.High){
+					Value[j] |= 0x01;
+				}
+				GpioController.Write(Clock, PinValue.High);
+                GpioController.Write(Clock, PinValue.Low);
+			}
+			Thread.Sleep(1);
+			GpioController.Write(CS, PinValue.High);
+		}
+		return Value[1..];
 	}
 }

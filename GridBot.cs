@@ -52,21 +52,19 @@ class GridBot {
         }
         
         if(PositionValid(tempX, tempY)) {
-            if(Gunnar.LineFollowPID()) {
-                PosX = tempX; 
-                PosY = tempY; 
+            Gunnar.LineFollow();
+            PosX = tempX; 
+            PosY = tempY; 
 
-                int[] SensorValues = Gunnar.TRSensor.ReadLine();
+            int[] SensorValues = Gunnar.TRSensor.ReadLine();
 
-                while(SensorValues.Sum() >= 3){
-                    Gunnar.MotionControl.Forward(0.1);
-                    SensorValues = Gunnar.TRSensor.ReadLine();
-                }
-                Thread.Sleep(100);
-                Gunnar.MotionControl.Stop();            
-            } else {
-                Console.WriteLine("Failed LineFollow() :((((((");
+            while(SensorValues.Sum() >= 3){
+                Gunnar.MotionControl.Forward(0.1);
+                SensorValues = Gunnar.TRSensor.ReadLine();
             }
+
+            Thread.Sleep(100);
+            Gunnar.MotionControl.Stop();
         } else {
             Console.WriteLine("Invalid move :)");
         }
