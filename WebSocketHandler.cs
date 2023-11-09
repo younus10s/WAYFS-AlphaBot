@@ -10,7 +10,7 @@ public class WebSocketHandler
     {
 
         private string clientMessage = "";
-        public async Task<string> HandleWebSocketAsync(WebSocket webSocket)
+        public async void HandleWebSocketAsync(WebSocket webSocket, AppCmdParser cmdParser)
         {
             try
             {
@@ -27,13 +27,17 @@ public class WebSocketHandler
 
                         Console.WriteLine($"Received from client: {clientMessage} \n");
                         Console.WriteLine($"Type: {clientMessage.GetType()}");
-                        // Send a JSON string of doubles
-                        
-                        double[] data = new double[] { 1.23, 4.56, 7.89 }; // Replace with your data
-                        string serializedData = JsonConvert.SerializeObject(data);
-                        byte[] dataBytes = Encoding.UTF8.GetBytes(serializedData);
 
-                        await webSocket.SendAsync(new ArraySegment<byte>(dataBytes), WebSocketMessageType.Text, true, CancellationToken.None);
+                        await Task.Delay(1000); // delay task
+
+                        cmdParser.RunCommands(clientMessage);
+
+                        // // Send a JSON string of doubles
+                        // double[] data = new double[] { 1.23, 4.56, 7.89 }; // Replace with your data
+                        // string serializedData = JsonConvert.SerializeObject(data);
+                        // byte[] dataBytes = Encoding.UTF8.GetBytes(serializedData);
+
+                        // await webSocket.SendAsync(new ArraySegment<byte>(dataBytes), WebSocketMessageType.Text, true, CancellationToken.None);
 
                         // Send a string message back to the client
 
@@ -49,7 +53,6 @@ public class WebSocketHandler
                 Console.WriteLine($"WebSocket error: {ex.Message}");
             }
             
-            return clientMessage;
         }
     }
 }

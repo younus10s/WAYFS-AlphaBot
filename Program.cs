@@ -1,10 +1,5 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Net.WebSockets;
-using System.Threading.Tasks;
+using System.Text;
 
 namespace ConsoleApplication
 {
@@ -14,13 +9,15 @@ class Program
     public static string clientMessage = "";
     public static WebSocketHandler webSocketHandler = new WebSocketHandler();
 
+    //public static CommandParser cmdParser = new CommandParser();
+
         static async Task Main(string[] args)
         {
-            GridBot Gunnar = new GridBot(5, 5);
+           // GridBot Gunnar = new GridBot(5, 5);
             // TxtParser TParser = new TxtParser(Gunnar);
             // TParser.RunFile("robot.txt");
 
-            CommandParser cmdParser = new CommandParser(Gunnar);
+            AppCmdParser appCmdParser = new AppCmdParser();
             
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
@@ -32,10 +29,8 @@ class Program
                     if (context.WebSockets.IsWebSocketRequest)
                         {
                             WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                            clientMessage = await webSocketHandler.HandleWebSocketAsync(webSocket);
+                            webSocketHandler.HandleWebSocketAsync(webSocket, appCmdParser);
 
-
-                            cmdParser.RunCommands(clientMessage);
                         } else {
                                 await next();
                         }
@@ -45,6 +40,8 @@ class Program
 
 
             }
-}
 
+
+
+}
 }

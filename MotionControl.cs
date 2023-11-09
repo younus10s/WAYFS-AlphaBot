@@ -21,7 +21,7 @@
  * CleanUp()
  * Should be ran when MotionControl goes out of scope to stop both motors. 
 */
-class MotionControl
+public class MotionControl
 {
     private const int left_in1 = 12;
     private const int left_in2 = 13;

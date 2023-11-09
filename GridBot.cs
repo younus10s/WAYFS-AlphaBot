@@ -12,8 +12,8 @@
  * Left() /Right()
  * Make the robot turns 90 degree on a crossing
  */
-class GridBot {
-    private AlphaBot Gunnar;
+public class GridBot {
+    public AlphaBot Gunnar;
 
     private static int NumRows;
     private static int NumCols;
