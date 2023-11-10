@@ -23,7 +23,7 @@ class Program {
         //Gunnar.CleanUp();
 
         AlphaBot Ab = new AlphaBot(0.5, false);
-        Ab.Cam.RunCamera();
+        //Ab.Cam.RunCamera();
 
     }
 }
