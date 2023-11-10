@@ -3,8 +3,8 @@ export default {
   theme: { // Define custom colors for theme here
     extend: { 
       colors: {
-        "primary-color": "#00668A",
-        "secondary-color": "#004E71",
+        "primary-color": "#EBF2FF",
+        "secondary-color": "#2D68D9",
       }
     },
     fontFamily: {

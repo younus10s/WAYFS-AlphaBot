@@ -11,10 +11,10 @@ function Header() {
     return (
         <>
             <Navbar className="navbar fixed-top bg-secondary-color shadow-md">
-                {/* <Navbar.Brand to="/" className="navbar-brand">Logo</Navbar.Brand> */}
+                <Navbar.Brand to="/" className="navbar-brand"><i className="fa-solid fa-robot ml-4" style={{ color: "white" }}></i></Navbar.Brand>
                 <Nav className='gap-4 text-white py-1 text-xl'>
-                    <Link to="/" className="nav-link text-white">Home</Link>
-                    <Link to="/control" className="nav-link text-white">Control Robot</Link>
+                    <Link to="/" className="nav-link ml-2 text-white">Home</Link>
+                    <Link to="/control" className="nav-link ml-2 text-white">Control Robot</Link>
                 </Nav>
             </Navbar>
             <Routes>

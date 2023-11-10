@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 namespace ConsoleApplication {
 public class WebSocketHandler
     {
-
         private string clientMessage = "";
         public async void HandleWebSocketAsync(WebSocket webSocket, AppCmdParser cmdParser)
         {
