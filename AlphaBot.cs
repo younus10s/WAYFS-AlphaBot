@@ -69,8 +69,6 @@ public class AlphaBot
 
         MotionControl.Forward(Power);
 
-        Console.WriteLine(Power);
-
         while (Following()) {
             Position = TRSensor.GetPosition();
 
@@ -117,8 +115,8 @@ public class AlphaBot
         }
             
         if(SensorValues.Sum() == 0) {
-            CleanUp();
-            throw new OffLineException("Can not find the line any more!");
+            MotionControl.Stop(); 
+            throw new OffLineException("Following: No line!");
         }
 
         return true;

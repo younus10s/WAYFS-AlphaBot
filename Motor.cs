@@ -63,9 +63,9 @@ class Motor
     }
 
     private void StartPwm() {
-            keepRunning = true;
-            pwmThread = new Thread(PwmLoop);
-            pwmThread.Start();
+        keepRunning = true;
+        pwmThread = new Thread(PwmLoop);
+        pwmThread.Start();
     }
     
     public void StopPwm() {
