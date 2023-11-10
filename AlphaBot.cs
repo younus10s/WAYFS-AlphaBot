@@ -15,6 +15,8 @@ class AlphaBot
 {
     public MotionControl MotionControl = new MotionControl();
     public TRSensor TRSensor = new TRSensor();
+
+    public Camera Cam = new Camera();
     private double Power;
 
     public AlphaBot(double power, bool Calibrate) {

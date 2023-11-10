@@ -1,9 +1,9 @@
 class Program {
     static void Main(string[] args) {
         
-        GridBot Gunnar = new GridBot(5, 5);
-        TxtParser TParser = new TxtParser(Gunnar);
-        TParser.RunFile("robot.txt");
+        //GridBot Gunnar = new GridBot(5, 5);
+        //TxtParser TParser = new TxtParser(Gunnar);
+        //TParser.RunFile("robot.txt");
  
         // Gunnar.Place(2,1,"north");
         // Console.WriteLine("Forwards");
@@ -20,6 +20,10 @@ class Program {
         // Gunnar.Move();
         // Gunnar.Report(); 
 
-        Gunnar.CleanUp();
+        //Gunnar.CleanUp();
+
+        AlphaBot Ab = new AlphaBot(0.5, false);
+        Ab.Cam.RunCamera();
+
     }
 }
