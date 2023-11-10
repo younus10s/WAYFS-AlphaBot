@@ -11,14 +11,6 @@ class Program {
         // Gunnar.Report(); 
         // Console.WriteLine("Left");
         // Gunnar.Left();
-        // Console.WriteLine("Forwards");
-        // Gunnar.Move();
-        // Gunnar.Report(); 
-        // Console.WriteLine("Right");
-        // Gunnar.Right();
-        // Console.WriteLine("Forwards");
-        // Gunnar.Move();
-        // Gunnar.Report(); 
 
         Gunnar.CleanUp();
     }
