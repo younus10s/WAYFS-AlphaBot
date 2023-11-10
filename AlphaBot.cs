@@ -53,11 +53,11 @@ public class AlphaBot
 
     public void LineFollow()
     {
-        double ScalingFactor = 200;
+        double ScalingFactor = 100;
 
-        double X = 50*ScalingFactor;
-        double Y = 10000*ScalingFactor;
-        double Z = 10*ScalingFactor;
+        double PositionParameter   = 0.01;
+        double IntegralParameter   = 0.0001;
+        double DerivativeParameter = 0.05;
 
         double Position;
         double Derivative;
@@ -67,18 +67,19 @@ public class AlphaBot
 
         double SteeringInput;
 
+        MotionControl.Forward(Power);
+
         while (Following()) {
             Position = TRSensor.GetPosition();
 
             Derivative = Position - LastPosition;
-            Integral += Position;
+            Integral  += Position;
 
-            SteeringInput = Position / X + Integral / Y + Derivative / Z;
+            SteeringInput = Position * PositionParameter 
+                          + Integral * IntegralParameter 
+                          + Derivative * DerivativeParameter;
 
-            //Console.WriteLine("Position: " + Position + ", Steering: " + SteeringInput);
-            //Console.WriteLine("POS: " + Position / X + ", INT: " + Integral / Y + ", DER: " + Derivative / Z);
-
-            Steer(SteeringInput);
+            Steer(SteeringInput/ScalingFactor);
 
             LastPosition = Position;
         }
@@ -115,8 +116,7 @@ public class AlphaBot
             
         if(SensorValues.Sum() == 0) {
             CleanUp();
-            throw new Exception("Can not find the line any more!");
-            return false;
+            throw new OffLineException("Can not find the line any more!");
         }
 
         return true;
@@ -124,5 +124,22 @@ public class AlphaBot
 
     public void CleanUp() {
         MotionControl.CleanUp();
+    }
+}
+
+public class OffLineException : Exception
+{
+    public OffLineException()
+    {
+    }
+
+    public OffLineException(string message)
+        : base(message)
+    {
+    }
+
+    public OffLineException(string message, Exception innerException)
+        : base(message, innerException)
+    {
     }
 }

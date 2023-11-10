@@ -74,10 +74,6 @@ public class TRSensor {
             Values[i] = (Values[i] > MaxReading) ? MaxReading : Values[i];
             Values[i] = (Values[i] < MinReading) ? MinReading : Values[i];
 
-			int x = Values[i] - MinReading;
-			x = x * 1000 / MaxReading;
-			x = 1000 - x;
-
 			CalibratedValues[i] = 1000 - ((Values[i] - MinReading) * 1000 / MaxReading);
 		}
 

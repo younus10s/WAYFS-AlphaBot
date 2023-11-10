@@ -52,7 +52,30 @@ public class GridBot {
         }
         
         if(PositionValid(tempX, tempY)) {
-            Gunnar.LineFollow();
+            bool MoveDone = false;
+            while (!MoveDone)
+            {
+                try
+                {
+                    Gunnar.LineFollow();
+                    MoveDone = true;
+                }
+                catch (OffLineException e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine("Whoops! Put me back on the line please! :D");
+                    Console.WriteLine("Press any key when ready!");
+                    Console.ReadLine();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+
+                    CleanUp();
+                    Environment.Exit(0);
+                }                
+            }
+
             PosX = tempX; 
             PosY = tempY; 
 
