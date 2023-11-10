@@ -22,8 +22,10 @@ class Program {
 
         //Gunnar.CleanUp();
 
-        AlphaBot Ab = new AlphaBot(0.5, false);
+        //AlphaBot Ab = new AlphaBot(0.5, false);
+        Camera cam = new Camera(); 
         //Ab.Cam.RunCamera();
+        //Console.WriteLine("Funkar :)"); 
 
     }
 }
