@@ -52,7 +52,7 @@ public class AlphaBot
     }
 
     public void LineFollow()
-    {
+    {        
         double ScalingFactor = 100;
 
         double PositionParameter   = 0.01;
@@ -68,6 +68,8 @@ public class AlphaBot
         double SteeringInput;
 
         MotionControl.Forward(Power);
+
+        Console.WriteLine(Power);
 
         while (Following()) {
             Position = TRSensor.GetPosition();

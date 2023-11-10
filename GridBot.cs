@@ -57,11 +57,15 @@ public class GridBot {
             {
                 try
                 {
+                    Console.WriteLine("Got here!");
                     Gunnar.LineFollow();
+                    Console.WriteLine("Got here three!");
                     MoveDone = true;
                 }
                 catch (OffLineException e)
                 {
+                    Console.WriteLine(MoveDone);
+                    MoveDone = false; 
                     Console.WriteLine(e.Message);
                     Console.WriteLine("Whoops! Put me back on the line please! :D");
                     Console.WriteLine("Press any key when ready!");
