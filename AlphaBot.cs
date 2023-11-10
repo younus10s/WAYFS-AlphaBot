@@ -11,7 +11,7 @@
  * CleanUp()
  * Calls MotionControl to stop both left and right motor, should be called after running. 
  */
-class AlphaBot
+public class AlphaBot
 {
     public MotionControl MotionControl = new MotionControl();
     public TRSensor TRSensor = new TRSensor();
@@ -32,7 +32,7 @@ class AlphaBot
         while(SensorValues[2]==1) {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[2]==0) {
+        while(SensorValues[0]==0) {
             SensorValues = TRSensor.ReadLine();
         }
         MotionControl.Stop();
@@ -45,7 +45,7 @@ class AlphaBot
         while(SensorValues[2]==1) {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[2]==0) {
+        while(SensorValues[4]==0) {
             SensorValues = TRSensor.ReadLine();
         }
         MotionControl.Stop();
@@ -109,7 +109,9 @@ class AlphaBot
     {
         int[] SensorValues = TRSensor.ReadLine();
 
-        if (SensorValues.Sum() >= 3) return false;
+        if (SensorValues.Sum() >= 3){
+            return false;
+        }
             
         if(SensorValues.Sum() == 0) {
             CleanUp();

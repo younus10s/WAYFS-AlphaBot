@@ -113,16 +113,11 @@ public class TRSensor {
 
 		int[] ThresholdedData = new int[SensorData.Length];
 
-		for(int i = 0; i < SensorData.Length; i++){
-			if(SensorData[i] < 550 && SensorData[i] > 0)
-				ThresholdedData[i] = 1;
-			else
-				ThresholdedData[i] = 0;
-		}
+		int Treshold = 500;
 
-		//sensor value test
-		//Console.WriteLine("data: \t" + string.Join(", ", SensorData) + 
-		//						"\t\t" + string.Join(", ", ThresholdedData));
+		for(int i = 0; i < SensorData.Length; i++){
+			ThresholdedData[i] = (SensorData[i] < Treshold) ? 1 : 0;
+		}
 
 		return ThresholdedData;
 	}
