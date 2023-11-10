@@ -29,10 +29,10 @@ public class AlphaBot
         int[] SensorValues = TRSensor.ReadLine();
         MotionControl.Left(Power/2);
 
-        while(SensorValues[2]==1) {
+        while(SensorValues[1]==1) {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[0]==0) {
+        while(SensorValues[1]==0) {
             SensorValues = TRSensor.ReadLine();
         }
         MotionControl.Stop();
@@ -42,10 +42,10 @@ public class AlphaBot
         int[] SensorValues = TRSensor.ReadLine();
         MotionControl.Right(Power/2);
         
-        while(SensorValues[2]==1) {
+        while(SensorValues[3]==1) {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[4]==0) {
+        while(SensorValues[3]==0) {
             SensorValues = TRSensor.ReadLine();
         }
         MotionControl.Stop();
@@ -75,8 +75,8 @@ public class AlphaBot
 
             SteeringInput = Position / X + Integral / Y + Derivative / Z;
 
-            Console.WriteLine("Position: " + Position + ", Steering: " + SteeringInput);
-            Console.WriteLine("POS: " + Position / X + ", INT: " + Integral / Y + ", DER: " + Derivative / Z);
+            //Console.WriteLine("Position: " + Position + ", Steering: " + SteeringInput);
+            //Console.WriteLine("POS: " + Position / X + ", INT: " + Integral / Y + ", DER: " + Derivative / Z);
 
             Steer(SteeringInput);
 

@@ -57,13 +57,12 @@ public class GridBot {
             PosY = tempY; 
 
             int[] SensorValues = Gunnar.TRSensor.ReadLine();
+            Gunnar.MotionControl.Forward(0.1);
 
             while(SensorValues.Sum() >= 3){
-                Gunnar.MotionControl.Forward(0.1);
                 SensorValues = Gunnar.TRSensor.ReadLine();
             }
 
-            Thread.Sleep(100);
             Gunnar.MotionControl.Stop();
         } else {
             Console.WriteLine("Invalid move :)");
