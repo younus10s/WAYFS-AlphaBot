@@ -26,6 +26,7 @@ class Program {
         Camera Cam = new Camera();
         Cam.RunCamera();
         //Ab.Cam.RunCamera();
+        //Console.WriteLine("Funkar :)"); 
 
     }
 }
