@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     },
 
     mapContainer: {
-      backgroundColor: "gray",
+      //backgroundColor: "gray",
       position: 'absolute',
       width: 447,
       height: 260,
@@ -134,7 +134,38 @@ const styles = StyleSheet.create({
       bottom: 1,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+
+    mapRow: {
+      //backgroundColor: "blue",
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: "100%",
+      height: "20%",
+
+    },
+
+    mapCell: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: "20%",
+        height: "100%",
+
+    },
+    mapCellImg: {
+      width: "100%",
+      height: "100%"
+    },
+
+    pac: {
+      position: 'absolute',
+      width: 50,
+      height: 50,
+      transform: [{ rotate: '0deg'}],
     }
+
   });
 
 export default styles;

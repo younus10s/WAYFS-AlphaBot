@@ -36,29 +36,29 @@ export default function App() {
             const distance = Math.sqrt(gestureState.dx ** 2 + gestureState.dy ** 2);
 
             //Update power x
-            if(gestureState.dx >= 0 && gestureState.dx <= 10)
+            if(gestureState.dx >= 0 && gestureState.dx <= 12)
             setDx(0)
-            else if (gestureState.dx >= 11 && gestureState.dx <= 30)
+            else if (gestureState.dx >= 21 && gestureState.dx <= 30)
               setDx(0.5)
             else if (gestureState.dx >= 30 && gestureState.dx <= 40)
               setDx(1)
-            else if(gestureState.dx <= 0 && gestureState.dx >= -10)
+            else if(gestureState.dx <= 0 && gestureState.dx >= -20)
               setDx(0)
-            else if (gestureState.dx <= -11 && gestureState.dx >= -30)
+            else if (gestureState.dx <= -21 && gestureState.dx >= -30)
               setDx(-0.5)
             else if (gestureState.dx <= -30 && gestureState.dx >= -40)
               setDx(-1)
             
             //Update power y
-            if(gestureState.dy >= 0 && gestureState.dy <= 10)
+            if(gestureState.dy >= 0 && gestureState.dy <= 20)
               setDy(0)
-            else if (gestureState.dy >= 11 && gestureState.dy <= 30)
+            else if (gestureState.dy >= 21 && gestureState.dy <= 30)
               setDy(-0.5)
             else if (gestureState.dy >= 30 && gestureState.dy <= 40)
               setDy(-1)
-            else if(gestureState.dy <= 0 && gestureState.dy >= -10)
+            else if(gestureState.dy <= 0 && gestureState.dy >= -20)
               setDy(0)
-            else if (gestureState.dy <= -11 && gestureState.dy >= -30)
+            else if (gestureState.dy <= -21 && gestureState.dy >= -30)
               setDy(0.5)
             else if (gestureState.dy <= -30 && gestureState.dy >= -40)
               setDy(1)
@@ -159,7 +159,94 @@ export default function App() {
 
         {/* Map code */}
         { !isCameraMode && <View style={styles.mapContainer}>
-          <Text>Map Here!</Text>
+          <View style={styles.mapRow}>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+          </View>
+          <View style={styles.mapRow}>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+          </View>
+          <View style={styles.mapRow}>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+          </View>
+          <View style={styles.mapRow}>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+          </View>
+          <View style={styles.mapRow}>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+            <View style={styles.mapCell}> 
+              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
+            </View>
+          </View>
+
+          <Image style={styles.pac} source={require('./assets/pac.png')}/> 
+          
         </View>
         }
 
