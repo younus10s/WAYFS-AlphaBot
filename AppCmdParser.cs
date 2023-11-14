@@ -30,12 +30,12 @@ public class AppCmdParser {
             string command = Parts[i];
             switch(command){
                 case "PLACE":
-                    if (Parts[1].GetType() == typeof(int) && Parts[2].GetType() == typeof(int) && Parts[3].GetType() == typeof(string)){
+                    //if (Parts[1].GetType() == typeof(int) && Parts[2].GetType() == typeof(int) && Parts[3].GetType() == typeof(string)){
                         Gunnar.Place(int.Parse(Parts[1]), int.Parse(Parts[2]), Parts[3].ToLower());
                         i = 3; // Jump array to index 3 as X,Y,Direction has been used
-                    }else{
-                        Console.WriteLine("Invalid Command PLACE");
-                    }
+                    //}else{
+                    //    Console.WriteLine("Invalid Command PLACE");
+                    //}
                     break;
                 case "MOVE":
                 // Send a string message back to the client
