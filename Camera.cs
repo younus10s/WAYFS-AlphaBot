@@ -11,6 +11,10 @@ class Camera{
 
 
     public Camera(){
+        
+    }
+
+    public void takePicture(){
         MMALCamera cam = MMALCamera.Instance;
 
         try
@@ -24,7 +28,15 @@ class Camera{
                 // Capture an image
                 cam.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
 
-                Console.WriteLine("Image captured successfully");
+                if (File.Exists(imgCaptureHandler.GetFilepath()))
+                {
+                    Console.WriteLine($"Image saved at {imgCaptureHandler.GetFilepath()}");
+                }
+                else
+                {
+                    Console.WriteLine("Failed to save image.");
+                }
+
             }
         }
         catch (Exception ex)
