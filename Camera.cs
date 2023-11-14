@@ -14,7 +14,7 @@ class Camera{
         
     }
 
-    public void takePicture(){
+    public async Task takePicture(){
         MMALCamera cam = MMALCamera.Instance;
 
         try
@@ -25,10 +25,10 @@ class Camera{
             // Create an image capture handler
             using (var imgCaptureHandler = new ImageStreamCaptureHandler("img/", "jpg"))
             {
-                Thread.Sleep(1000);
+                //Thread.Sleep(1000);
                 // Capture an image
                 Console.WriteLine("Ready");
-                cam.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
+                await cam.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
             }
         }
         catch (Exception ex)

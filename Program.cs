@@ -1,5 +1,5 @@
 class Program {
-    static void Main(string[] args) {
+    static async Task Main(string[] args) {
         
         //GridBot Gunnar = new GridBot(5, 5);
         //TxtParser TParser = new TxtParser(Gunnar);
@@ -21,10 +21,7 @@ class Program {
         // Gunnar.Report(); 
 
         //Gunnar.CleanUp();
-
-        //AlphaBot Ab = new AlphaBot(0.5, false);
-        Camera Cam = new Camera();
-        Cam.takePicture();
+        
         //Ab.Cam.RunCamera();
         //Console.WriteLine("Funkar :)"); 
 
