@@ -13,7 +13,7 @@
  * Make the robot turns 90 degree on a crossing
  */
 public class GridBot {
-    public AlphaBot Gunnar;
+    private AlphaBot AlphaBot;
     private static int NumRows;
     private static int NumCols;
     private int PosX;
@@ -21,9 +21,13 @@ public class GridBot {
     private string Heading = "";
 
     public GridBot(int Rows, int Cols) {
-        Gunnar = new AlphaBot(0.4, true);
+        AlphaBot = new AlphaBot(0.4, true);
         NumRows = Rows;
         NumCols = Cols;
+    }
+
+    public async Task TakePicture(){
+        await AlphaBot.Camera.TakePicture();
     }
 
     public void Place(int PosX_, int PosY_, string Heading_) {
@@ -57,7 +61,7 @@ public class GridBot {
             {
                 try
                 {
-                    Gunnar.LineFollow();
+                    AlphaBot.LineFollow();
                     MoveDone = true;
                 }
                 catch (OffLineException e)
@@ -81,21 +85,21 @@ public class GridBot {
             PosX = tempX; 
             PosY = tempY; 
 
-            int[] SensorValues = Gunnar.TRSensor.ReadLine();
-            Gunnar.MotionControl.Forward(0.1);
+            int[] SensorValues = AlphaBot.TRSensor.ReadLine();
+            AlphaBot.MotionControl.Forward(0.1);
 
             while(SensorValues.Sum() >= 3){
-                SensorValues = Gunnar.TRSensor.ReadLine();
+                SensorValues = AlphaBot.TRSensor.ReadLine();
             }
 
-            Gunnar.MotionControl.Stop();
+            AlphaBot.MotionControl.Stop();
         } else {
             Console.WriteLine("Invalid move :)");
         }
     }
 
     public void Left() {
-        Gunnar.TurnLeft();
+        AlphaBot.TurnLeft();
         switch(Heading) {
             case "north": 
                 Heading="west"; 
@@ -113,7 +117,7 @@ public class GridBot {
     }
 
     public void Right() {
-        Gunnar.TurnRight();
+        AlphaBot.TurnRight();
         switch(Heading) {
             case "north": 
                 Heading="east"; 
@@ -134,12 +138,12 @@ public class GridBot {
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);
     }
 
+    public void CleanUp() {
+        AlphaBot.CleanUp();
+    }
+ 
     private bool PositionValid(int X, int Y)
     {
         return !(X < 0 || X >= NumRows || Y < 0 || Y >= NumCols);
-    }
-
-    public void CleanUp() {
-        Gunnar.CleanUp();
     }
 }

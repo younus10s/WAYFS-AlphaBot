@@ -11,14 +11,13 @@
  * CleanUp()
  * Calls MotionControl to stop both left and right motor, should be called after running. 
  */
-using System.Numerics;
 
 public class AlphaBot
 {
     public MotionControl MotionControl = new MotionControl();
     public TRSensor TRSensor = new TRSensor();
+    public Camera Camera = new Camera();
 
-    public Camera Cam = new Camera();
     private double Power;
 
     public AlphaBot(double power, bool Calibrate) {

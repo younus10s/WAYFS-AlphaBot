@@ -15,20 +15,14 @@
  */
 
 class TxtParser {
-    private GridBot Gunnar; 
-
-    public TxtParser(GridBot GridBot) {
-        Gunnar = GridBot; 
-    }
-
-    public void RunFile(string FilePath){
+    public void RunFile(string FilePath, GridBot Gunnar){
         if (File.Exists(FilePath)) {
 
             using (StreamReader Reader = new StreamReader(FilePath)) {
                 string? Line;
 
                 while ((Line = Reader.ReadLine()) != null) {
-                    Execute(Line);
+                    Execute(Line, Gunnar);
                 }
             }
         } else {
@@ -36,7 +30,7 @@ class TxtParser {
         }
     }
     
-    private void Execute(string Command) {
+    private void Execute(string Command, GridBot Gunnar) {
         string[] Parts = Command.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
         switch(Parts[0]){

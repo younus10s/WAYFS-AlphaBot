@@ -1,11 +1,6 @@
-using System;
 using MMALSharp;
 using MMALSharp.Common;
 using MMALSharp.Handlers;
-using MMALSharp.Native;
-using MMALSharp.Ports;
-using MMALSharp.Ports.Outputs;
-using System.Text;
 
 public class Camera{
 
@@ -14,7 +9,7 @@ public class Camera{
         
     }
 
-    public async Task takePicture(){
+    public async Task TakePicture(){
         MMALCamera cam = MMALCamera.Instance;
 
         try
