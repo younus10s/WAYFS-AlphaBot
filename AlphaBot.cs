@@ -11,6 +11,8 @@
  * CleanUp()
  * Calls MotionControl to stop both left and right motor, should be called after running. 
  */
+using System.Numerics;
+
 public class AlphaBot
 {
     public MotionControl MotionControl = new MotionControl();
@@ -53,40 +55,52 @@ public class AlphaBot
 
     public void LineFollow()
     {        
-        double ScalingFactor = 100;        //öka?
+        double ScalingFactor = 100; //öka?
 
+        int MemorySize = 5;
+        double[] PositionMemory = new double[MemorySize];
 
         double PositionParameter   = 0.01; //minska?
         double IntegralParameter   = 0.0001;
-        double DerivativeParameter = 0.05; 
+        double DerivativeParameter = 0.05/MemorySize; //minskad 
 
-        double Position;
+        //double Position;
         double Derivative;
         double Integral = 0;
 
-        double LastPosition = 0;
-        double LLPosition = 0;
-        double LLLPosition = 0;
+        //double LastPosition = 0;
 
         double SteeringInput;
 
         MotionControl.Forward(Power);
 
         while (Following()) {
-            Position = TRSensor.GetPosition();
 
-            Derivative = (Position - LastPosition) + (Position - LLPosition) + (Position - LLLPosition);
-            Integral  += Position;
+            for (int i = MemorySize; i > 1; i--)
+            {
+                PositionMemory[i] = PositionMemory[i-1];
+            }
 
-            SteeringInput = Position * PositionParameter 
+            PositionMemory[0] = TRSensor.GetPosition();
+
+            //Position = TRSensor.GetPosition();
+            //Derivative = Position - LastPosition;
+
+            Derivative = 0;
+
+            for (int i = 1; i < MemorySize; i++)
+            {
+                Derivative += (PositionMemory[0] - PositionMemory[i]);
+            }
+
+            //Integral += Position;
+            Integral += PositionMemory[0];
+
+            SteeringInput = PositionMemory[0] * PositionParameter 
                           + Integral * IntegralParameter 
                           + Derivative * DerivativeParameter;
 
             Steer(SteeringInput/ScalingFactor);
-
-            LastPosition = Position;
-            LLPosition = LastPosition;
-            LLLPosition = LLPosition;
         }
 
         MotionControl.Stop();
