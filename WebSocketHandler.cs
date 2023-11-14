@@ -9,7 +9,8 @@ namespace ConsoleApplication {
 public class WebSocketHandler
     {
         private string clientMessage = "";
-        public async void HandleWebSocketAsync(WebSocket webSocket, AppCmdParser cmdParser)
+        public async         Task
+HandleWebSocketAsync(WebSocket webSocket, AppCmdParser cmdParser)
         {
             try
             {
@@ -25,7 +26,6 @@ public class WebSocketHandler
                         clientMessage = Encoding.UTF8.GetString(buffer, 0, result.Count);
 
                         Console.WriteLine($"Received from client: {clientMessage} \n");
-                        Console.WriteLine($"Type: {clientMessage.GetType()}");
 
                         await Task.Delay(1000); // delay task
 
@@ -49,7 +49,7 @@ public class WebSocketHandler
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"WebSocket error: {ex.Message}");
+                Console.WriteLine($"WebSocket exception caught: {ex.Message}");
             }
             
         }

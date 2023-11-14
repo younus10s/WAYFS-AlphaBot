@@ -47,20 +47,60 @@ function ControlRobot() {
     }
 
     useEffect(() => {
+        const newWebSocket = new WebSocket('ws://192.168.187.236:5175');
 
-        const webSocket = new WebSocket('ws://localhost:5175');
+        newWebSocket.onopen = () => {
+            console.log('WebSocket connected');
+        };
+
+        newWebSocket.onerror = (error) => {
+            console.error('WebSocket error: ' + error);
+        };
+
+        // newWebSocket.onclose = (event) => {
+        //     if (event.wasClean) {
+        //         console.log('WebSocket closed cleanly');
+        //     } else {
+        //         console.error('WebSocket connection abruptly closed');
+        //     }
+        //     console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
+        // };
+
+        setWebSocket(newWebSocket);
+
+    }, []); // Empty dependency array means this effect runs once after the initial render
+
+    const handleSendClick = () => {
+
+        handleClick("send"); // To update current step
+
+        //const webSocket = new WebSocket('ws://192.168.187.236:5175');
         // // When running server in localhost: ws://localhost:5175
         // // When running server in RPi: ws://192.168.187.236:5175
 
+        const fullCommands = combineCommands();
+
         webSocket.onopen = () => {
             console.log('WebSocket connected');
+            webSocket.send(fullCommands);
+            console.log(fullCommands);
             setWebSocket(webSocket);
         };
 
         webSocket.onerror = (error) => {
             console.error('WebSocket error: ' + error);
         };
-    }, []);
+
+        webSocket.onclose = (event) => {
+            if (event.wasClean) {
+                console.log('WebSocket closed cleanly');
+            } else {
+                console.error('WebSocket connection abruptly closed');
+            }
+            console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
+        };
+
+    };
 
     const receiveServerMessage = () => {
 
@@ -85,60 +125,6 @@ function ControlRobot() {
             }
         }
     }
-
-    const handleSendClick = () => {
-
-        handleClick("send"); // To update current step
-
-        const fullCommands = combineCommands();
-
-        console.log(fullCommands);
-
-        if (webSocket && webSocket.readyState === WebSocket.OPEN) {
-
-            webSocket.send(fullCommands);
-            console.log(fullCommands);
-        } else {
-            console.log("Commands could not be sent to server (is WebSocket open?)");
-        }
-
-        //receiveServerMessage();
-
-        // const webSocket = new WebSocket('ws://localhost:5175');
-        // // When running server in localhost: ws://localhost:5175
-        // // When running server in RPi: ws://192.168.187.236:5175
-
-        // webSocket.onopen = () => {
-        //     console.log('WebSocket connected');
-        //     sendMessage(fullCommands);
-        //     console.log(fullCommands);
-        //     setWebSocket(webSocket);
-        // };
-
-        // webSocket.onerror = (error) => {
-        //     console.error('WebSocket error: ' + error);
-        // };
-
-        // webSocket.onmessage = (event) => {
-        //     // Parse message from string into an array of doubles
-        //     console.log(typeof event.data);
-
-        //     const message = JSON.parse(event.data);
-
-        //     console.log("Message from server: ", message);
-
-        // };
-        // webSocket.onclose = (event) => {
-        //     if (event.wasClean) {
-        //         console.log('WebSocket closed cleanly');
-        //     } else {
-        //         console.error('WebSocket connection abruptly closed');
-        //     }
-        //     console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
-        // };
-
-
-    };
 
     const combineCommands = () => {
 
