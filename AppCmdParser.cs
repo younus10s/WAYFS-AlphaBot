@@ -40,9 +40,10 @@ public class AppCmdParser {
                 case "MOVE":
                 // Send a string message back to the client
 
-                    Gunnar.SendMessageToClient("Move");
-
                     Gunnar.Move();
+                    
+                   // Gunnar.SendMessageToClient("Move");
+
                 break;
                 case "LEFT":
                     Gunnar.Left();

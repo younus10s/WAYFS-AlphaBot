@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StepperControl from './StepperControl';
 import PlaceStep from './steps/PlaceStep';
 import CommandStep from './steps/CommandStep';
@@ -12,6 +12,8 @@ function ControlRobot() {
     //const [connected, setConnected] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
     const [commands, setCommands] = useState([]);
+    const [webSocket, setWebSocket] = useState(null);
+
     const [placeValues, setPlaceValues] = useState(
         {
             xcoord: "0",
@@ -44,6 +46,45 @@ function ControlRobot() {
         });
     }
 
+    useEffect(() => {
+
+        const webSocket = new WebSocket('ws://localhost:5175');
+        // // When running server in localhost: ws://localhost:5175
+        // // When running server in RPi: ws://192.168.187.236:5175
+
+        webSocket.onopen = () => {
+            console.log('WebSocket connected');
+            setWebSocket(webSocket);
+        };
+
+        webSocket.onerror = (error) => {
+            console.error('WebSocket error: ' + error);
+        };
+    }, []);
+
+    const receiveServerMessage = () => {
+
+        if (webSocket && webSocket.readyState === WebSocket.OPEN) {
+
+            webSocket.onmessage = (event) => {
+                // Parse message from string into an array of doubles
+                console.log(typeof event.data);
+
+                const message = JSON.parse(event.data);
+
+                console.log("Message from server: ", message);
+
+                webSocket.onclose = (event) => {
+                    if (event.wasClean) {
+                        console.log('WebSocket closed cleanly');
+                    } else {
+                        console.error('WebSocket connection abruptly closed');
+                    }
+                    console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
+                };
+            }
+        }
+    }
 
     const handleSendClick = () => {
 
@@ -52,41 +93,50 @@ function ControlRobot() {
         const fullCommands = combineCommands();
 
         console.log(fullCommands);
-        const webSocket = new WebSocket('ws://localhost:5175');
-        // When running server in localhost: ws://localhost:5175
-        // When running server in RPi: ws://192.168.158.236:5175
-        webSocket.onopen = () => {
-            console.log('WebSocket connected');
+
+        if (webSocket && webSocket.readyState === WebSocket.OPEN) {
+
             webSocket.send(fullCommands);
             console.log(fullCommands);
-            setConnected(true);
-        };
+        } else {
+            console.log("Commands could not be sent to server (is WebSocket open?)");
+        }
 
-        webSocket.onerror = (error) => {
-            console.error('WebSocket error: ' + error);
-        };
+        //receiveServerMessage();
 
-        webSocket.onmessage = (event) => {
-            // Parse message from string into an array of doubles
-            console.log(typeof event.data)
-            const message = JSON.parse(event.data);
+        // const webSocket = new WebSocket('ws://localhost:5175');
+        // // When running server in localhost: ws://localhost:5175
+        // // When running server in RPi: ws://192.168.187.236:5175
 
-            console.log("Message from server: ", message);
+        // webSocket.onopen = () => {
+        //     console.log('WebSocket connected');
+        //     sendMessage(fullCommands);
+        //     console.log(fullCommands);
+        //     setWebSocket(webSocket);
+        // };
 
+        // webSocket.onerror = (error) => {
+        //     console.error('WebSocket error: ' + error);
+        // };
 
-        };
+        // webSocket.onmessage = (event) => {
+        //     // Parse message from string into an array of doubles
+        //     console.log(typeof event.data);
 
-        webSocket.onclose = (event) => {
-            if (event.wasClean) {
-                console.log('WebSocket closed cleanly');
-            } else {
-                console.error('WebSocket connection abruptly closed');
-            }
-            console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
-        };
+        //     const message = JSON.parse(event.data);
 
+        //     console.log("Message from server: ", message);
 
-        console.log(currentStep);
+        // };
+        // webSocket.onclose = (event) => {
+        //     if (event.wasClean) {
+        //         console.log('WebSocket closed cleanly');
+        //     } else {
+        //         console.error('WebSocket connection abruptly closed');
+        //     }
+        //     console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
+        // };
+
 
     };
 

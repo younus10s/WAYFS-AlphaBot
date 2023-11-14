@@ -21,3 +21,6 @@ source ~/.bashrc
 ## Add GPIO package for pin access:
 
 dotnet add package System.Device.Gpio --version 2.2.0-*
+
+## Start server with IP address
+dotnet run --urls "http://192.168.187.236:5175"
