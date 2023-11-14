@@ -7,7 +7,7 @@ using MMALSharp.Ports;
 using MMALSharp.Ports.Outputs;
 using System.Text;
 
-class Camera{
+public class Camera{
 
 
     public Camera(){

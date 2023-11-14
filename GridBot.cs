@@ -13,7 +13,7 @@
  * Make the robot turns 90 degree on a crossing
  */
 public class GridBot {
-    private AlphaBot Gunnar;
+    public AlphaBot Gunnar;
     private static int NumRows;
     private static int NumCols;
     private int PosX;
