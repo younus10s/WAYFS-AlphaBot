@@ -53,17 +53,20 @@ public class AlphaBot
 
     public void LineFollow()
     {        
-        double ScalingFactor = 100;
+        double ScalingFactor = 100;        //öka?
 
-        double PositionParameter   = 0.01;
+
+        double PositionParameter   = 0.01; //minska?
         double IntegralParameter   = 0.0001;
-        double DerivativeParameter = 0.05;
+        double DerivativeParameter = 0.05; 
 
         double Position;
         double Derivative;
         double Integral = 0;
 
         double LastPosition = 0;
+        double LLPosition = 0;
+        double LLLPosition = 0;
 
         double SteeringInput;
 
@@ -74,7 +77,7 @@ public class AlphaBot
         while (Following()) {
             Position = TRSensor.GetPosition();
 
-            Derivative = Position - LastPosition;
+            Derivative = (Position - LastPosition) + (Position - LLPosition) + (Position - LLLPosition);
             Integral  += Position;
 
             SteeringInput = Position * PositionParameter 
@@ -84,6 +87,8 @@ public class AlphaBot
             Steer(SteeringInput/ScalingFactor);
 
             LastPosition = Position;
+            LLPosition = LastPosition;
+            LLLPosition = LLPosition;
         }
 
         MotionControl.Stop();
