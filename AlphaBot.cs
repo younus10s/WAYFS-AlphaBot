@@ -55,19 +55,16 @@ public class AlphaBot
 
     public void LineFollow()
     {        
-        double ScalingFactor = 100; //öka?
+        double ScalingFactor = 100;
 
-        int MemorySize = 5;
+        int MemorySize = 10;
         double[] PositionMemory = new double[MemorySize];
-        //double Position;
         double Derivative;
         double Integral = 0;
 
-        double PositionParameter   = 0.01; //minska?
+        double PositionParameter   = 0.005;
         double IntegralParameter   = 0.0001;
-        double DerivativeParameter = 0.05/MemorySize; //minskad 
-
-        //double LastPosition = 0;
+        double DerivativeParameter = 0.05/MemorySize; 
 
         double SteeringInput;
 
@@ -82,9 +79,6 @@ public class AlphaBot
 
             PositionMemory[0] = TRSensor.GetPosition();
 
-            //Position = TRSensor.GetPosition();
-            //Derivative = Position - LastPosition;
-
             Derivative = 0;
 
             for (int i = 1; i < MemorySize; i++)
@@ -92,7 +86,6 @@ public class AlphaBot
                 Derivative += (PositionMemory[0] - PositionMemory[i]);
             }
 
-            //Integral += Position;
             Integral += PositionMemory[0];
 
             SteeringInput = PositionMemory[0] * PositionParameter 
