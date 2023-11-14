@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Stepper from './Stepper';
 import StepperControl from './StepperControl';
 import PlaceStep from './steps/PlaceStep';
 import CommandStep from './steps/CommandStep';
 import StepperContext from '../contexts/StepperContext';
+import MovingStep from './steps/MovingStep';
 /**
  * Component to control robot by adding, removing and sending a string of commands.
  * Commands are sent by starting a websocket.
@@ -14,15 +14,16 @@ function ControlRobot() {
     const [commands, setCommands] = useState([]);
     const [placeValues, setPlaceValues] = useState(
         {
-            xcoord: 0,
-            ycoord: 0,
+            xcoord: "0",
+            ycoord: "0",
             direction: "North"
         }
     );
 
     const steps = [
         "Placement of Robot",
-        "Enter Commands"
+        "Enter Commands",
+        "Show robot move"
     ];
 
     const handleXChange = (event) => {
@@ -45,6 +46,9 @@ function ControlRobot() {
 
 
     const handleSendClick = () => {
+
+        handleClick("send"); // To update current step
+
         const fullCommands = combineCommands();
 
         console.log(fullCommands);
@@ -62,11 +66,15 @@ function ControlRobot() {
             console.error('WebSocket error: ' + error);
         };
 
-        // webSocket.onmessage = (event) => {
-        //     // Parse message from string into an array of doubles
-        //     console.log(typeof event.data)
-        //     const doubles = JSON.parse(event.data);
-        // };
+        webSocket.onmessage = (event) => {
+            // Parse message from string into an array of doubles
+            console.log(typeof event.data)
+            const message = JSON.parse(event.data);
+
+            console.log("Message from server: ", message);
+
+
+        };
 
         webSocket.onclose = (event) => {
             if (event.wasClean) {
@@ -76,9 +84,16 @@ function ControlRobot() {
             }
             console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
         };
+
+
+        console.log(currentStep);
+
     };
 
     const combineCommands = () => {
+
+        console.log(placeValues);
+        console.log(commands);
         let fullCommands = "PLACE,";
         fullCommands += placeValues.xcoord.concat(",", placeValues.ycoord);
         fullCommands = fullCommands.concat(",", placeValues.direction.toUpperCase());
@@ -114,6 +129,9 @@ function ControlRobot() {
                     addCommand={addCommand}
                     removeCommand={removeCommand}
                     placeValues={placeValues} />
+            case 3:
+                return <MovingStep
+                    commands={commands} />
             default:
                 return null;
         }
@@ -122,9 +140,12 @@ function ControlRobot() {
     const handleClick = (direction) => {
         let newStep = currentStep;
 
-        direction === "next" ? newStep++ : newStep--;
+        direction === "next" || direction === "send" ? newStep++ : newStep--;
         // check if steps are withing bounds
         newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
+
+
+        console.log(currentStep);
     }
 
     return (

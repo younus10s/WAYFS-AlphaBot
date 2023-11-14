@@ -12,11 +12,19 @@
  * Left() /Right()
  * Make the robot turns 90 degree on a crossing
  */
+using System.Text;
+using System.Net.WebSockets;
+using ConsoleApplication;
+
 public class GridBot {
     public AlphaBot Gunnar;
 
     private static int NumRows;
     private static int NumCols;
+
+    public static WebSocketHandler? webSocketHandler;
+
+    public static WebSocket webSocket;
 
     private int PosX;
     private int PosY;
@@ -26,6 +34,7 @@ public class GridBot {
         Gunnar = new AlphaBot(0.2);
         NumRows = Rows;
         NumCols = Cols;
+        webSocketHandler = new WebSocketHandler();
     }
 
     public void Place(int PosX_, int PosY_, string Heading_) {
@@ -121,5 +130,20 @@ public class GridBot {
 
     public void CleanUp() {
         Gunnar.CleanUp();
+    }
+
+    public async void StartSocket(HttpContext context)
+    {
+        AppCmdParser appCmdParser = new AppCmdParser(this);
+
+        webSocket = await context.WebSockets.AcceptWebSocketAsync();
+        webSocketHandler.HandleWebSocketAsync(webSocket, appCmdParser);
+
+    }
+
+    public async void SendMessageToClient(string message)
+    {
+        byte[] serverMessageBytes = Encoding.UTF8.GetBytes(message);
+        await webSocket.SendAsync(new ArraySegment<byte>(serverMessageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
     }
 }

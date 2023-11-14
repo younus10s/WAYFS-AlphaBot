@@ -28,8 +28,9 @@ class Program
                 {
                     if (context.WebSockets.IsWebSocketRequest)
                         {
-                            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                            webSocketHandler.HandleWebSocketAsync(webSocket, appCmdParser);
+                            // WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                            // webSocketHandler.HandleWebSocketAsync(webSocket, appCmdParser);
+                            Gunnar.StartSocket(context);
 
                         } else {
                                 await next();
