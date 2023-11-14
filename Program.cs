@@ -8,11 +8,7 @@ class Program {
         GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
         TxtParser TParser = new TxtParser();
 
-        TParser.RunFile("robot.txt", Gunnar);
-
-        await Gunnar.TakePicture();
-
-        TParser.RunFile("robot.txt", Gunnar);
+        await TParser.RunFile("robot.txt", Gunnar);
  
         Gunnar.CleanUp();
     }
