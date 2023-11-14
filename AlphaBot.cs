@@ -64,7 +64,6 @@ public class AlphaBot
         double Integral = 0;
 
         double LastPosition = 0;
-
         double SteeringInput;
 
         MotionControl.Forward(Power);
@@ -92,11 +91,9 @@ public class AlphaBot
         if (SteeringInput > Power) {
             SteeringInput = Power;
         }
-
         if (SteeringInput < -Power) {
             SteeringInput = -Power;
         }
-
         if (SteeringInput < 0) {
             MotionControl.SetPowerLeft(Power + SteeringInput);
             MotionControl.SetPowerRight(Power);
@@ -113,7 +110,6 @@ public class AlphaBot
         if (SensorValues.Sum() >= 3){
             return false;
         }
-            
         if(SensorValues.Sum() == 0) {
             MotionControl.Stop(); 
             throw new OffLineException("Following: No line!");
