@@ -24,7 +24,6 @@ class Program {
 
         //AlphaBot Ab = new AlphaBot(0.5, false);
         Camera Cam = new Camera();
-        Cam.RunCamera();
         //Ab.Cam.RunCamera();
         //Console.WriteLine("Funkar :)"); 
 

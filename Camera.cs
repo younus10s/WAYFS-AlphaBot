@@ -1,58 +1,44 @@
-using Emgu.CV;
-using Emgu.CV.CvEnum;
-using Emgu.CV.Structure;
 using System;
+using MMALSharp;
+using MMALSharp.Common;
+using MMALSharp.Handlers;
+using MMALSharp.Native;
+using MMALSharp.Ports;
+using MMALSharp.Ports.Outputs;
 using System.Text;
 
 class Camera{
-    private VideoCapture capture;
-    private Mat frame;
 
 
     public Camera(){
-        capture = new VideoCapture(0, VideoCapture.API.DShow);
-        if (!capture.IsOpened)
-            Console.WriteLine("Error: Unable to open camera.");
+        MMALCamera cam = MMALCamera.Instance;
 
-        frame = new Mat();
-    }
+        try
+        {
+            // Configure the camera settings
+            cam.ConfigureCameraSettings();
 
-
-    public void RunCamera(){
-        while (true)
+            // Create an image capture handler
+            using (var imgCaptureHandler = new ImageStreamCaptureHandler("~/Desktop/", "jpg"))
             {
-                capture.Read(frame); // Read a frame from the camera
+                // Capture an image
+                cam.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
 
-                if (frame.IsEmpty)
-                {
-                    Console.WriteLine("Error: Frame is empty.");
-                    break;
-                }
-
-                // Access raw pixel data (BGR format)
-                //byte[] data = new byte[frame.Width * frame.Height * frame.NumberOfChannels];
-                //frame.CopyTo(data);
-
-                // You can process or print the raw data here
-                //Console.WriteLine("Raw data: " + string.Join(", ", data));
-
-
-                // Convert the frame to grayscale
-                CvInvoke.CvtColor(frame, frame, ColorConversion.Bgr2Gray);
-
-                // Convert the grayscale frame to ASCII art
-                string asciiArt = ConvertToAsciiArt(frame, 80, 40);
-
-                // Print the ASCII art to the console
-                Console.Clear();
-                Console.WriteLine(asciiArt);
-
-                // Optionally, add a delay to control the frame rate
-                // System.Threading.Thread.Sleep(100); // Add a 100ms delay
+                Console.WriteLine("Image captured successfully");
             }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            // Cleanup resources
+            cam.Cleanup();
+        }
     }
 
-
+    /*
     private string ConvertToAsciiArt(Mat frame, int width, int height)
     {
         StringBuilder asciiArt = new StringBuilder();
@@ -90,5 +76,6 @@ class Camera{
 
         return asciiChars[index];
     }
+    */
 
 }
