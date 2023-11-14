@@ -59,14 +59,13 @@ public class AlphaBot
 
         int MemorySize = 5;
         double[] PositionMemory = new double[MemorySize];
+        //double Position;
+        double Derivative;
+        double Integral = 0;
 
         double PositionParameter   = 0.01; //minska?
         double IntegralParameter   = 0.0001;
         double DerivativeParameter = 0.05/MemorySize; //minskad 
-
-        //double Position;
-        double Derivative;
-        double Integral = 0;
 
         //double LastPosition = 0;
 
@@ -76,7 +75,7 @@ public class AlphaBot
 
         while (Following()) {
 
-            for (int i = MemorySize; i > 1; i--)
+            for (int i = MemorySize-1; i > 0; i--)
             {
                 PositionMemory[i] = PositionMemory[i-1];
             }
