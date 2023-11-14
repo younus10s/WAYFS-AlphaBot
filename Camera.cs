@@ -23,20 +23,12 @@ class Camera{
             cam.ConfigureCameraSettings();
 
             // Create an image capture handler
-            using (var imgCaptureHandler = new ImageStreamCaptureHandler("~/Desktop/", "jpg"))
+            using (var imgCaptureHandler = new ImageStreamCaptureHandler("img/", "jpg"))
             {
+                Thread.Sleep(1000);
                 // Capture an image
+                Console.WriteLine("Ready");
                 cam.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
-
-                if (File.Exists(imgCaptureHandler.GetFilepath()))
-                {
-                    Console.WriteLine($"Image saved at {imgCaptureHandler.GetFilepath()}");
-                }
-                else
-                {
-                    Console.WriteLine("Failed to save image.");
-                }
-
             }
         }
         catch (Exception ex)
