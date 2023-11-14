@@ -28,6 +28,10 @@ public class AlphaBot
         }
     }
 
+    public async Task TakePicture(){
+        await Camera.TakePicture();
+    }
+
     public void TurnLeft() {
         int[] SensorValues = TRSensor.ReadLine();
         MotionControl.Left(Power/2);
@@ -84,7 +88,7 @@ public class AlphaBot
 
             for (int i = 1; i < MemorySize; i++)
             {
-                Derivative += (PositionMemory[0] - PositionMemory[i]);
+                Derivative += PositionMemory[0] - PositionMemory[i];
             }
 
             Integral += PositionMemory[0];

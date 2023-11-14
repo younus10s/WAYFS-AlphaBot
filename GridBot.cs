@@ -9,25 +9,21 @@
  * First checks if moving one step forward in the direction it is facing will take the robot out of the grid. 
  * Then calls Alphabot's LineFollow(). 
  * 
- * Left() /Right()
+ * Left() / Right()
  * Make the robot turns 90 degree on a crossing
  */
-public class GridBot {
-    private AlphaBot AlphaBot;
+public class GridBot : AlphaBot {
     private static int NumRows;
     private static int NumCols;
     private int PosX;
     private int PosY;
     private string Heading = "";
 
-    public GridBot(int Rows, int Cols) {
-        AlphaBot = new AlphaBot(0.4, true);
+    public GridBot(double power, bool Calibrate, int Rows, int Cols)
+            : base(power, Calibrate) 
+        {
         NumRows = Rows;
         NumCols = Cols;
-    }
-
-    public async Task TakePicture(){
-        await AlphaBot.Camera.TakePicture();
     }
 
     public void Place(int PosX_, int PosY_, string Heading_) {
@@ -61,7 +57,7 @@ public class GridBot {
             {
                 try
                 {
-                    AlphaBot.LineFollow();
+                    LineFollow();
                     MoveDone = true;
                 }
                 catch (OffLineException e)
@@ -85,21 +81,21 @@ public class GridBot {
             PosX = tempX; 
             PosY = tempY; 
 
-            int[] SensorValues = AlphaBot.TRSensor.ReadLine();
-            AlphaBot.MotionControl.Forward(0.1);
+            int[] SensorValues = TRSensor.ReadLine();
+            MotionControl.Forward(0.1);
 
             while(SensorValues.Sum() >= 3){
-                SensorValues = AlphaBot.TRSensor.ReadLine();
+                SensorValues = TRSensor.ReadLine();
             }
 
-            AlphaBot.MotionControl.Stop();
+            MotionControl.Stop();
         } else {
             Console.WriteLine("Invalid move :)");
         }
     }
 
     public void Left() {
-        AlphaBot.TurnLeft();
+        TurnLeft();
         switch(Heading) {
             case "north": 
                 Heading="west"; 
@@ -117,7 +113,7 @@ public class GridBot {
     }
 
     public void Right() {
-        AlphaBot.TurnRight();
+        TurnRight();
         switch(Heading) {
             case "north": 
                 Heading="east"; 
@@ -138,10 +134,6 @@ public class GridBot {
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);
     }
 
-    public void CleanUp() {
-        AlphaBot.CleanUp();
-    }
- 
     private bool PositionValid(int X, int Y)
     {
         return !(X < 0 || X >= NumRows || Y < 0 || Y >= NumCols);
