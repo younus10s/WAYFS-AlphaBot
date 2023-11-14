@@ -18,7 +18,7 @@ public class Camera{
             cam.ConfigureCameraSettings();
 
             // Create an image capture handler
-            using (var imgCaptureHandler = new ImageStreamCaptureHandler("img/", "jpg"))
+            using (var imgCaptureHandler = new ImageStreamCaptureHandler("../", "jpg"))
             {
                 //Thread.Sleep(1000);
                 // Capture an image
