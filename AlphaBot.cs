@@ -72,8 +72,6 @@ public class AlphaBot
 
         MotionControl.Forward(Power);
 
-        Console.WriteLine(Power);
-
         while (Following()) {
             Position = TRSensor.GetPosition();
 
@@ -99,11 +97,9 @@ public class AlphaBot
         if (SteeringInput > Power) {
             SteeringInput = Power;
         }
-
         if (SteeringInput < -Power) {
             SteeringInput = -Power;
         }
-
         if (SteeringInput < 0) {
             MotionControl.SetPowerLeft(Power + SteeringInput);
             MotionControl.SetPowerRight(Power);
@@ -120,10 +116,9 @@ public class AlphaBot
         if (SensorValues.Sum() >= 3){
             return false;
         }
-            
         if(SensorValues.Sum() == 0) {
-            CleanUp();
-            throw new OffLineException("Can not find the line any more!");
+            MotionControl.Stop(); 
+            throw new OffLineException("Following: No line!");
         }
 
         return true;

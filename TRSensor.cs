@@ -26,7 +26,6 @@ public class TRSensor {
 	private GpioController GpioController;
 
 	private bool Calibrated = false;
-
 	private int MinReading = int.MaxValue;
 	private int MaxReading = int.MinValue;
 
@@ -83,10 +82,9 @@ public class TRSensor {
 	public double GetPosition() {
 		double Average = 0.0;
 		double Sum = 0.0;
+		int[] SensorValues = ReadCalbrated();
 
 		int Threshold = 200;
-
-		int[] SensorValues = ReadCalbrated();
 
 		for(int i = 0; i < SensorValues.Length; i++) {
 			int Value = SensorValues[i];
@@ -106,9 +104,7 @@ public class TRSensor {
 
 	public int[] ReadLine() {
 		int[] SensorData = AnalogRead();
-
 		int[] ThresholdedData = new int[SensorData.Length];
-
 		int Treshold = 500;
 
 		for(int i = 0; i < SensorData.Length; i++){
