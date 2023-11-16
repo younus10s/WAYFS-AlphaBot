@@ -9,7 +9,6 @@ import MovingStep from './steps/MovingStep';
  * Commands are sent by starting a websocket.
  */
 function ControlRobot() {
-    //const [connected, setConnected] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
     const [commands, setCommands] = useState([]);
     const [webSocket, setWebSocket] = useState(null);
@@ -48,7 +47,9 @@ function ControlRobot() {
 
 
 
-    const receiveServerMessage = () => {
+    const receiveServerMessage = (webSocket) => {
+
+        console.log("Websocket ready state: ", webSocket);
 
         if (webSocket && webSocket.readyState === WebSocket.OPEN) {
 
@@ -61,6 +62,15 @@ function ControlRobot() {
                 console.log("Message from server: ", message);
 
             }
+
+            webSocket.onclose = (event) => {
+                if (event.wasClean) {
+                    console.log('WebSocket closed cleanly');
+                } else {
+                    console.error('WebSocket connection abruptly closed');
+                }
+                console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
+            };
         }
     }
 
@@ -76,27 +86,16 @@ function ControlRobot() {
             console.log('WebSocket connected');
             webSocket.send(fullCommands);
             console.log(fullCommands);
-            setConnected(true);
+            setWebSocket(webSocket);
         };
 
         webSocket.onerror = (error) => {
             console.error('WebSocket error: ' + error);
         };
 
-        // webSocket.onmessage = (event) => {
-        //     // Parse message from string into an array of doubles
-        //     console.log(typeof event.data)
-        //     const doubles = JSON.parse(event.data);
-        // };
+        //receiveServerMessage(webSocket);
 
-        webSocket.onclose = (event) => {
-            if (event.wasClean) {
-                console.log('WebSocket closed cleanly');
-            } else {
-                console.error('WebSocket connection abruptly closed');
-            }
-            console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
-        };
+
 
     };
 
