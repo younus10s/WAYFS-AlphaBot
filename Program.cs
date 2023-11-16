@@ -33,8 +33,6 @@ class Program
                         {
                             WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                             await webSocketHandler.HandleWebSocketAsync(webSocket, cmdParser);
-
-
                             
                         } else {
                                 await next();

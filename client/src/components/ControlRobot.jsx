@@ -46,22 +46,7 @@ function ControlRobot() {
         });
     }
 
-    useEffect(() => {
-        const newWebSocket = new WebSocket('ws://192.168.187.236:5175');
-        // // When running server in localhost: ws://localhost:5175
-        // // When running server in RPi: ws://192.168.187.236:5175
 
-        newWebSocket.onopen = () => {
-            console.log('WebSocket connected');
-        };
-
-        newWebSocket.onerror = (error) => {
-            console.error('WebSocket error: ' + error);
-        };
-
-        setWebSocket(newWebSocket);
-
-    }, []); // Empty dependency array means this effect runs once after the initial render
 
     const receiveServerMessage = () => {
 
@@ -85,13 +70,24 @@ function ControlRobot() {
 
         const fullCommands = combineCommands();
 
-        webSocket.send(fullCommands);
-        console.log(fullCommands);
+        const webSocket = new WebSocket('ws://192.168.187.236:5175');
 
-        setTimeout(() => {
-            receiveServerMessage();
-        }, 2000); // The receive server message will be executed after 2000 milliseconds (2 seconds)
+        webSocket.onopen = () => {
+            console.log('WebSocket connected');
+            webSocket.send(fullCommands);
+            console.log(fullCommands);
+            setConnected(true);
+        };
 
+        webSocket.onerror = (error) => {
+            console.error('WebSocket error: ' + error);
+        };
+
+        // webSocket.onmessage = (event) => {
+        //     // Parse message from string into an array of doubles
+        //     console.log(typeof event.data)
+        //     const doubles = JSON.parse(event.data);
+        // };
 
         webSocket.onclose = (event) => {
             if (event.wasClean) {
@@ -101,6 +97,7 @@ function ControlRobot() {
             }
             console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
         };
+
     };
 
     const combineCommands = () => {
