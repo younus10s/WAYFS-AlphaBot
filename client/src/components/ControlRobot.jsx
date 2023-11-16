@@ -48,6 +48,8 @@ function ControlRobot() {
 
     useEffect(() => {
         const newWebSocket = new WebSocket('ws://192.168.187.236:5175');
+        // // When running server in localhost: ws://localhost:5175
+        // // When running server in RPi: ws://192.168.187.236:5175
 
         newWebSocket.onopen = () => {
             console.log('WebSocket connected');
@@ -57,50 +59,9 @@ function ControlRobot() {
             console.error('WebSocket error: ' + error);
         };
 
-        // newWebSocket.onclose = (event) => {
-        //     if (event.wasClean) {
-        //         console.log('WebSocket closed cleanly');
-        //     } else {
-        //         console.error('WebSocket connection abruptly closed');
-        //     }
-        //     console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
-        // };
-
         setWebSocket(newWebSocket);
 
     }, []); // Empty dependency array means this effect runs once after the initial render
-
-    const handleSendClick = () => {
-
-        handleClick("send"); // To update current step
-
-        //const webSocket = new WebSocket('ws://192.168.187.236:5175');
-        // // When running server in localhost: ws://localhost:5175
-        // // When running server in RPi: ws://192.168.187.236:5175
-
-        const fullCommands = combineCommands();
-
-        webSocket.onopen = () => {
-            console.log('WebSocket connected');
-            webSocket.send(fullCommands);
-            console.log(fullCommands);
-            setWebSocket(webSocket);
-        };
-
-        webSocket.onerror = (error) => {
-            console.error('WebSocket error: ' + error);
-        };
-
-        webSocket.onclose = (event) => {
-            if (event.wasClean) {
-                console.log('WebSocket closed cleanly');
-            } else {
-                console.error('WebSocket connection abruptly closed');
-            }
-            console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
-        };
-
-    };
 
     const receiveServerMessage = () => {
 
@@ -114,17 +75,33 @@ function ControlRobot() {
 
                 console.log("Message from server: ", message);
 
-                webSocket.onclose = (event) => {
-                    if (event.wasClean) {
-                        console.log('WebSocket closed cleanly');
-                    } else {
-                        console.error('WebSocket connection abruptly closed');
-                    }
-                    console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
-                };
             }
         }
     }
+
+    const handleSendClick = () => {
+
+        handleClick("send"); // To update current step
+
+        const fullCommands = combineCommands();
+
+        webSocket.send(fullCommands);
+        console.log(fullCommands);
+
+        setTimeout(() => {
+            receiveServerMessage();
+        }, 2000); // The receive server message will be executed after 2000 milliseconds (2 seconds)
+
+
+        webSocket.onclose = (event) => {
+            if (event.wasClean) {
+                console.log('WebSocket closed cleanly');
+            } else {
+                console.error('WebSocket connection abruptly closed');
+            }
+            console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
+        };
+    };
 
     const combineCommands = () => {
 
@@ -179,7 +156,6 @@ function ControlRobot() {
         direction === "next" || direction === "send" ? newStep++ : newStep--;
         // check if steps are withing bounds
         newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
-
 
         console.log(currentStep);
     }
