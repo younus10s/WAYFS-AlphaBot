@@ -32,6 +32,7 @@ public class AppCmdParser {
                 case "PLACE":
                     //if (Parts[1].GetType() == typeof(int) && Parts[2].GetType() == typeof(int) && Parts[3].GetType() == typeof(string)){
                         Gunnar.Place(int.Parse(Parts[1]), int.Parse(Parts[2]), Parts[3].ToLower());
+                        Console.WriteLine($"Place command exectued was: {Parts[1]}, {Parts[2]}, {Parts[3]}\n");
                         i = 3; // Jump array to index 3 as X,Y,Direction has been used
                     //}else{
                     //    Console.WriteLine("Invalid Command PLACE");
@@ -61,6 +62,8 @@ public class AppCmdParser {
                 Console.WriteLine($"Command exectued was: {command} \n");
                 i++;
             }
+
+                Console.WriteLine($"Number of commands exectued was: {i} \n");
     }
     
     // private void ExecuteCommand(string Command) {
