@@ -9,26 +9,19 @@
  * First checks if moving one step forward in the direction it is facing will take the robot out of the grid. 
  * Then calls Alphabot's LineFollow(). 
  * 
- * Left() /Right()
+ * Left() / Right()
  * Make the robot turns 90 degree on a crossing
  */
-using System.Text;
-using System.Net.WebSockets;
-using ConsoleApplication;
-
-public class GridBot {
-    public AlphaBot Gunnar;
-
+public class GridBot : AlphaBot {
     private static int NumRows;
     private static int NumCols;
-
-
     private int PosX;
     private int PosY;
     private string Heading = "";
 
-    public GridBot(int Rows, int Cols) {
-        Gunnar = new AlphaBot(0.2);
+    public GridBot(double power, bool Calibrate, int Rows, int Cols)
+            : base(power, Calibrate) 
+        {
         NumRows = Rows;
         NumCols = Cols;
     }
@@ -59,28 +52,50 @@ public class GridBot {
         }
         
         if(PositionValid(tempX, tempY)) {
-            if(Gunnar.LineFollow()) {
-                PosX = tempX; 
-                PosY = tempY; 
-
-                int[] SensorValues = Gunnar.TRSensor.ReadLine();
-
-                while(SensorValues.Sum() >= 3){
-                    Gunnar.MotionControl.Forward(0.1);
-                    SensorValues = Gunnar.TRSensor.ReadLine();
+            bool MoveDone = false;
+            while (!MoveDone)
+            {
+                try
+                {
+                    LineFollow();
+                    MoveDone = true;
                 }
-                Thread.Sleep(100);
-                Gunnar.MotionControl.Stop();            
-            } else {
-                Console.WriteLine("Failed LineFollow() :((((((");
+                catch (OffLineException e)
+                {
+                    Console.WriteLine(MoveDone);
+                    MoveDone = false; 
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine("Whoops! Put me back on the line please! :D");
+                    Console.WriteLine("Press any key when ready!");
+                    Console.ReadLine();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+
+                    CleanUp();
+                    Environment.Exit(0);
+                }                
             }
+
+            PosX = tempX; 
+            PosY = tempY; 
+
+            int[] SensorValues = TRSensor.ReadLine();
+            MotionControl.Forward(0.1);
+
+            while(SensorValues.Sum() >= 3){
+                SensorValues = TRSensor.ReadLine();
+            }
+
+            MotionControl.Stop();
         } else {
             Console.WriteLine("Invalid move :)");
         }
     }
 
     public void Left() {
-        Gunnar.TurnLeft();
+        TurnLeft();
         switch(Heading) {
             case "north": 
                 Heading="west"; 
@@ -98,7 +113,7 @@ public class GridBot {
     }
 
     public void Right() {
-        Gunnar.TurnRight();
+        TurnRight();
         switch(Heading) {
             case "north": 
                 Heading="east"; 
@@ -123,29 +138,4 @@ public class GridBot {
     {
         return !(X < 0 || X >= NumRows || Y < 0 || Y >= NumCols);
     }
-
-    public void CleanUp() {
-        Gunnar.CleanUp();
-    }
-
-    // public async void StartSocket(HttpContext context)
-    // {
-    //     AppCmdParser appCmdParser = new AppCmdParser(this);
-
-    //     try {
-    //     webSocket = await context.WebSockets.AcceptWebSocketAsync();
-    //     webSocketHandler.HandleWebSocketAsync(webSocket, appCmdParser);
-        
-            
-    //     } catch (Exception e){
-    //         Console.WriteLine($"Got exception: {e}");
-    //     }
-
-    // }
-
-    // public async void SendMessageToClient(string message)
-    // {
-    //     byte[] serverMessageBytes = Encoding.UTF8.GetBytes(message);
-    //     await webSocket.SendAsync(new ArraySegment<byte>(serverMessageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
-    // }
 }

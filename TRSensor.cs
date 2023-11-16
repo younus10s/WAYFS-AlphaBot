@@ -3,8 +3,14 @@ using System.Device.Gpio;
 /* Class TRSensor
  * Class to handle sensor input from the IR Sensors on the bottom of the robot.
  * 
- * AnalogRead() 
- * Reads values from infrared sensors. Returns raw data as an int vector of size 5
+ * Calibrate()
+ * Moves the robot in a circle to find the highest and lowest sensor readings.
+ * Uses these valuse as parameters for calibrating sensor reading in ReadCalibrated().
+ * Running Calibrate is a prereqiusite for running ReadCalibrated().
+ * Robot needs to be on a line.
+ * 
+ * ReadCalibrated() 
+ * Returns Sensor readings on the form int [0,1000]. 0 corresponds to no line, and vice versa.
  * 
  * ReadLine()
  * Applies thresholding to the data recieved from the sensors to
@@ -19,6 +25,10 @@ public class TRSensor {
 	private int NumSensors = 5;
 	private GpioController GpioController;
 
+	private bool Calibrated = false;
+	private int MinReading = int.MaxValue;
+	private int MaxReading = int.MinValue;
+
 	public TRSensor() {
 		GpioController = new GpioController();
 		GpioController.OpenPin(Clock, PinMode.Output);
@@ -27,7 +37,84 @@ public class TRSensor {
 		GpioController.OpenPin(DataOut, PinMode.InputPullUp);
 	}
 
-	public int[] AnalogRead() {
+	public void Calibrate(MotionControl MotionControl)
+	{
+		MotionControl.Left(0.3);
+
+		for (int i = 0; i < 100; i++) {
+			int[] Values = AnalogRead();
+
+            int TmpMax = Values.Max();
+			int TmpMin = Values.Min();
+
+			MaxReading = (TmpMax > MaxReading) ? TmpMax : MaxReading;
+            MinReading = (TmpMin < MinReading) ? TmpMin : MinReading;
+        }
+
+		MotionControl.Stop();
+
+		Console.WriteLine("Done! Put me back please :D");
+		Console.WriteLine("Press any Key to continue...");
+		Console.ReadLine();
+
+        Calibrated = true;
+    }
+
+	public int[] ReadCalbrated()
+	{
+		if (!Calibrated) {
+			throw new Exception("The TRSensor is not calibrated. Exiting...");
+		}
+
+		int[] Values = AnalogRead();
+		int[] CalibratedValues = {0,0,0,0,0};
+
+		for (int i = 0; i < Values.Length; i++) {
+            Values[i] = (Values[i] > MaxReading) ? MaxReading : Values[i];
+            Values[i] = (Values[i] < MinReading) ? MinReading : Values[i];
+
+			CalibratedValues[i] = 1000 - ((Values[i] - MinReading) * 1000 / MaxReading);
+		}
+
+        return CalibratedValues;
+	}
+
+	public double GetPosition() {
+		double Average = 0.0;
+		double Sum = 0.0;
+		int[] SensorValues = ReadCalbrated();
+
+		int Threshold = 200;
+
+		for(int i = 0; i < SensorValues.Length; i++) {
+			int Value = SensorValues[i];
+			Value = (Value > Threshold) ? Value : 0;
+
+			Average += (float) (Value * i * 1000);
+			Sum += (float) Value;
+		}
+
+		if (Sum == 0)
+		{
+			throw new Exception("All sensor values are 0. Exiting...");
+		}
+
+		return (Average / Sum) - 2000;
+	}
+
+	public int[] ReadLine() {
+		int[] SensorData = AnalogRead();
+		int[] ThresholdedData = new int[SensorData.Length];
+		int Treshold = 500;
+
+		for(int i = 0; i < SensorData.Length; i++){
+			ThresholdedData[i] = (SensorData[i] < Treshold) ? 1 : 0;
+		}
+
+		return ThresholdedData;
+	}
+
+	private int[] AnalogRead() {
 		int[] Value = new int[NumSensors + 1];
 
 		for (int j = 0; j < NumSensors+1; j++){
@@ -46,7 +133,6 @@ public class TRSensor {
 				if(GpioController.Read(DataOut) == PinValue.High){
 					Value[j] |= 0x01;
 				}
-
 				GpioController.Write(Clock, PinValue.High);
 				GpioController.Write(Clock, PinValue.Low);
 			}
@@ -56,29 +142,12 @@ public class TRSensor {
 				if(GpioController.Read(DataOut) == PinValue.High){
 					Value[j] |= 0x01;
 				}
-
 				GpioController.Write(Clock, PinValue.High);
                 GpioController.Write(Clock, PinValue.Low);
 			}
-
 			Thread.Sleep(1);
 			GpioController.Write(CS, PinValue.High);
 		}
 		return Value[1..];
-	}
-
-	public int[] ReadLine(){
-		int[] SensorData = AnalogRead();
-
-		int[] ThresholdedData = new int[SensorData.Length];
-
-		for(int i = 0; i < SensorData.Length; i++){
-			if(SensorData[i] < 600 && SensorData[i] > 0)
-				ThresholdedData[i] = 1;
-			else
-				ThresholdedData[i] = 0;
-		}
-
-		return ThresholdedData;
 	}
 }

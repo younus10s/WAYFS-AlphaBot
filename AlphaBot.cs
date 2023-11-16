@@ -6,7 +6,7 @@
  * 
  * LineFollow()
  * A funciton that makes the robot follow a black line until there is a tape crossing. 
- * Return true if the robot is moving elsewere false
+ * Return true if the robot is moving elsewere false.
  * 
  * CleanUp()
  * Calls MotionControl to stop both left and right motor, should be called after running. 
@@ -15,20 +15,30 @@ public class AlphaBot
 {
     public MotionControl MotionControl = new MotionControl();
     public TRSensor TRSensor = new TRSensor();
+    public Camera Camera = new Camera();
+
     private double Power;
 
-    public AlphaBot(double power) {
+    public AlphaBot(double power, bool Calibrate) {
         Power = power;
+
+        if (Calibrate) {
+            TRSensor.Calibrate(MotionControl);
+        }
+    }
+
+    public async Task TakePicture(){
+        await Camera.TakePicture();
     }
 
     public void TurnLeft() {
         int[] SensorValues = TRSensor.ReadLine();
-        MotionControl.Left(Power);
+        MotionControl.Left(Power/2);
 
-        while(SensorValues[2]==1) {
+        while(SensorValues[1]==1) {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[2]==0) {
+        while(SensorValues[1]==0) {
             SensorValues = TRSensor.ReadLine();
         }
         MotionControl.Stop();
@@ -36,53 +46,112 @@ public class AlphaBot
 
     public void TurnRight() {
         int[] SensorValues = TRSensor.ReadLine();
-        MotionControl.Right(Power);
+        MotionControl.Right(Power/2);
         
-        while(SensorValues[2]==1) {
+        while(SensorValues[3]==1) {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[2]==0) {
+        while(SensorValues[3]==0) {
             SensorValues = TRSensor.ReadLine();
         }
         MotionControl.Stop();
     }
 
-    public bool LineFollow() {
-        int[] forward = {0,0,1,0,0};
-        int[] left1 =   {0,0,1,1,0};
-        int[] left2 =   {0,0,0,1,0};
-        int[] right1 =  {0,1,1,0,0};
-        int[] right2 =  {0,1,0,0,0};
+    public void LineFollow()
+    {        
+        double ScalingFactor = 100;
 
-        int[] SensorValues;
+        int MemorySize = 10;
+        double[] PositionMemory = new double[MemorySize];
+        double Derivative;
+        double Integral = 0;
+
+        double PositionParameter   = 0.005;
+        double IntegralParameter   = 0.0001;
+        double DerivativeParameter = 0.05/MemorySize; 
+
+        double SteeringInput;
+
         MotionControl.Forward(Power);
 
-        bool Continue = true;
+        while (Following()) {
 
-        while(Continue) {
-            SensorValues = TRSensor.ReadLine();
-
-            if(SensorValues.Sum() >= 3) {
-                MotionControl.Stop();
-                Continue = false;
-            } else if(SensorValues.SequenceEqual(forward)) {
-                MotionControl.Forward(Power);
-            } else if(SensorValues.SequenceEqual(left1) || SensorValues.SequenceEqual(left2) || SensorValues[4]==1) {
-                MotionControl.SetPowerRight(Power*0.9);
-            } else if(SensorValues.SequenceEqual(right1) || SensorValues.SequenceEqual(right2) || SensorValues[0]==1) {
-                MotionControl.SetPowerLeft(Power*0.9);
-            } else {
-                Console.WriteLine("Unhandeled case");
-                Console.WriteLine("SensonValues: " + string.Join(", ", SensorValues));
-
-                Continue = false;
-                return false; 
+            for (int i = MemorySize-1; i > 0; i--)
+            {
+                PositionMemory[i] = PositionMemory[i-1];
             }
+
+            PositionMemory[0] = TRSensor.GetPosition();
+
+            Derivative = 0;
+
+            for (int i = 1; i < MemorySize; i++)
+            {
+                Derivative += PositionMemory[0] - PositionMemory[i];
+            }
+
+            Integral += PositionMemory[0];
+
+            SteeringInput = PositionMemory[0] * PositionParameter 
+                          + Integral * IntegralParameter 
+                          + Derivative * DerivativeParameter;
+
+            Steer(SteeringInput/ScalingFactor);
         }
-        return true; 
+
+        MotionControl.Stop();
+    }
+
+    private void Steer(double SteeringInput)
+    {
+        if (SteeringInput > Power) {
+            SteeringInput = Power;
+        }
+        if (SteeringInput < -Power) {
+            SteeringInput = -Power;
+        }
+        if (SteeringInput < 0) {
+            MotionControl.SetPowerLeft(Power + SteeringInput);
+            MotionControl.SetPowerRight(Power);
+        } else {
+            MotionControl.SetPowerLeft(Power);
+            MotionControl.SetPowerRight(Power - SteeringInput);
+        }
+    }
+
+    private bool Following()
+    {
+        int[] SensorValues = TRSensor.ReadLine();
+
+        if (SensorValues.Sum() >= 3){
+            return false;
+        }
+        if(SensorValues.Sum() == 0) {
+            MotionControl.Stop(); 
+            throw new OffLineException("Following: No line!");
+        }
+
+        return true;
     }
 
     public void CleanUp() {
         MotionControl.CleanUp();
+    }
+}
+
+public class OffLineException : Exception
+{
+    public OffLineException()
+    {
+    }
+
+    public OffLineException(string message)
+        : base(message)
+    {
+    }
+
+    public OffLineException(string message, Exception innerException)
+        : base(message, innerException)
+    {
     }
 }

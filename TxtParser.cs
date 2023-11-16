@@ -15,20 +15,14 @@
  */
 
 class TxtParser {
-    private GridBot Gunnar; 
-
-    public TxtParser(GridBot GridBot) {
-        Gunnar = GridBot; 
-    }
-
-    public void RunFile(string FilePath){
+    public async Task RunFile(string FilePath, GridBot Gunnar){
         if (File.Exists(FilePath)) {
 
             using (StreamReader Reader = new StreamReader(FilePath)) {
                 string? Line;
 
                 while ((Line = Reader.ReadLine()) != null) {
-                    Execute(Line);
+                    await Execute(Line, Gunnar);
                 }
             }
         } else {
@@ -36,7 +30,7 @@ class TxtParser {
         }
     }
     
-    private void Execute(string Command) {
+    private async Task Execute(string Command, GridBot Gunnar) {
         string[] Parts = Command.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
         switch(Parts[0]){
@@ -49,15 +43,21 @@ class TxtParser {
                 break;
             case "MOVE":
                 Gunnar.Move();
+                Console.WriteLine("MOVE");
             break;
             case "LEFT":
                 Gunnar.Left();
+                Console.WriteLine("LEFT");
             break;
             case "RIGHT":
                 Gunnar.Right();
+                Console.WriteLine("RIGHT");
                 break;
             case "REPORT":
                 Gunnar.Report();
+                break;
+            case "IMAGE":
+                await Gunnar.TakePicture();
                 break;
             default:
                 Console.WriteLine("Invalid Command OTHER");

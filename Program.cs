@@ -8,19 +8,27 @@ using System.Threading.Tasks;
 
 namespace ConsoleApplication
 {
-class Program
-{
+class Program {
 
     public static string clientMessage = "";
     public static WebSocketHandler webSocketHandler = new WebSocketHandler();
 
+
         static async Task Main(string[] args)
         {
-            GridBot Gunnar = new GridBot(5, 5);
-            // TxtParser TParser = new TxtParser(Gunnar);
-            // TParser.RunFile("robot.txt");
 
-            AppCmdParser cmdParser = new AppCmdParser(Gunnar);
+        double Power = 0.4;
+        bool Calibrate = true;
+        int Rows = 5;
+        int Cols = 5;
+
+        GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
+        //TxtParser TParser = new TxtParser();
+
+        //await TParser.RunFile("robot.txt", Gunnar);
+ 
+
+        AppCmdParser cmdParser = new AppCmdParser(Gunnar);
             
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
@@ -41,8 +49,9 @@ class Program
         
             await app.RunAsync();
 
+            Gunnar.CleanUp();
 
             }
-}
-
+            
+    }
 }
