@@ -1,10 +1,4 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Net.WebSockets;
-using System.Threading.Tasks;
 
 namespace ConsoleApplication
 {
@@ -12,7 +6,6 @@ class Program {
 
     public static string clientMessage = "";
     public static WebSocketHandler webSocketHandler = new WebSocketHandler();
-
 
         static async Task Main(string[] args)
         {

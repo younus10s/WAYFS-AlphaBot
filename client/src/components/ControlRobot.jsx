@@ -101,8 +101,6 @@ function ControlRobot() {
 
     const combineCommands = () => {
 
-        console.log(placeValues);
-        console.log(commands);
         let fullCommands = "PLACE,";
         fullCommands += placeValues.xcoord.concat(",", placeValues.ycoord);
         fullCommands = fullCommands.concat(",", placeValues.direction.toUpperCase());
@@ -159,9 +157,7 @@ function ControlRobot() {
     return (
         <div>
             <div className="container horizontal mt-5">
-                <div className='row p-2 bg-white self-start max-w-screen-md'>
-                    {/* 
-                    <Stepper steps={steps} currentStep={currentStep} /> */}
+                <div className='row p-2 m-4 bg-white self-start max-w-screen-md'>
                     <div className='text-3xl col m-6 font-semibold'>Step {currentStep}</div>
                     <div className='text-xl'>
                         <StepperContext.Provider value={{}}>

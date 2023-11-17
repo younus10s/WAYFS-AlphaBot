@@ -1,9 +1,5 @@
-using Microsoft.AspNetCore.Http;
-using System;
 using System.Net.WebSockets;
 using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace ConsoleApplication {
 public class WebSocketHandler
