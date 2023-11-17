@@ -5,8 +5,7 @@ namespace ConsoleApplication {
 public class WebSocketHandler
     {
         private string clientMessage = "";
-        public async         Task
-HandleWebSocketAsync(WebSocket webSocket, AppCmdParser cmdParser)
+        public async Task HandleWebSocketAsync(WebSocket webSocket, AppCmdParser cmdParser)
         {
             try
             {
@@ -27,15 +26,7 @@ HandleWebSocketAsync(WebSocket webSocket, AppCmdParser cmdParser)
 
                         cmdParser.RunCommands(clientMessage);
 
-                        // // Send a JSON string of doubles
-                        // double[] data = new double[] { 1.23, 4.56, 7.89 }; // Replace with your data
-                        // string serializedData = JsonConvert.SerializeObject(data);
-                        // byte[] dataBytes = Encoding.UTF8.GetBytes(serializedData);
-
-                        // await webSocket.SendAsync(new ArraySegment<byte>(dataBytes), WebSocketMessageType.Text, true, CancellationToken.None);
-
                         // Send a string message back to the client
-
                         // string serverMessage = "This is a server message.";
                         // byte[] serverMessageBytes = Encoding.UTF8.GetBytes(serverMessage);
                         // await webSocket.SendAsync(new ArraySegment<byte>(serverMessageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
