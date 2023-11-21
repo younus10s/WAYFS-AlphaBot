@@ -44,7 +44,7 @@ function ControlRobot() {
           setWebSocket(newWebSocket);
         };
     
-        //connectWebSocket();
+        connectWebSocket();
     
         // Cleanup function to close WebSocket connection
         return () => {
