@@ -16,10 +16,10 @@ export default function App() {
   const [dir, setDir] = useState("NORTH");
 
     // Define the initial state for Pacman's position
-    const [pacmanPosition, setPacmanPosition] = useState({ x: 15, y: 0, deg: '0deg'});
+    const [gunnarPosition, setGunnarPosition] = useState({ x: 15, y: 0, deg: '0deg'});
 
     // Function to update the position based on grid coordinates
-    const movePacman = (gridX, gridY, dir) => {
+    const moveGunnar = (gridX, gridY, dir) => {
       // Convert grid coordinates to pixel position
       const pixelX = gridX * 90 + 15;
       const pixelY = gridY * 52;
@@ -36,7 +36,7 @@ export default function App() {
         direction = '0deg';
 
       // Update state with the new pixel position
-      setPacmanPosition({ x: pixelX, y: pixelY, deg: direction });
+      setGunnarPosition({ x: pixelX, y: pixelY, deg: direction });
     };
   //Joystick movement
   const pan = useRef(new Animated.ValueXY()).current;
@@ -162,7 +162,7 @@ export default function App() {
         <Text>Dx: {dx}</Text>
         <Text>Direction: {dir}</Text>
         <Button
-          onPress={() => movePacman(2, 2, dir)}
+          onPress={() => moveGunnar(2, 2, "NORTH")}
           title="Move"
           color="#841584"
         />
@@ -273,7 +273,7 @@ export default function App() {
             </View>
           </View>
 
-          <Image style={[styles.pac, { left: pacmanPosition.x, bottom: pacmanPosition.y, transform: [{ rotate: pacmanPosition.deg}] }]} source={require('./assets/pac.png')}/> 
+          <Image style={[styles.pac, { left: gunnarPosition.x, bottom: gunnarPosition.y, transform: [{ rotate: gunnarPosition.deg}] }]} source={require('./assets/pac.png')}/> 
           
         </View>
         }
