@@ -15,22 +15,22 @@
  */
 
 class TxtParser {
-    public async Task RunFile(string FilePath, GridBot Gunnar){
+    public static async Task RunFile(string FilePath, GridBot Gunnar){
         if (File.Exists(FilePath)) {
 
-            using (StreamReader Reader = new StreamReader(FilePath)) {
-                string? Line;
+            using StreamReader Reader = new(FilePath);
+            string? Line;
 
-                while ((Line = Reader.ReadLine()) != null) {
-                    await Execute(Line, Gunnar);
-                }
+            while ((Line = Reader.ReadLine()) != null)
+            {
+                await Execute(Line, Gunnar);
             }
         } else {
             Console.WriteLine("The file does not exist.");
         }
     }
     
-    private async Task Execute(string Command, GridBot Gunnar) {
+    private static async Task Execute(string Command, GridBot Gunnar) {
         string[] Parts = Command.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
         switch(Parts[0]){

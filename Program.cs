@@ -18,8 +18,7 @@ class Program {
         GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
         //TxtParser TParser = new TxtParser();
 
-        //await TParser.RunFile("robot.txt", Gunnar);
- 
+        //await TParser.RunFile("robot.txt", Gunnar); 
 
         AppCmdParser cmdParser = new AppCmdParser(Gunnar);
             

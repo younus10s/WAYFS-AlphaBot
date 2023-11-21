@@ -31,8 +31,8 @@ public class MotionControl
     private const int right_ena = 26;
 
     private const int Frequency = 50;
-    private Motor LeftMotor;
-    private Motor RightMotor;
+    private readonly Motor LeftMotor;
+    private readonly Motor RightMotor;
 
     public MotionControl() {
         LeftMotor = new Motor(left_in1, left_in2, left_ena, Frequency);
