@@ -2,29 +2,18 @@ using MMALSharp;
 using MMALSharp.Common;
 using MMALSharp.Handlers;
 
-public class Camera{
-
-
-    public Camera(){
-        
-    }
-
+public class Camera
+{
     public async Task TakePicture(){
         MMALCamera cam = MMALCamera.Instance;
 
         try
         {
-            // Configure the camera settings
             cam.ConfigureCameraSettings();
 
-            // Create an image capture handler
-            using (var imgCaptureHandler = new ImageStreamCaptureHandler("../", "jpg"))
-            {
-                //Thread.Sleep(1000);
-                // Capture an image
-                Console.WriteLine("Ready");
-                await cam.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
-            }
+            using var imgCaptureHandler = new ImageStreamCaptureHandler("../", "jpg");
+
+            await cam.TakePicture(imgCaptureHandler, MMALEncoding.JPEG, MMALEncoding.I420);
         }
         catch (Exception ex)
         {
@@ -32,7 +21,6 @@ public class Camera{
         }
         finally
         {
-            // Cleanup resources
             cam.Cleanup();
         }
     }

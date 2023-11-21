@@ -22,8 +22,8 @@ public class TRSensor {
 	private const int Clock = 25;
 	private const int Address = 24;
 	private const int DataOut = 23;
-	private int NumSensors = 5;
-	private GpioController GpioController;
+	private readonly int NumSensors = 5;
+	private readonly GpioController GpioController;
 
 	private bool Calibrated = false;
 	private int MinReading = int.MaxValue;

@@ -5,10 +5,10 @@ class Program {
         int Rows = 5;
         int Cols = 5;
 
-        GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
-        TxtParser TParser = new TxtParser();
+        GridBot Gunnar = new(Power, Calibrate, Rows, Cols);
+        TxtParser TParser = new();
 
-        await TParser.RunFile("robot.txt", Gunnar);
+        await TxtParser.RunFile("robot.txt", Gunnar);
  
         Gunnar.CleanUp();
     }

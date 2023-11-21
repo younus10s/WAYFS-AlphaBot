@@ -134,7 +134,7 @@ public class GridBot : AlphaBot {
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);
     }
 
-    private bool PositionValid(int X, int Y)
+    private static bool PositionValid(int X, int Y)
     {
         return !(X < 0 || X >= NumRows || Y < 0 || Y >= NumCols);
     }

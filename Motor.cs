@@ -14,16 +14,16 @@ using System.Device.Gpio;
 
 class Motor 
 {
-    private GpioController gpioController;
-    private int in1;
-    private int in2;
-    private int ena;
+    private readonly GpioController gpioController;
+    private readonly int in1;
+    private readonly int in2;
+    private readonly int ena;
 
     private Thread? pwmThread;
-    private int Frequency;
+    private readonly int Frequency;
     private double DutyCycle = 0;
     private volatile bool keepRunning = false;
-    private object LockDutyCycle = new object();
+    private readonly object LockDutyCycle = new();
 
     public Motor(int in1_, int in2_, int ena_, int frequency) {
         in1 = in1_;

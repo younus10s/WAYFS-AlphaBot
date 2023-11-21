@@ -14,11 +14,11 @@
 
 public class AlphaBot
 {
-    public MotionControl MotionControl = new MotionControl();
-    public TRSensor TRSensor = new TRSensor();
-    public Camera Camera = new Camera();
+    public MotionControl MotionControl = new();
+    public TRSensor TRSensor = new();
+    public Camera Camera = new();
 
-    private double Power;
+    private readonly double Power;
 
     public AlphaBot(double power, bool Calibrate) {
         Power = power;
