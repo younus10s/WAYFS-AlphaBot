@@ -130,7 +130,8 @@ public class GridBot : AlphaBot {
         }
     }
 
-    public void Report(){
+    public async Task Report(){
+        await TakePicture();
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);
     }
 

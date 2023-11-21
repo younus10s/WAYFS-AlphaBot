@@ -44,3 +44,6 @@ Commands:
 * MOVE - Allows the robot to move relative to the direction it faces
 * LEFT - Makes the robot turn anti-clock wise
 * RIGHT - Makes the robot turn clock wise
+
+## Start server with IP address
+dotnet run --urls "http://192.168.187.236:5175"

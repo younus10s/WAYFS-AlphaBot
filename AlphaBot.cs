@@ -11,7 +11,6 @@
  * CleanUp()
  * Calls MotionControl to stop both left and right motor, should be called after running. 
  */
-
 public class AlphaBot
 {
     public MotionControl MotionControl = new();
