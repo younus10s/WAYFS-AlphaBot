@@ -162,7 +162,7 @@ export default function App() {
         <Text>Dx: {dx}</Text>
         <Text>Direction: {dir}</Text>
         <Button
-          onPress={() => moveGunnar(2, 2, "NORTH")}
+          onPress={() => moveGunnar(3, 3, "SOUTH")}
           title="Move"
           color="#841584"
         />

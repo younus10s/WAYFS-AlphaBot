@@ -27,6 +27,38 @@ function ControlRobot() {
         "Show robot move"
     ];
 
+
+    useEffect(() => {
+        // Function to initialize WebSocket connection
+        const connectWebSocket = () => {
+          const newWebSocket = new WebSocket('ws://localhost:5175');
+    
+          newWebSocket.onopen = () => {
+            console.log('Connected to WebSocket');
+          };
+    
+          newWebSocket.onmessage = (event) => {
+            console.log('Message from server ', event.data);
+          };
+    
+          setWebSocket(newWebSocket);
+        };
+    
+        //connectWebSocket();
+    
+        // Cleanup function to close WebSocket connection
+        return () => {
+          if (webSocket) {
+            webSocket.close();
+            console.log('WebSocket disconnected');
+          }
+        };
+      }, []); // Empty dependency array ensures this runs once on mount and cleanup on unmount
+    
+
+
+    
+
     const handleXChange = (event) => {
         setPlaceValues(prevState => {
             return { ...prevState, xcoord: event.target.value }
@@ -78,39 +110,18 @@ function ControlRobot() {
 
         handleClick("send"); // To update current step
 
-        const fullCommands = combineCommands();
-
-        const webSocket = new WebSocket('ws://192.168.187.236:5175');
-
-        webSocket.onopen = () => {
-            console.log('WebSocket connected');
-            webSocket.send(fullCommands);
-            console.log(fullCommands);
-            setWebSocket(webSocket);
-        };
-
-        webSocket.onerror = (error) => {
-            console.error('WebSocket error: ' + error);
-        };
-
-        //receiveServerMessage(webSocket);
-
+        const msg = {
+            "title": "commands",
+            "msg": commands
+        }
+        //const fullCommands = combineCommands();
+        webSocket.send(JSON.stringify(msg));
+        console.log("Sending:")
+        console.log(msg)
 
 
     };
 
-    const combineCommands = () => {
-
-        let fullCommands = "PLACE,";
-        fullCommands += placeValues.xcoord.concat(",", placeValues.ycoord);
-        fullCommands = fullCommands.concat(",", placeValues.direction.toUpperCase());
-
-
-        fullCommands = fullCommands.concat(",", commands);
-        fullCommands = fullCommands.concat(",", "REPORT"); // Final command to be added
-
-        return fullCommands;
-    };
 
     const addCommand = (com) => {
         setCommands(oldCommands => [...oldCommands, com]);
