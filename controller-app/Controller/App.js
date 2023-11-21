@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Switch, Image, TouchableOpacity, Animated, PanResponder } from 'react-native';
+import { Text, View, Switch, Image, TouchableOpacity, Animated, PanResponder, Button } from 'react-native';
 
 import styles from './Styles.js';
 
@@ -15,6 +15,29 @@ export default function App() {
   const [dx, setDx] = useState(0);
   const [dir, setDir] = useState("NORTH");
 
+    // Define the initial state for Pacman's position
+    const [pacmanPosition, setPacmanPosition] = useState({ x: 15, y: 0, deg: '0deg'});
+
+    // Function to update the position based on grid coordinates
+    const movePacman = (gridX, gridY, dir) => {
+      // Convert grid coordinates to pixel position
+      const pixelX = gridX * 90 + 15;
+      const pixelY = gridY * 52;
+
+      var direction = '0deg';
+      
+      if(dir == "NORTH")
+        direction = '-90deg';
+      else if(dir == "WEST")
+        direction = '-180deg';
+      else if(dir == "SOUTH")
+        direction = '-270deg';
+      else if(dir == "EAST")
+        direction = '0deg';
+
+      // Update state with the new pixel position
+      setPacmanPosition({ x: pixelX, y: pixelY, deg: direction });
+    };
   //Joystick movement
   const pan = useRef(new Animated.ValueXY()).current;
   const boundary = 40; 
@@ -138,6 +161,11 @@ export default function App() {
         <Text>Dy: {dy}</Text>
         <Text>Dx: {dx}</Text>
         <Text>Direction: {dir}</Text>
+        <Button
+          onPress={() => movePacman(2, 2, dir)}
+          title="Move"
+          color="#841584"
+        />
       </View>
 
       {/* Map & Camera code*/}
@@ -245,7 +273,7 @@ export default function App() {
             </View>
           </View>
 
-          <Image style={styles.pac} source={require('./assets/pac.png')}/> 
+          <Image style={[styles.pac, { left: pacmanPosition.x, bottom: pacmanPosition.y, transform: [{ rotate: pacmanPosition.deg}] }]} source={require('./assets/pac.png')}/> 
           
         </View>
         }

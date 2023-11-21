@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
       position: 'absolute',
       width: 50,
       height: 50,
-      transform: [{ rotate: '0deg'}],
     }
 
   });
