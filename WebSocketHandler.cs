@@ -1,7 +1,16 @@
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
 
 namespace ConsoleApplication {
+
+
+public class MSG
+{
+    public string Title { get; set; } = string.Empty; // Default to an empty string
+    public List<string> Msg { get; set; } = new List<string>(); // Default to an empty list
+}
+
 public class WebSocketHandler
     {
         private WebSocket WebSocket;
@@ -20,30 +29,38 @@ public class WebSocketHandler
             if (result.MessageType == WebSocketMessageType.Text)
             {
                 clientMessage = Encoding.UTF8.GetString(buffer, 0, result.Count);
-
-                Console.WriteLine($"Received from client: {clientMessage} \n");
                 return clientMessage;
             }
             return "";
         }
 
+        public async Task SendMessage(string msg){
+            byte[] serverMessageBytes = Encoding.UTF8.GetBytes(msg);
+            await WebSocket.SendAsync(new ArraySegment<byte>(serverMessageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
 
         public async Task HandleWebSocketAsync(AppCmdParser? cmdParser = null)
         {
-            string clientMessage = "";
             try
             {
                 var buffer = new byte[1024];
 
                 while (WebSocket.State == WebSocketState.Open)
                 {
-                    
-                        clientMessage = await reciveMessage();
-                        //Send a string message back to the client
-                        // string serverMessage = "Hej Hej.";
-                        // byte[] serverMessageBytes = Encoding.UTF8.GetBytes(serverMessage);
-                        // await WebSocket.SendAsync(new ArraySegment<byte>(serverMessageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
-                
+                        string clientMessage = await reciveMessage();
+                        Console.WriteLine("Received JSON: " + clientMessage); // Debug line to check the received JSON
+                        MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
+                        
+
+                        var dataToSend = new MSG
+                        {
+                            Title = "command-ack",
+                            Msg = new List<string> {"Thank you"} // Add as many commands as needed
+                        };
+                        string sendMsg = JsonSerializer.Serialize(dataToSend);
+                        await SendMessage(sendMsg);
+                        Console.WriteLine($"Send: {sendMsg} \n");
                     
                 }
             }

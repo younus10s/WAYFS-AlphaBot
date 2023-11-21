@@ -38,7 +38,8 @@ function ControlRobot() {
           };
     
           newWebSocket.onmessage = (event) => {
-            console.log('Message from server ', event.data);
+            console.log('Message from server ');
+            console.log(JSON.parse(event.data))
           };
     
           setWebSocket(newWebSocket);
@@ -77,42 +78,17 @@ function ControlRobot() {
         });
     }
 
-
-
-    const receiveServerMessage = (webSocket) => {
-
-        console.log("Websocket ready state: ", webSocket);
-
-        if (webSocket && webSocket.readyState === WebSocket.OPEN) {
-
-            webSocket.onmessage = (event) => {
-                // Parse message from string into an array of doubles
-                console.log(typeof event.data);
-
-                const message = JSON.parse(event.data);
-
-                console.log("Message from server: ", message);
-
-            }
-
-            webSocket.onclose = (event) => {
-                if (event.wasClean) {
-                    console.log('WebSocket closed cleanly');
-                } else {
-                    console.error('WebSocket connection abruptly closed');
-                }
-                console.log('Close code: ' + event.code + ', Reason: ' + event.reason);
-            };
-        }
-    }
-
     const handleSendClick = () => {
 
         handleClick("send"); // To update current step
 
+        const placeString = `PLACE,${placeValues.xcoord},${placeValues.ycoord},${placeValues.direction.toUpperCase()}`;
+        commands.unshift(placeString);
+        commands.push("REPORT");
+        
         const msg = {
-            "title": "commands",
-            "msg": commands
+            "Title": "commands",
+            "Msg": commands
         }
         //const fullCommands = combineCommands();
         webSocket.send(JSON.stringify(msg));
