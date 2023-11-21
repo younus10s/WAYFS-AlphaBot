@@ -4,8 +4,7 @@ namespace ConsoleApplication
 {
 class Program {
 
-    public static string clientMessage = "";
-    public static WebSocketHandler webSocketHandler = new WebSocketHandler();
+    //public static WebSocketHandler webSocketHandler = new WebSocketHandler();
 
         static async Task Main(string[] args)
         {
@@ -15,36 +14,40 @@ class Program {
         int Rows = 5;
         int Cols = 5;
 
-        GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
+        //GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
         //TxtParser TParser = new TxtParser();
 
         //await TParser.RunFile("robot.txt", Gunnar);
  
 
-        AppCmdParser cmdParser = new AppCmdParser(Gunnar);
+        //AppCmdParser cmdParser = new AppCmdParser(Gunnar);
             
-            var builder = WebApplication.CreateBuilder(args);
-            var app = builder.Build();
+        var builder = WebApplication.CreateBuilder(args);
+        var app = builder.Build();
 
-            app.UseWebSockets();
+        app.UseWebSockets();
 
-            app.Use(async (context, next) =>
-                {
-                    if (context.WebSockets.IsWebSocketRequest)
-                        {
-                            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                            await webSocketHandler.HandleWebSocketAsync(webSocket, cmdParser);
-                            
-                        } else {
-                                await next();
-                        }
-                });
-        
-            await app.RunAsync();
+        app.Use(async (context, next) =>
+            {
+                if (context.WebSockets.IsWebSocketRequest)
+                    {
+                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                        Console.WriteLine("The frontend is connected");
+                        WebSocketHandler webSocketHandler = new WebSocketHandler(webSocket);
+                        //await webSocketHandler.HandleWebSocketAsync(webSocket, cmdParser);
+                        await webSocketHandler.HandleWebSocketAsync();
+                        Console.WriteLine("after socket messages");
+                        
+                    } else {
+                            await next();
+                    }
+            });
+    
+        await app.RunAsync();
 
-            Gunnar.CleanUp();
+        //Gunnar.CleanUp();
 
-            }
+        }
             
     }
 }
