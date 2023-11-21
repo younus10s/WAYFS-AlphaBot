@@ -10,7 +10,7 @@ class Program {
         static async Task Main(string[] args)
         {
 
-        Console.WriteLine("test");
+        Console.WriteLine("test 2");
         double Power = 0.4;
         bool Calibrate = true;
         int Rows = 5;
