@@ -15,6 +15,8 @@ class Program {
         int Rows = 5;
         int Cols = 5;
 
+
+        Console.WriteLine("TEST");
         GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
         //TxtParser TParser = new TxtParser();
 
