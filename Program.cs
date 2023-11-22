@@ -4,8 +4,7 @@ namespace ConsoleApplication
 {
 class Program {
 
-    public static string clientMessage = "";
-    public static WebSocketHandler webSocketHandler = new WebSocketHandler();
+    //public static WebSocketHandler webSocketHandler = new WebSocketHandler();
 
         static async Task Main(string[] args)
         {
@@ -24,28 +23,32 @@ class Program {
 
         AppCmdParser cmdParser = new AppCmdParser(Gunnar);
             
-            var builder = WebApplication.CreateBuilder(args);
-            var app = builder.Build();
+        var builder = WebApplication.CreateBuilder(args);
+        var app = builder.Build();
 
-            app.UseWebSockets();
+        app.UseWebSockets();
 
-            app.Use(async (context, next) =>
-                {
-                    if (context.WebSockets.IsWebSocketRequest)
-                        {
-                            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                            await webSocketHandler.HandleWebSocketAsync(webSocket, cmdParser);
-                            
-                        } else {
-                                await next();
-                        }
-                });
-        
-            await app.RunAsync();
+        app.Use(async (context, next) =>
+            {
+                if (context.WebSockets.IsWebSocketRequest)
+                    {
+                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                        Console.WriteLine("The frontend is connected");
+                        WebSocketHandler webSocketHandler = new WebSocketHandler(webSocket);
+                        //await webSocketHandler.HandleWebSocketAsync(webSocket, cmdParser);
+                        await webSocketHandler.HandleWebSocketAsync(cmdParser);
+                        Console.WriteLine("after socket messages");
+                        
+                    } else {
+                            await next();
+                    }
+            });
+    
+        await app.RunAsync();
 
-            Gunnar.CleanUp();
+        //Gunnar.CleanUp();
 
-            }
+        }
             
     }
 }
