@@ -13,6 +13,7 @@ function ControlRobot() {
     const [commands, setCommands] = useState([]);
     const [webSocket, setWebSocket] = useState(null);
     const [currentCommand, setCurrentCommand] = useState("IDLE");
+    const [currentIndex, setCurrentIndex] = useState("0");
 
     const [placeValues, setPlaceValues] = useState(
         {
@@ -32,7 +33,7 @@ function ControlRobot() {
     useEffect(() => {
         // Function to initialize WebSocket connection
         const connectWebSocket = () => {
-          const newWebSocket = new WebSocket('ws://localhost:5175');
+          const newWebSocket = new WebSocket('ws://192.168.187.236:5175');
     
           newWebSocket.onopen = () => {
             console.log('Connected to WebSocket');
@@ -41,11 +42,12 @@ function ControlRobot() {
           newWebSocket.onmessage = (event) => {
             console.log('Message from server ');
 
-            message = JSON.parse(event.data);
+            const message = JSON.parse(event.data);
             if(message.Title == "status")
-                setCurrentCommand(message.Msg[0])
+                setCurrentIndex(parseInt(message.Msg[0]))
+                setCurrentCommand(message.Msg[1])
 
-            console.log(JSON.parse(event.data))
+            console.log(message)
           };
     
           setWebSocket(newWebSocket);
@@ -132,7 +134,8 @@ function ControlRobot() {
             case 3:
                 return <MovingStep
                     commands={commands}
-                    currentCommand={currentCommand} />
+                    currentCommand={currentCommand}
+                    i={currentIndex} />
             default:
                 return null;
         }
