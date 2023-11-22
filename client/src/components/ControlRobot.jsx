@@ -12,6 +12,7 @@ function ControlRobot() {
     const [currentStep, setCurrentStep] = useState(1);
     const [commands, setCommands] = useState([]);
     const [webSocket, setWebSocket] = useState(null);
+    const [currentCommand, setCurrentCommand] = useState("IDLE");
 
     const [placeValues, setPlaceValues] = useState(
         {
@@ -39,6 +40,11 @@ function ControlRobot() {
     
           newWebSocket.onmessage = (event) => {
             console.log('Message from server ');
+
+            message = JSON.parse(event.data);
+            if(message.Title == "status")
+                setCurrentCommand(message.Msg[0])
+
             console.log(JSON.parse(event.data))
           };
     
@@ -54,7 +60,7 @@ function ControlRobot() {
             console.log('WebSocket disconnected');
           }
         };
-      }, []); // Empty dependency array ensures this runs once on mount and cleanup on unmount
+      }, []);
     
 
 
@@ -125,7 +131,8 @@ function ControlRobot() {
                     placeValues={placeValues} />
             case 3:
                 return <MovingStep
-                    commands={commands} />
+                    commands={commands}
+                    currentCommand={currentCommand} />
             default:
                 return null;
         }

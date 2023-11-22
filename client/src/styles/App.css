@@ -50,3 +50,8 @@
 .button-style {
   margin: 1em;
 }
+
+.currentCmd {
+  color: yellow;
+  text-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700, 0 0 15px #FFA500;
+}

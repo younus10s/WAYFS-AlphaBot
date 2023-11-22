@@ -40,7 +40,7 @@ public class WebSocketHandler
         }
 
 
-        public async Task HandleWebSocketAsync(AppCmdParser? cmdParser = null)
+        public async Task HandleWebSocketAsync(AppCmdParser cmdParser)
         {
             try
             {
@@ -49,18 +49,33 @@ public class WebSocketHandler
                 while (WebSocket.State == WebSocketState.Open)
                 {
                         string clientMessage = await reciveMessage();
-                        Console.WriteLine("Received JSON: " + clientMessage); // Debug line to check the received JSON
+                        Console.WriteLine("Received JSON: " + clientMessage);
                         MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
+
+                        for(int i = 0; i < message?.Msg.Count; i++){
+                            var dataToSend = new MSG
+                            {
+                                Title = "status",
+                                Msg = new List<string> {message.Msg[i]} 
+                            };
+
+                            string sendMsg = JsonSerializer.Serialize(dataToSend);
+                            await SendMessage(sendMsg);
+                            Console.WriteLine($"Send: {sendMsg} \n");
+
+                            await cmdParser.RunCommand(message.Msg[i]);
+                            
+                        }
                         
 
-                        var dataToSend = new MSG
+                        var doneMsg = new MSG
                         {
-                            Title = "command-ack",
-                            Msg = new List<string> {"Thank you"} // Add as many commands as needed
+                            Title = "Done",
+                            Msg = new List<string> {"Thank you"} 
                         };
-                        string sendMsg = JsonSerializer.Serialize(dataToSend);
-                        await SendMessage(sendMsg);
-                        Console.WriteLine($"Send: {sendMsg} \n");
+                        string done = JsonSerializer.Serialize(doneMsg);
+                        await SendMessage(done);
+                        Console.WriteLine($"Send: {done} \n");
                     
                 }
             }
