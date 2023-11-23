@@ -33,4 +33,5 @@ jobs:
         cache-dependency-path: client/package-lock.json
     - run: npm ci
     - run: npm run build --if-present
-    - run: npm test
+  # Fails if no test script exists. UNCOMMENT when tests are added!
+  #  - run: npm test
