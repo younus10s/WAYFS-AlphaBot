@@ -39,11 +39,11 @@ public class AlphaBot
         int[] SensorValues = TRSensor.ReadLine();
         MotionControl.Left(Power / 2);
 
-        while(SensorValues[1] == 1)
+        while (SensorValues[1] == 1)
         {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[1] == 0)
+        while (SensorValues[1] == 0)
         {
             SensorValues = TRSensor.ReadLine();
         }
@@ -54,12 +54,12 @@ public class AlphaBot
     {
         int[] SensorValues = TRSensor.ReadLine();
         MotionControl.Right(Power / 2);
-        
-        while(SensorValues[3] == 1)
+
+        while (SensorValues[3] == 1)
         {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[3] == 0)
+        while (SensorValues[3] == 0)
         {
             SensorValues = TRSensor.ReadLine();
         }
@@ -67,7 +67,7 @@ public class AlphaBot
     }
 
     public void LineFollow()
-    {        
+    {
         double ScalingFactor = 100;
 
         int MemorySize = 10;
@@ -77,7 +77,7 @@ public class AlphaBot
 
         double PositionParameter = 0.005;
         double IntegralParameter = 0.0001;
-        double DerivativeParameter = 0.05/MemorySize; 
+        double DerivativeParameter = 0.05 / MemorySize;
 
         double SteeringInput;
 
@@ -86,7 +86,7 @@ public class AlphaBot
         while (Following())
         {
 
-            for (int i = MemorySize-1; i > 0; i--)
+            for (int i = MemorySize - 1; i > 0; i--)
             {
                 PositionMemory[i] = PositionMemory[i - 1];
             }
@@ -102,11 +102,11 @@ public class AlphaBot
 
             Integral += PositionMemory[0];
 
-            SteeringInput = PositionMemory[0] * PositionParameter 
-                          + Integral * IntegralParameter 
+            SteeringInput = PositionMemory[0] * PositionParameter
+                          + Integral * IntegralParameter
                           + Derivative * DerivativeParameter;
 
-            Steer(SteeringInput/ScalingFactor);
+            Steer(SteeringInput / ScalingFactor);
         }
 
         MotionControl.Stop();
@@ -126,7 +126,8 @@ public class AlphaBot
         {
             MotionControl.SetPowerLeft(Power + SteeringInput);
             MotionControl.SetPowerRight(Power);
-        } else
+        }
+        else
         {
             MotionControl.SetPowerLeft(Power);
             MotionControl.SetPowerRight(Power - SteeringInput);
@@ -141,6 +142,7 @@ public class AlphaBot
         {
             return false;
         }
+
         if(SensorValues.Sum() == 0)
         {
             MotionControl.Stop(); 
