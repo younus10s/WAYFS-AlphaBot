@@ -19,39 +19,48 @@ public class AlphaBot
 
     private readonly double Power;
 
-    public AlphaBot(double power, bool Calibrate) {
+    public AlphaBot(double power, bool Calibrate) 
+    {
         Power = power;
 
-        if (Calibrate) {
+        if (Calibrate) 
+        {
             TRSensor.Calibrate(MotionControl);
         }
     }
 
-    public async Task TakePicture(){
+    public async Task TakePicture()
+    {
         await Camera.TakePicture();
     }
 
-    public void TurnLeft() {
+    public void TurnLeft() 
+    {
         int[] SensorValues = TRSensor.ReadLine();
         MotionControl.Left(Power/2);
 
-        while(SensorValues[1]==1) {
+        while(SensorValues[1]==1) 
+        {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[1]==0) {
+        while(SensorValues[1]==0) 
+        {
             SensorValues = TRSensor.ReadLine();
         }
         MotionControl.Stop();
     }
 
-    public void TurnRight() {
+    public void TurnRight() 
+    {
         int[] SensorValues = TRSensor.ReadLine();
         MotionControl.Right(Power/2);
         
-        while(SensorValues[3]==1) {
+        while(SensorValues[3]==1) 
+        {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[3]==0) {
+        while(SensorValues[3]==0) 
+        {
             SensorValues = TRSensor.ReadLine();
         }
         MotionControl.Stop();
@@ -74,7 +83,8 @@ public class AlphaBot
 
         MotionControl.Forward(Power);
 
-        while (Following()) {
+        while (Following())
+        {
 
             for (int i = MemorySize-1; i > 0; i--)
             {
@@ -104,16 +114,20 @@ public class AlphaBot
 
     private void Steer(double SteeringInput)
     {
-        if (SteeringInput > Power) {
+        if (SteeringInput > Power) 
+        {
             SteeringInput = Power;
         }
-        if (SteeringInput < -Power) {
+        if (SteeringInput < -Power) 
+        {
             SteeringInput = -Power;
         }
-        if (SteeringInput < 0) {
+        if (SteeringInput < 0) 
+        {
             MotionControl.SetPowerLeft(Power + SteeringInput);
             MotionControl.SetPowerRight(Power);
-        } else {
+        } else 
+        {
             MotionControl.SetPowerLeft(Power);
             MotionControl.SetPowerRight(Power - SteeringInput);
         }
@@ -123,10 +137,12 @@ public class AlphaBot
     {
         int[] SensorValues = TRSensor.ReadLine();
 
-        if (SensorValues.Sum() >= 3){
+        if (SensorValues.Sum() >= 3)
+        {
             return false;
         }
-        if(SensorValues.Sum() == 0) {
+        if(SensorValues.Sum() == 0) 
+        {
             MotionControl.Stop(); 
             throw new OffLineException("Following: No line!");
         }
@@ -134,7 +150,8 @@ public class AlphaBot
         return true;
     }
 
-    public void CleanUp() {
+    public void CleanUp() 
+    {
         MotionControl.CleanUp();
     }
 }
