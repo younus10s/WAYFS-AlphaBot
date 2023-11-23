@@ -19,7 +19,7 @@ public class AlphaBot
 
     private readonly double Power;
 
-    public AlphaBot(double power, bool Calibrate) 
+    public AlphaBot(double power, bool Calibrate)
     {
         Power = power;
 
