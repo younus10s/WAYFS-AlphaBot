@@ -89,7 +89,7 @@ public class MotionControl
 
         LeftMotor.SetPower(power);
         RightMotor.SetPower(power);
-    } 
+    }
 
     public void SetPowerLeft(double power)
     {
