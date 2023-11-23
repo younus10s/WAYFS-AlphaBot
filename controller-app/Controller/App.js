@@ -10,6 +10,41 @@ export default function App() {
   const [isCameraMode, setIsCameraMode] = useState(false);
   const toggleSwitch = () => setIsCameraMode(previousState => !previousState);
 
+
+  const [webSocket, setWebSocket] = useState(null);
+
+  useEffect(() => {
+    // Function to initialize WebSocket connection
+    const connectWebSocket = () => {
+      //const newWebSocket = new WebSocket('ws://192.168.187.236:5175');
+      const newWebSocket = new WebSocket('ws://192.168.187.239:5175');
+      console.log("Trying to connect...");
+
+      newWebSocket.onopen = () => {
+        console.log('Connected to WebSocket');
+      };
+
+      newWebSocket.onmessage = (event) => {
+        console.log('Message from server ');
+
+        const message = JSON.parse(event.data);
+        console.log(message)
+      };
+
+      setWebSocket(newWebSocket);
+    };
+
+    connectWebSocket();
+
+    // Cleanup function to close WebSocket connection
+    return () => {
+      if (webSocket) {
+        webSocket.close();
+        console.log('WebSocket disconnected');
+      }
+    };
+  }, []);
+
   //Status vars
   const [dy, setDy] = useState(0);
   const [dx, setDx] = useState(0);
@@ -162,7 +197,17 @@ export default function App() {
         <Text>Dx: {dx}</Text>
         <Text>Direction: {dir}</Text>
         <Button
-          onPress={() => moveGunnar(3, 3, "SOUTH")}
+          onPress={() => {
+            moveGunnar(3, 3, "SOUTH")
+            const msg = {
+              "Title": "Test",
+              "Msg": ["Hello"]
+            }
+            //const fullCommands = combineCommands();
+            webSocket.send(JSON.stringify(msg));
+            console.log("Sending:");
+            console.log(msg);
+          }}
           title="Move"
           color="#841584"
         />
