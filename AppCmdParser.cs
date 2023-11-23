@@ -15,7 +15,7 @@
  */
 public class AppCmdParser
 {
-    public GridBot Gunnar; 
+    public GridBot Gunnar;
 
     public AppCmdParser(GridBot gridBot)
     {
@@ -27,7 +27,7 @@ public class AppCmdParser
     {
 
         string[] Parts = command.Split(',');
-        
+
         switch (Parts[0])
         {
             default:
@@ -50,5 +50,4 @@ public class AppCmdParser
                 break;
         }
     }
-    
 }
