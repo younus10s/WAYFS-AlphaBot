@@ -34,17 +34,20 @@ public class MotionControl
     private readonly Motor LeftMotor;
     private readonly Motor RightMotor;
 
-    public MotionControl() {
+    public MotionControl()
+    {
         LeftMotor = new Motor(left_in1, left_in2, left_ena, Frequency);
         RightMotor = new Motor(right_in1, right_in2, right_ena, Frequency);
     }
 
-    public void CleanUp() {
+    public void CleanUp()
+    {
         RightMotor.StopPwm();
         LeftMotor.StopPwm();
     }
 
-    public void Stop() {
+    public void Stop()
+    {
         LeftMotor.Stop();
         RightMotor.Stop();
 
@@ -52,7 +55,8 @@ public class MotionControl
         LeftMotor.SetPower(0);
     }
 
-    public void Forward(double power) {
+    public void Forward(double power)
+    {
         LeftMotor.Forward();
         RightMotor.Forward();
 
@@ -60,7 +64,8 @@ public class MotionControl
         LeftMotor.SetPower(power);
     }
 
-    public void Backward(double power) {
+    public void Backward(double power)
+    {
         LeftMotor.Backward();
         RightMotor.Backward();
 
@@ -68,7 +73,8 @@ public class MotionControl
         LeftMotor.SetPower(power);
     }
 
-    public void Left(double power) {
+    public void Left(double power)
+    {
         LeftMotor.Backward();
         RightMotor.Forward();
 
@@ -76,20 +82,23 @@ public class MotionControl
         RightMotor.SetPower(power);
     }
 
-    public void Right(double power) {
+    public void Right(double power)
+    {
         LeftMotor.Forward();
         RightMotor.Backward();
 
         LeftMotor.SetPower(power);
         RightMotor.SetPower(power);
-    } 
+    }
 
-    public void SetPowerLeft(double power) {
+    public void SetPowerLeft(double power)
+    {
         LeftMotor.Forward();
         LeftMotor.SetPower(power);
     }
 
-    public void SetPowerRight(double power) {
+    public void SetPowerRight(double power)
+    {
         RightMotor.Forward();
         RightMotor.SetPower(power);
     }
