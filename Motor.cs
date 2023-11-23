@@ -12,7 +12,7 @@
 
 using System.Device.Gpio;
 
-class Motor 
+class Motor
 {
     private readonly GpioController gpioController;
     private readonly int in1;
@@ -43,7 +43,7 @@ class Motor
 
     public void SetPower(double dutyCycle)
     {
-        lock(LockDutyCycle)
+        lock (LockDutyCycle)
         {
             DutyCycle = dutyCycle;
         }
@@ -63,7 +63,7 @@ class Motor
 
     public void Stop()
     {
-        lock(LockDutyCycle)
+        lock (LockDutyCycle)
         {
             DutyCycle = 0;
         }
@@ -75,7 +75,7 @@ class Motor
         pwmThread = new Thread(PwmLoop);
         pwmThread.Start();
     }
-    
+
     public void StopPwm()
     {
         keepRunning = false;
@@ -88,7 +88,7 @@ class Motor
 
         while (keepRunning)
         {
-            lock(LockDutyCycle)
+            lock (LockDutyCycle)
             {
                 tempDutyCycle = DutyCycle;
             }
