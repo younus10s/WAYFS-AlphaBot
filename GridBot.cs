@@ -36,25 +36,25 @@ public class GridBot : AlphaBot
     public void Move()
     {
         int tempX = PosX;
-        int tempY = PosY; 
+        int tempY = PosY;
 
-        switch(Heading)
+        switch (Heading)
         {
-            case "north": 
-                tempY += 1; 
+            case "north":
+                tempY += 1;
                 break;
             case "east":
-                tempX += 1; 
-                break; 
-            case "south": 
+                tempX += 1;
+                break;
+            case "south":
                 tempY -= 1;
                 break;
             case "west":
-                tempX -= 1; 
-                break; 
+                tempX -= 1;
+                break;
         }
         
-        if(PositionValid(tempX, tempY))
+        if (PositionValid(tempX, tempY))
         {
             bool MoveDone = false;
             while (!MoveDone)
@@ -79,7 +79,7 @@ public class GridBot : AlphaBot
 
                     CleanUp();
                     Environment.Exit(0);
-                }                
+                }
             }
 
             PosX = tempX;
@@ -88,13 +88,13 @@ public class GridBot : AlphaBot
             int[] SensorValues = TRSensor.ReadLine();
             MotionControl.Forward(0.1);
 
-            while(SensorValues.Sum() >= 3)
+            while (SensorValues.Sum() >= 3)
             {
                 SensorValues = TRSensor.ReadLine();
             }
 
             MotionControl.Stop();
-        } 
+        }
         else
         {
             Console.WriteLine("Invalid move");
@@ -104,40 +104,40 @@ public class GridBot : AlphaBot
     public void Left()
     {
         TurnLeft();
-        switch(Heading)
+        switch (Heading)
         {
-            case "north": 
-                Heading = "west"; 
+            case "north":
+                Heading = "west";
                 break;
             case "west":
-                Heading = "south"; 
-                break; 
-            case "south": 
+                Heading = "south";
+                break;
+            case "south":
                 Heading = "east";
                 break;
             case "east":
-                Heading = "north"; 
-                break; 
+                Heading = "north";
+                break;
         }
     }
 
     public void Right()
     {
         TurnRight();
-        switch(Heading)
+        switch (Heading)
         {
-            case "north": 
-                Heading = "east"; 
+            case "north":
+                Heading = "east";
                 break;
             case "east":
-                Heading = "south"; 
-                break; 
-            case "south": 
+                Heading = "south";
+                break;
+            case "south":
                 Heading = "west";
                 break;
             case "west":
-                Heading = "north"; 
-                break; 
+                Heading = "north";
+                break;
         }
     }
 
