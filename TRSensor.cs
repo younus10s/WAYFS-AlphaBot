@@ -43,7 +43,7 @@ public class TRSensor
     public void Calibrate(MotionControl MotionControl)
     {
         MotionControl.Left(0.3);
-        
+
         for (int i = 0; i < 100; i++)
         {
             int[] Values = AnalogRead();
@@ -70,10 +70,10 @@ public class TRSensor
         {
             throw new Exception("The TRSensor is not calibrated. Exiting...");
         }
-        
+
         int[] Values = AnalogRead();
-        int[] CalibratedValues = {0,0,0,0,0};
-        
+        int[] CalibratedValues = { 0, 0, 0, 0, 0 };
+
         for (int i = 0; i < Values.Length; i++)
         {
             Values[i] = (Values[i] > MaxReading) ? MaxReading : Values[i];
@@ -90,18 +90,18 @@ public class TRSensor
         double Average = 0.0;
         double Sum = 0.0;
         int[] SensorValues = ReadCalbrated();
-        
+
         int Threshold = 200;
-        
-        for(int i = 0; i < SensorValues.Length; i++)
+
+        for (int i = 0; i < SensorValues.Length; i++)
         {
             int Value = SensorValues[i];
             Value = (Value > Threshold) ? Value : 0;
-            
-            Average += (float) (Value * i * 1000);
-            Sum += (float) Value;
+
+            Average += (float)(Value * i * 1000);
+            Sum += (float)Value;
         }
-        
+
         if (Sum == 0)
         {
             throw new Exception("All sensor values are 0. Exiting...");
@@ -109,14 +109,14 @@ public class TRSensor
 
         return (Average / Sum) - 2000;
     }
-    
+
     public int[] ReadLine()
     {
         int[] SensorData = AnalogRead();
         int[] ThresholdedData = new int[SensorData.Length];
         int Treshold = 500;
 
-        for(int i = 0; i < SensorData.Length; i++)
+        for (int i = 0; i < SensorData.Length; i++)
         {
             ThresholdedData[i] = (SensorData[i] < Treshold) ? 1 : 0;
         }
