@@ -1,5 +1,3 @@
-using System.Device.Gpio;
-
 /* Motor Class.
  * Represents each of the motor's wheels.
  * Each wheel is controlled via RPi's GPIO pins.
@@ -11,6 +9,8 @@ using System.Device.Gpio;
  * PwmLoop() manually applies values high/low on pins as a solution for.
  * This Class is multithreaded, it creates a spicific thread for the pwm functionality
  */
+
+using System.Device.Gpio;
 
 class Motor 
 {
@@ -25,7 +25,8 @@ class Motor
     private volatile bool keepRunning = false;
     private readonly object LockDutyCycle = new();
 
-    public Motor(int in1_, int in2_, int ena_, int frequency) {
+    public Motor(int in1_, int in2_, int ena_, int frequency)
+    {
         in1 = in1_;
         in2 = in2_;
         ena = ena_;
@@ -40,46 +41,58 @@ class Motor
         Stop();
     }
 
-    public void SetPower(double dutyCycle) {
-        lock(LockDutyCycle){
+    public void SetPower(double dutyCycle)
+    {
+        lock(LockDutyCycle)
+        {
             DutyCycle = dutyCycle;
         }
     }
 
-    public void Forward() {
+    public void Forward()
+    {
         gpioController.Write(in1, PinValue.Low);
         gpioController.Write(in2, PinValue.High);
     }
 
-    public void Backward() {
+    public void Backward()
+    {
         gpioController.Write(in1, PinValue.High);
         gpioController.Write(in2, PinValue.Low);
     }
 
-    public void Stop() {
-        lock(LockDutyCycle){
+    public void Stop()
+    {
+        lock(LockDutyCycle)
+        {
             DutyCycle = 0;
         }
     }
 
-    private void StartPwm() {
+    private void StartPwm()
+    {
         keepRunning = true;
         pwmThread = new Thread(PwmLoop);
         pwmThread.Start();
     }
     
-    public void StopPwm() {
+    public void StopPwm()
+    {
         keepRunning = false;
         pwmThread?.Join();
     }
 
-    private void PwmLoop() {
+    private void PwmLoop()
+    {
         double tempDutyCycle = 0;
 
-        while (keepRunning) {
-            lock(LockDutyCycle) {
+        while (keepRunning)
+        {
+            lock(LockDutyCycle)
+            {
                 tempDutyCycle = DutyCycle;
             }
+
             int period = (int)(1000.0 / Frequency);
             int pulseWidth = (int)(period * tempDutyCycle);
 
