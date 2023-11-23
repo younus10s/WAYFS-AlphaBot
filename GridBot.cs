@@ -53,7 +53,7 @@ public class GridBot : AlphaBot
                 tempX -= 1;
                 break;
         }
-        
+
         if (PositionValid(tempX, tempY))
         {
             bool MoveDone = false;
