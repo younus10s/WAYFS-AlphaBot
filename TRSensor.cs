@@ -1,5 +1,3 @@
-using System.Device.Gpio;
-
 /* Class TRSensor
  * Class to handle sensor input from the IR Sensors on the bottom of the robot.
  * 
@@ -16,112 +14,115 @@ using System.Device.Gpio;
  * Applies thresholding to the data recieved from the sensors to
  * destinguish a black line from another material under he robot.
  * Returns binary data, where one means a black line is detected
- */ 
+ */
+
+using System.Device.Gpio;
+
 public class TRSensor
 {
-	private const int CS = 5;
-	private const int Clock = 25;
-	private const int Address = 24;
-	private const int DataOut = 23;
-	private readonly int NumSensors = 5;
-	private readonly GpioController GpioController;
+    private const int CS = 5;
+    private const int Clock = 25;
+    private const int Address = 24;
+    private const int DataOut = 23;
+    private readonly int NumSensors = 5;
+    private readonly GpioController GpioController;
 
-	private bool Calibrated = false;
-	private int MinReading = int.MaxValue;
-	private int MaxReading = int.MinValue;
+    private bool Calibrated = false;
+    private int MinReading = int.MaxValue;
+    private int MaxReading = int.MinValue;
 
-	public TRSensor()
-	{
-		GpioController = new GpioController();
-		GpioController.OpenPin(Clock, PinMode.Output);
-		GpioController.OpenPin(Address, PinMode.Output);
-		GpioController.OpenPin(CS, PinMode.Output);
-		GpioController.OpenPin(DataOut, PinMode.InputPullUp);
-	}
+    public TRSensor()
+    {
+        GpioController = new GpioController();
+        GpioController.OpenPin(Clock, PinMode.Output);
+        GpioController.OpenPin(Address, PinMode.Output);
+        GpioController.OpenPin(CS, PinMode.Output);
+        GpioController.OpenPin(DataOut, PinMode.InputPullUp);
+    }
 
-	public void Calibrate(MotionControl MotionControl)
-	{
-		MotionControl.Left(0.3);
-
-		for (int i = 0; i < 100; i++)
-		{
-			int[] Values = AnalogRead();
+    public void Calibrate(MotionControl MotionControl)
+    {
+        MotionControl.Left(0.3);
+        
+        for (int i = 0; i < 100; i++)
+        {
+            int[] Values = AnalogRead();
 
             int TmpMax = Values.Max();
-			int TmpMin = Values.Min();
+            int TmpMin = Values.Min();
 
-			MaxReading = (TmpMax > MaxReading) ? TmpMax : MaxReading;
+            MaxReading = (TmpMax > MaxReading) ? TmpMax : MaxReading;
             MinReading = (TmpMin < MinReading) ? TmpMin : MinReading;
         }
 
-		MotionControl.Stop();
+        MotionControl.Stop();
 
-		Console.WriteLine("Done! Put me back please :D");
-		Console.WriteLine("Press any Key to continue...");
-		Console.ReadLine();
+        Console.WriteLine("Done! Put me back please :D");
+        Console.WriteLine("Press any Key to continue...");
+        Console.ReadLine();
 
         Calibrated = true;
     }
 
-	public int[] ReadCalbrated()
-	{
-		if (!Calibrated)
-		{
-			throw new Exception("The TRSensor is not calibrated. Exiting...");
-		}
-
-		int[] Values = AnalogRead();
-		int[] CalibratedValues = {0,0,0,0,0};
-
-		for (int i = 0; i < Values.Length; i++)
-		{
+    public int[] ReadCalbrated()
+    {
+        if (!Calibrated)
+        {
+            throw new Exception("The TRSensor is not calibrated. Exiting...");
+        }
+        
+        int[] Values = AnalogRead();
+        int[] CalibratedValues = {0,0,0,0,0};
+        
+        for (int i = 0; i < Values.Length; i++)
+        {
             Values[i] = (Values[i] > MaxReading) ? MaxReading : Values[i];
             Values[i] = (Values[i] < MinReading) ? MinReading : Values[i];
 
-			CalibratedValues[i] = 1000 - ((Values[i] - MinReading) * 1000 / MaxReading);
-		}
+            CalibratedValues[i] = 1000 - ((Values[i] - MinReading) * 1000 / MaxReading);
+        }
 
         return CalibratedValues;
-	}
+    }
 
-	public double GetPosition()
-	{
-		double Average = 0.0;
-		double Sum = 0.0;
-		int[] SensorValues = ReadCalbrated();
+    public double GetPosition()
+    {
+        double Average = 0.0;
+        double Sum = 0.0;
+        int[] SensorValues = ReadCalbrated();
+        
+        int Threshold = 200;
+        
+        for(int i = 0; i < SensorValues.Length; i++)
+        {
+            int Value = SensorValues[i];
+            Value = (Value > Threshold) ? Value : 0;
+            
+            Average += (float) (Value * i * 1000);
+            Sum += (float) Value;
+        }
+        
+        if (Sum == 0)
+        {
+            throw new Exception("All sensor values are 0. Exiting...");
+        }
 
-		int Threshold = 200;
+        return (Average / Sum) - 2000;
+    }
+    
+    public int[] ReadLine()
+    {
+        int[] SensorData = AnalogRead();
+        int[] ThresholdedData = new int[SensorData.Length];
+        int Treshold = 500;
 
-		for(int i = 0; i < SensorValues.Length; i++)
-		{
-			int Value = SensorValues[i];
-			Value = (Value > Threshold) ? Value : 0;
+        for(int i = 0; i < SensorData.Length; i++)
+        {
+            ThresholdedData[i] = (SensorData[i] < Treshold) ? 1 : 0;
+        }
 
-			Average += (float) (Value * i * 1000);
-			Sum += (float) Value;
-		}
-
-		if (Sum == 0)
-		{
-			throw new Exception("All sensor values are 0. Exiting...");
-		}
-
-		return (Average / Sum) - 2000;
-	}
-
-	public int[] ReadLine()
-	{
-		int[] SensorData = AnalogRead();
-		int[] ThresholdedData = new int[SensorData.Length];
-		int Treshold = 500;
-
-		for(int i = 0; i < SensorData.Length; i++)
-		{
-			ThresholdedData[i] = (SensorData[i] < Treshold) ? 1 : 0;
-		}
-
-		return ThresholdedData;
-	}
+        return ThresholdedData;
+    }
 
     private int ReadBitAndShift(int sensorIndex, int currentValue)
     {
