@@ -85,5 +85,37 @@ public class WebSocketHandler
             }
             
         }
+    
+
+        public async Task HandleWebSocketAsync()
+        {
+            try
+            {
+                var buffer = new byte[1024];
+
+                while (WebSocket.State == WebSocketState.Open)
+                {
+                        string clientMessage = await reciveMessage();
+                        Console.WriteLine("Received JSON: " + clientMessage);
+                        
+
+                        var doneMsg = new MSG
+                        {
+                            Title = "Done",
+                            Msg = new List<string> {"Thank you"} 
+                        };
+                        string done = JsonSerializer.Serialize(doneMsg);
+                        await SendMessage(done);
+                        Console.WriteLine($"Send: {done} \n");
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"WebSocket exception caught: {ex.Message}");
+            }
+            
+        }
+    
     }
 }
