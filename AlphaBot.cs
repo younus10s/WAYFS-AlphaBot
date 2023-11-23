@@ -143,9 +143,9 @@ public class AlphaBot
             return false;
         }
 
-        if(SensorValues.Sum() == 0)
+        if (SensorValues.Sum() == 0)
         {
-            MotionControl.Stop(); 
+            MotionControl.Stop();
             throw new OffLineException("Following: No line!");
         }
 
