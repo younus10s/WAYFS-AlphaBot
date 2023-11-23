@@ -23,6 +23,29 @@ function ControlRobot() {
         }
     );
 
+    const [gunnarPosition, setGunnarPosition] = useState({ x: 258, y: 250, deg: '0deg' });
+    const [destPosition, setdestPosition] = useState({ x: 0, y: 0 });
+
+    const moveGunnar = (gridX, gridY, dir) => {
+        // Convert grid coordinates to pixel position
+        const pixelX = gridX * 59 + 258;
+        const pixelY =  250 - gridY * 59;
+  
+        var direction = '0deg';
+        
+        if(dir == "NORTH")
+          direction = '-90deg';
+        else if(dir == "WEST")
+          direction = '-180deg';
+        else if(dir == "SOUTH")
+          direction = '-270deg';
+        else if(dir == "EAST")
+          direction = '0deg';
+  
+        // Update state with the new pixel position
+        setGunnarPosition({ x: pixelX, y: pixelY, deg: direction });
+      };
+
     const steps = [
         "Placement of Robot",
         "Enter Commands",
@@ -151,11 +174,112 @@ function ControlRobot() {
         console.log(currentStep);
     }
 
+    const handleMoveClick = () => {
+        // Example: Move to (100, 100) and rotate 45 degrees
+        moveGunnar(2, 3, 'SOUTH');
+    };
+
+    const handleCellClick = (x, y) => {
+        // Example: Move to (100, 100) and rotate 45 degrees
+        setdestPosition(x, y);
+        console.log("(" + x + ":" + y + ")");
+    };
+
     return (
         <div>
-            <div className="container horizontal mt-5">
-                <div className='row p-2 m-4 bg-white self-start max-w-screen-md'>
-                    <div className='text-3xl col m-6 font-semibold'>Step {currentStep}</div>
+            <div className="container horizontal mt-5 relative">
+                <img className="absolute w-8 h-8" style={{ left: `${gunnarPosition.x}px`, top: `${gunnarPosition.y}px`, transform: `rotate(${gunnarPosition.deg})` }} src="src/assets/pac.png" />
+                <div className=' container row gap-0 self-start w-50'>
+                    <div className='col p-0' onClick={() => handleCellClick(0,4)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(1,4)}>
+                        <img src="src/assets/plus.png" />
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(2,4)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(3,4)}>
+                        <img src="src/assets/plus.png" />
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(4,4)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                </div>
+                <div className=' container row gap-0 self-start w-50'>
+                    <div className='col p-0' onClick={() => handleCellClick(0,3)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(1,3)}>
+                        <img src="src/assets/plus.png" />
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(2,3)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(3,3)}>
+                        <img src="src/assets/plus.png" />
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(4,3)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                </div>
+                <div className=' container row gap-0 self-start w-50'>
+                    <div className='col p-0' onClick={() => handleCellClick(0,2)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(1,2)}>
+                        <img src="src/assets/plus.png" />
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(2,2)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(3,2)}>
+                        <img src="src/assets/plus.png" />
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(4,2)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                </div>
+                <div className=' container row gap-0 self-start w-50'>
+                    <div className='col p-0' onClick={() => handleCellClick(0,1)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(1,1)}>
+                        <img src="src/assets/plus.png" />
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(2,1)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(3,1)}>
+                        <img src="src/assets/plus.png" />
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(4,1)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                </div>
+                <div className=' container row gap-0 self-start w-50'>
+                    <div className='col p-0' onClick={() => handleCellClick(0,0)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(1,0)}>
+                        <img src="src/assets/plus.png" />
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(2,0)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(3,0)}>
+                        <img src="src/assets/plus.png" />
+                    </div>
+                    <div className='col p-0' onClick={() => handleCellClick(4,0)}>
+                        <img src="src/assets/plus.png"/>
+                    </div>
+                </div>
+            </div>
+
+            <div className="container horizontal mt-3">
+            <button onClick={handleMoveClick}>Move and Rotate</button>
+                <div className='row p-2 m-2 bg-white self-start max-w-screen-md'>
+                    <div className='text-3xl col m-3 font-semibold'>Step {currentStep}</div>
                     <div className='text-xl'>
                         <StepperContext.Provider value={{}}>
                             {displayStep(currentStep)}

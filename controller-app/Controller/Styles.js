@@ -144,7 +144,6 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       width: "100%",
       height: "20%",
-
     },
 
     mapCell: {
