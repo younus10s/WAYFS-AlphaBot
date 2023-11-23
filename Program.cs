@@ -2,7 +2,8 @@ using System.Net.WebSockets;
 
 namespace ConsoleApplication
 {
-class Program {
+class Program
+    {
 
     //public static WebSocketHandler webSocketHandler = new WebSocketHandler();
 
@@ -13,7 +14,6 @@ class Program {
         bool Calibrate = true;
         int Rows = 5;
         int Cols = 5;
-
 
         Console.WriteLine("TEST");
         //GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
@@ -29,26 +29,23 @@ class Program {
         app.UseWebSockets();
 
         app.Use(async (context, next) =>
+        {
+            if (context.WebSockets.IsWebSocketRequest)
             {
-                if (context.WebSockets.IsWebSocketRequest)
-                    {
-                        WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                        Console.WriteLine("The frontend is connected");
-                        WebSocketHandler webSocketHandler = new WebSocketHandler(webSocket);
-                        //await webSocketHandler.HandleWebSocketAsync(cmdParser);
-                        await webSocketHandler.HandleWebSocketAsync();
-                        Console.WriteLine("after socket messages");
-                        
-                    } else {
-                            await next();
-                    }
-            });
-    
+                WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                Console.WriteLine("The frontend is connected");
+                WebSocketHandler webSocketHandler = new WebSocketHandler(webSocket);
+                //await webSocketHandler.HandleWebSocketAsync(cmdParser);
+                await webSocketHandler.HandleWebSocketAsync();
+                Console.WriteLine("after socket messages");
+            }
+            else
+            {
+                await next();
+            }
+        });
+
         await app.RunAsync();
-
-        //Gunnar.CleanUp();
-
         }
-            
     }
 }
