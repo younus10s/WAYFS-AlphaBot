@@ -9,7 +9,7 @@ class Program {
         static async Task Main(string[] args)
         {
 
-        double Power = 0.4;
+        double Power = 0.3;
         bool Calibrate = true;
         int Rows = 5;
         int Cols = 5;
