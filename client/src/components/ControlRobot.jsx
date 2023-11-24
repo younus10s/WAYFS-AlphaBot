@@ -176,7 +176,7 @@ function ControlRobot() {
 
     const handleMoveClick = () => {
         // Example: Move to (100, 100) and rotate 45 degrees
-        moveGunnar(2, 3, 'SOUTH');
+        moveGunnar(2, 2, 'NORTH');
     };
 
     const handleCellClick = (x, y) => {
