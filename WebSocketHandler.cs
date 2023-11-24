@@ -41,8 +41,7 @@ namespace ConsoleApplication
             await WebSocket.SendAsync(new ArraySegment<byte>(serverMessageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
-
-        public async Task HandleWebSocketAsync(AppCmdParser cmdParser)
+        public async Task HandleWebSocketAsync(AppCmdParser cmdParser = null)
         {
             try
             {
@@ -54,25 +53,12 @@ namespace ConsoleApplication
                     Console.WriteLine("Received JSON: " + clientMessage);
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
 
-                    for(int i = 0; i < message?.Msg.Count; i++)
-                    {
-                        var dataToSend = new MSG
-                        {
-                            Title = "status",
-                            Msg = new List<string> {i.ToString(), message.Msg[i]} 
-                        };
-
-                        string sendMsg = JsonSerializer.Serialize(dataToSend);
-                        await SendMessage(sendMsg);
-                        Console.WriteLine($"Send: {sendMsg} \n");
-
-                        await cmdParser.RunCommand(message.Msg[i]); 
-                    }
+                    await ProcessMessageAsync(message, cmdParser);
 
                     var doneMsg = new MSG
                     {
                         Title = "Done",
-                        Msg = new List<string> {"Thank you"} 
+                        Msg = new List<string> { "Thank you" }
                     };
 
                     string done = JsonSerializer.Serialize(doneMsg);
@@ -86,30 +72,24 @@ namespace ConsoleApplication
             }
         }
 
-        public async Task HandleWebSocketAsync()
+        private async Task ProcessMessageAsync(MSG? message, AppCmdParser cmdParser)
         {
-            try
+            if (cmdParser != null && message != null)
             {
-                var buffer = new byte[1024];
-
-                while (WebSocket.State == WebSocketState.Open)
+                for (int i = 0; i < message.Msg.Count; i++)
                 {
-                    string clientMessage = await reciveMessage();
-                    Console.WriteLine("Received JSON: " + clientMessage);
-                    
-                    var doneMsg = new MSG
+                    var dataToSend = new MSG
                     {
-                        Title = "Done",
-                        Msg = new List<string> {"Thank you"} 
+                        Title = "status",
+                        Msg = new List<string> { i.ToString(), message.Msg[i] }
                     };
-                    string done = JsonSerializer.Serialize(doneMsg);
-                    await SendMessage(done);
-                    Console.WriteLine($"Send: {done} \n");
+
+                    string sendMsg = JsonSerializer.Serialize(dataToSend);
+                    await SendMessage(sendMsg);
+                    Console.WriteLine($"Send: {sendMsg} \n");
+
+                    await cmdParser.RunCommand(message.Msg[i]);
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"WebSocket exception caught: {ex.Message}");
             }
         }
     }
