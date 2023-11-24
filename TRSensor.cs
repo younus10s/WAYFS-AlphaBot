@@ -141,81 +141,34 @@ public class TRSensor
 
     private int[] AnalogRead()
     {
-        int[] values = new int[NumSensors];
+        int[] Value = new int[NumSensors + 1];
 
-        for (int sensorIndex = 0; sensorIndex < NumSensors; sensorIndex++)
+        for (int j = 0; j < NumSensors + 1; j++)
         {
             GpioController.Write(CS, PinValue.Low);
 
-            // Send sensor address
-            for (int bitIndex = 3; bitIndex >= 0; bitIndex--)
+            for (int i = 0; i < 4; i++)
             {
-                GpioController.Write(Address, ((sensorIndex >> bitIndex) & 0x01) == 1 ? PinValue.High : PinValue.Low);
+                if ((((j) >> (3 - i)) & 0x01) != 0)
+                {
+                    GpioController.Write(Address, PinValue.High);
+                }
+                else
+                {
+                    GpioController.Write(Address, PinValue.Low);
+                }
+                Value[j] = ReadBitAndShift(j, Value[j]);
 
-                values[sensorIndex] = ReadBitAndShift(sensorIndex, values[sensorIndex]);
+            }
+            for (int i = 0; i < NumSensors + 1; i++)
+            {
+                Value[j] = ReadBitAndShift(j, Value[j]);
             }
 
-            // Receive sensor value
-            for (int i = 0; i < NumSensors; i++)
-            {
-                values[sensorIndex] = ReadBitAndShift(sensorIndex, values[sensorIndex]);
-            }
-
-            // Allow some time before the next sensor
             Thread.Sleep(1);
-
             GpioController.Write(CS, PinValue.High);
         }
 
-        return values;
+        return Value[1..];
     }
-
-    /*    private int[] AnalogRead()
-        {
-            int[] Value = new int[NumSensors + 1];
-
-            for (int j = 0; j < NumSensors + 1; j++)
-            {
-                GpioController.Write(CS, PinValue.Low);
-
-                for (int i = 0; i < 4; i++)
-                {
-                    if ((((j) >> (3 - i)) & 0x01) != 0)
-                    {
-                        GpioController.Write(Address, PinValue.High);
-                    }
-                    else
-                    {
-                        GpioController.Write(Address, PinValue.Low);
-                    }
-
-                    Value[j] <<= 1;
-
-                    if(GpioController.Read(DataOut) == PinValue.High)
-                    {
-                        Value[j] |= 0x01;
-                    }
-
-                    GpioController.Write(Clock, PinValue.High);
-                    GpioController.Write(Clock, PinValue.Low);
-                }
-                for(int i = 0; i < NumSensors + 1; i++)
-                {
-                    Value[j] <<= 1;
-
-                    if(GpioController.Read(DataOut) == PinValue.High)
-                    {
-                        Value[j] |= 0x01;
-                    }
-
-                    GpioController.Write(Clock, PinValue.High);
-                    GpioController.Write(Clock, PinValue.Low);
-                }
-
-                Thread.Sleep(1);
-                GpioController.Write(CS, PinValue.High);
-            }
-
-            return Value[1..];
-        }*/
 }
