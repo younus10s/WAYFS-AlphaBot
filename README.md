@@ -28,6 +28,20 @@ To run the Robot, modify the Program.cs main method as needed, then run it from 
 The GridBot, and AlphaBot, classes contain functionality to control the Robot's behaviour.
 The Alphabot is general purpose, and the GridBot abstracts its functionality and adds behaviour specific to traversing a grid.
 
+### Run Backend & Frontend
+
+To run the backend:
+* Go to './WAYFS-AlphaBot'
+* Type: dotnet run --urls "http://<rpi-ip-address>:<port>"
+
+To run the frontend:
+* Go to './WAYFS-AlphaBot/client'
+* Type: npm run dev -- --host
+
+To run the app:
+* Go to './WAYFS-AlphaBot/controller-app/Controller'
+* Type: expo start
+
 ### Programmatic commands
 The first option is to control the robot programmatically. Both Alphabot, and GridBot instances can be controlled this way.
 Find their documentation in their respective files.
