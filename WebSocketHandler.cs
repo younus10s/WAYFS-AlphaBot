@@ -56,7 +56,7 @@ public class WebSocketHandler
                             var dataToSend = new MSG
                             {
                                 Title = "status",
-                                Msg = new List<string> {i.ToString(), message.Msg[i]} 
+                                Msg = new List<string> {i.ToString(), message.Msg[i], cmdParser.Gunnar.PosX.ToString(), cmdParser.Gunnar.PosY.ToString(), cmdParser.Gunnar.Heading.ToString()}
                             };
 
                             string sendMsg = JsonSerializer.Serialize(dataToSend);

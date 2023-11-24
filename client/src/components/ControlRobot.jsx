@@ -69,6 +69,7 @@ function ControlRobot() {
             if(message.Title == "status")
                 setCurrentIndex(parseInt(message.Msg[0]))
                 setCurrentCommand(message.Msg[1])
+                moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4])
 
             console.log(message)
           };
@@ -166,6 +167,9 @@ function ControlRobot() {
 
     const handleClick = (direction) => {
         let newStep = currentStep;
+
+        if(direction === "next")
+            moveGunnar(placeValues.xcoord, placeValues.ycoord, placeValues.direction.toUpperCase());
 
         direction === "next" || direction === "send" ? newStep++ : newStep--;
         // check if steps are withing bounds

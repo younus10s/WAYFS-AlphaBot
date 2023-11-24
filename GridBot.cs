@@ -15,9 +15,9 @@
 public class GridBot : AlphaBot {
     private static int NumRows;
     private static int NumCols;
-    private int PosX;
-    private int PosY;
-    private string Heading = "";
+    public int PosX;
+    public int PosY;
+    public string Heading = "";
 
     public GridBot(double power, bool Calibrate, int Rows, int Cols)
             : base(power, Calibrate) 
