@@ -36,7 +36,7 @@ namespace ConsoleApplication
 
                     await WebSocketRoutine(options.Dummy, options.URL);
                 }
-                    else if (options.TxtFile != null)
+                else if (options.TxtFile != null)
                 {
                     Console.WriteLine($"Using txtParser to run file: {options.TxtFile}");
 
