@@ -1,23 +1,72 @@
 using System.Net.WebSockets;
+using CommandLine;
+
+public class Options
+{
+    [Option('t', "txt", Required = false, HelpText = "Set to run using txt-file parser.")]
+    public string TxtFile { get; set; }
+
+    [Option('u', "urls", Required = false, HelpText = "Provide URL for Web Sockets.")]
+    public string URL { get; set; }
+
+    [Option('d', "dummy", Required = false, HelpText = "Run Program in Dummy Mode.")]
+    public bool Dummy { get; set; }
+}
 
 namespace ConsoleApplication
 {
     class Program
     {
+        static double Power = 0.4;
+        static bool Calibrate = true;
+        static int Rows = 5;
+        static int Cols = 5;
 
         static async Task Main(string[] args)
         {
-            double Power = 0.4;
-            bool Calibrate = true;
-            int Rows = 5;
-            int Cols = 5;
-            /*            
-            public static WebSocketHandler webSocketHandler = new WebSocketHandler();
+
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed(options =>
+                {
+
+                if (options.URL != null)
+                {
+                    Console.WriteLine($"Using URL: {options.URL}");
+
+                    WebSocketRoutine(options.Dummy, options.URL);
+                }
+                else if (options.TxtFile != null)
+                {
+                    Console.WriteLine($"Using txtParser to run file: {options.TxtFile}");
+
+                    TxtParserRoutine(options.TxtFile);
+                }
+            });
+        }
+
+        private static async Task TxtParserRoutine (string FileName)
+        {
             GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
             TxtParser TParser = new TxtParser();
-            await TParser.RunFile("robot.txt", Gunnar);
-            AppCmdParser cmdParser = new AppCmdParser(Gunnar);
-            */
+
+            await TParser.RunFile(FileName, Gunnar);
+
+            Gunnar.CleanUp();
+        }
+
+        private static async Task WebSocketRoutine (bool Dummy, string URL)
+        {
+            AppCmdParser cmdParser = null;
+            GridBot Gunnar;
+
+            if (!Dummy)
+            {
+                Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
+                cmdParser = new AppCmdParser(Gunnar);
+            }
+
+            string[] args = { "-u", URL };
+
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
 
@@ -30,8 +79,14 @@ namespace ConsoleApplication
                     WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                     Console.WriteLine("The frontend is connected");
                     WebSocketHandler webSocketHandler = new WebSocketHandler(webSocket);
-                    //await webSocketHandler.HandleWebSocketAsync(cmdParser);
-                    await webSocketHandler.HandleWebSocketAsync();
+                    if (!Dummy)
+                    {
+                        await webSocketHandler.HandleWebSocketAsync(cmdParser);
+                    } 
+                    else
+                    {
+                        await webSocketHandler.HandleWebSocketAsync();
+                    }
                     Console.WriteLine("after socket messages");
                 }
                 else

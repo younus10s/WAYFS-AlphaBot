@@ -16,7 +16,7 @@
 
 class TxtParser
 {
-    public static async Task RunFile(string FilePath, GridBot Gunnar)
+    public async Task RunFile(string FilePath, GridBot Gunnar)
     {
         if (File.Exists(FilePath))
         {
