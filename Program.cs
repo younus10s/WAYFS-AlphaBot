@@ -28,7 +28,7 @@ namespace ConsoleApplication
             var parserResult = Parser.Default.ParseArguments<Options>(args);
 
             await parserResult.WithParsedAsync(async options =>
-                {
+            {
 
                 if (options.URL != null)
                 {
@@ -45,7 +45,7 @@ namespace ConsoleApplication
             });
         }
 
-        private static async Task TxtParserRoutine (string FileName)
+        private static async Task TxtParserRoutine(string FileName)
         {
             GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
             TxtParser TParser = new TxtParser();
@@ -55,7 +55,7 @@ namespace ConsoleApplication
             Gunnar.CleanUp();
         }
 
-        private static async Task WebSocketRoutine (bool Dummy, string URL)
+        private static async Task WebSocketRoutine(bool Dummy, string URL)
         {
             AppCmdParser cmdParser = null;
             GridBot Gunnar;
