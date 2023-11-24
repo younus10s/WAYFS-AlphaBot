@@ -69,7 +69,7 @@ function ControlRobot() {
             if(message.Title == "status")
                 setCurrentIndex(parseInt(message.Msg[0]))
                 setCurrentCommand(message.Msg[1])
-                moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4])
+                moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4].toUpperCase())
 
             console.log(message)
           };
