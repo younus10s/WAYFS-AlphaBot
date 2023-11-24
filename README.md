@@ -29,7 +29,7 @@ The GridBot, and AlphaBot, classes contain functionality to control the Robot's 
 The Alphabot is general purpose, and the GridBot abstracts its functionality and adds behaviour specific to traversing a grid.
 
 ### Programmatic commands
-The first option is to control the robot programmatically. Both Alphabot, and GridBot instances can be controlled this way.
+The first option is to control the robot programmatically. Create a new Main method and populate it with initializations, and then commands as wanted. Both Alphabot, and GridBot instances can be controlled this way.
 Find their documentation in their respective files.
 
 ### .txt file commands
@@ -45,5 +45,13 @@ Commands:
 * LEFT - Makes the robot turn anti-clock wise
 * RIGHT - Makes the robot turn clock wise
 
-## Start server with IP address
-dotnet run --urls "http://192.168.187.236:5175"
+Use the dotnet run command with the flag -t or --txt to run the program in TxtParser mode. The flag should be followed by a file name. 
+
+## Commands from a Front-End Website, or App
+The Robot can also be run in tandem with a website. This way commands can be sent, and feedback recieved, in real time.
+
+Use the dotnet run command with the flag -u or --urls to run the program in AppCmdParser mode. The flag should be followed by a valid URL and port (like "http://localhost:5175"). 
+
+Using the -u flag, another flag, -d or --dummy, Can be set to run the backend without initializing an AlphaBot. This is useful for working on the Front End locally without a working backend.
+
+The front-end also needs to be launched. This is done npm run dev -- --host.
