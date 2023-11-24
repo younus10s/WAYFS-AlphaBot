@@ -53,6 +53,7 @@ public class WebSocketHandler
                         MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
 
                         for(int i = 0; i < message?.Msg.Count; i++){
+                            await cmdParser.RunCommand(message.Msg[i]);
                             var dataToSend = new MSG
                             {
                                 Title = "status",
@@ -62,8 +63,6 @@ public class WebSocketHandler
                             string sendMsg = JsonSerializer.Serialize(dataToSend);
                             await SendMessage(sendMsg);
                             Console.WriteLine($"Send: {sendMsg} \n");
-
-                            await cmdParser.RunCommand(message.Msg[i]);
                             
                         }
                         
