@@ -25,21 +25,22 @@ namespace ConsoleApplication
         static async Task Main(string[] args)
         {
 
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(options =>
+            var parserResult = Parser.Default.ParseArguments<Options>(args);
+
+            await parserResult.WithParsedAsync(async options =>
                 {
 
                 if (options.URL != null)
                 {
                     Console.WriteLine($"Using URL: {options.URL}");
 
-                    WebSocketRoutine(options.Dummy, options.URL);
+                    await WebSocketRoutine(options.Dummy, options.URL);
                 }
-                else if (options.TxtFile != null)
+                    else if (options.TxtFile != null)
                 {
                     Console.WriteLine($"Using txtParser to run file: {options.TxtFile}");
 
-                    TxtParserRoutine(options.TxtFile);
+                    await TxtParserRoutine(options.TxtFile);
                 }
             });
         }
@@ -65,28 +66,30 @@ namespace ConsoleApplication
                 cmdParser = new AppCmdParser(Gunnar);
             }
 
-            string[] args = { "-u", URL };
+            string[] args = { "--urls", URL };
 
             var builder = WebApplication.CreateBuilder(args);
             var app = builder.Build();
 
             app.UseWebSockets();
 
+            Console.WriteLine("Test4");
+
             app.Use(async (context, next) =>
             {
+                Console.WriteLine("Test5");
                 if (context.WebSockets.IsWebSocketRequest)
                 {
+
                     WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+                    Console.WriteLine("Test6");
+
+
                     Console.WriteLine("The frontend is connected");
                     WebSocketHandler webSocketHandler = new WebSocketHandler(webSocket);
-                    if (!Dummy)
-                    {
-                        await webSocketHandler.HandleWebSocketAsync(cmdParser);
-                    } 
-                    else
-                    {
-                        await webSocketHandler.HandleWebSocketAsync();
-                    }
+
+                    await webSocketHandler.HandleWebSocketAsync(cmdParser);
+
                     Console.WriteLine("after socket messages");
                 }
                 else
