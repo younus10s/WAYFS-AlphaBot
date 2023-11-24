@@ -16,12 +16,12 @@ class Program {
 
 
         Console.WriteLine("TEST");
-        //GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
+        GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
         //TxtParser TParser = new TxtParser();
 
         //await TParser.RunFile("robot.txt", Gunnar); 
 
-        //AppCmdParser cmdParser = new AppCmdParser(Gunnar);
+        AppCmdParser cmdParser = new AppCmdParser(Gunnar);
             
         var builder = WebApplication.CreateBuilder(args);
         var app = builder.Build();
@@ -35,8 +35,8 @@ class Program {
                         WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
                         Console.WriteLine("The frontend is connected");
                         WebSocketHandler webSocketHandler = new WebSocketHandler(webSocket);
-                        //await webSocketHandler.HandleWebSocketAsync(cmdParser);
-                        await webSocketHandler.HandleWebSocketAsync();
+                        await webSocketHandler.HandleWebSocketAsync(cmdParser);
+                        //await webSocketHandler.HandleWebSocketAsync();
                         Console.WriteLine("after socket messages");
                         
                     } else {
