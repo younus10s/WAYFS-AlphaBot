@@ -34,12 +34,12 @@ class TxtParser
             Console.WriteLine("The file does not exist.");
         }
     }
-    
+
     private static async Task Execute(string Command, GridBot Gunnar)
     {
         string[] Parts = Command.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-        switch(Parts[0])
+        switch (Parts[0])
         {
             case "PLACE":
                 if (Parts.Length == 4)
@@ -71,7 +71,7 @@ class TxtParser
                 break;
             default:
                 Console.WriteLine("Invalid Command OTHER");
-            break;
+                break;
         }
     }
 }
