@@ -12,46 +12,50 @@
  * Left() / Right()
  * Make the robot turns 90 degree on a crossing
  */
-public class GridBot : AlphaBot {
+public class GridBot : AlphaBot
+{
     private static int NumRows;
     private static int NumCols;
     public int PosX;
     public int PosY;
     public string Heading = "";
 
-    public GridBot(double power, bool Calibrate, int Rows, int Cols)
-            : base(power, Calibrate) 
-        {
+    public GridBot(double power, bool Calibrate, int Rows, int Cols) : base(power, Calibrate)
+    {
         NumRows = Rows;
         NumCols = Cols;
     }
 
-    public void Place(int PosX_, int PosY_, string Heading_) {
+    public void Place(int PosX_, int PosY_, string Heading_)
+    {
         PosX = PosX_;
         PosY = PosY_;
         Heading = Heading_;
     }
 
-    public void Move() {
+    public void Move()
+    {
         int tempX = PosX;
-        int tempY = PosY; 
+        int tempY = PosY;
 
-        switch(Heading) {
-            case "north": 
-                tempY+=1; 
+        switch (Heading)
+        {
+            case "north":
+                tempY += 1;
                 break;
             case "east":
-                tempX+=1; 
-                break; 
-            case "south": 
-                tempY-=1;
+                tempX += 1;
+                break;
+            case "south":
+                tempY -= 1;
                 break;
             case "west":
-                tempX-=1; 
-                break; 
+                tempX -= 1;
+                break;
         }
-        
-        if(PositionValid(tempX, tempY)) {
+
+        if (PositionValid(tempX, tempY))
+        {
             bool MoveDone = false;
             while (!MoveDone)
             {
@@ -63,7 +67,7 @@ public class GridBot : AlphaBot {
                 catch (OffLineException e)
                 {
                     Console.WriteLine(MoveDone);
-                    MoveDone = false; 
+                    MoveDone = false;
                     Console.WriteLine(e.Message);
                     Console.WriteLine("Whoops! Put me back on the line please! :D");
                     Console.WriteLine("Press any key when ready!");
@@ -75,62 +79,70 @@ public class GridBot : AlphaBot {
 
                     CleanUp();
                     Environment.Exit(0);
-                }                
+                }
             }
 
-            PosX = tempX; 
-            PosY = tempY; 
+            PosX = tempX;
+            PosY = tempY;
 
             int[] SensorValues = TRSensor.ReadLine();
             MotionControl.Forward(0.1);
 
-            while(SensorValues.Sum() >= 3){
+            while (SensorValues.Sum() >= 3)
+            {
                 SensorValues = TRSensor.ReadLine();
             }
 
             MotionControl.Stop();
-        } else {
-            Console.WriteLine("Invalid move :)");
+        }
+        else
+        {
+            Console.WriteLine("Invalid move");
         }
     }
 
-    public void Left() {
+    public void Left()
+    {
         TurnLeft();
-        switch(Heading) {
-            case "north": 
-                Heading="west"; 
+        switch (Heading)
+        {
+            case "north":
+                Heading = "west";
                 break;
             case "west":
-                Heading="south"; 
-                break; 
-            case "south": 
-                Heading="east";
+                Heading = "south";
+                break;
+            case "south":
+                Heading = "east";
                 break;
             case "east":
-                Heading="north"; 
-                break; 
+                Heading = "north";
+                break;
         }
     }
 
-    public void Right() {
+    public void Right()
+    {
         TurnRight();
-        switch(Heading) {
-            case "north": 
-                Heading="east"; 
+        switch (Heading)
+        {
+            case "north":
+                Heading = "east";
                 break;
             case "east":
-                Heading="south"; 
-                break; 
-            case "south": 
-                Heading="west";
+                Heading = "south";
+                break;
+            case "south":
+                Heading = "west";
                 break;
             case "west":
-                Heading="north"; 
-                break; 
+                Heading = "north";
+                break;
         }
     }
 
-    public async Task Report(){
+    public async Task Report()
+    {
         await TakePicture();
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);
     }

@@ -19,46 +19,55 @@ public class AlphaBot
 
     private readonly double Power;
 
-    public AlphaBot(double power, bool Calibrate) {
+    public AlphaBot(double power, bool Calibrate)
+    {
         Power = power;
 
-        if (Calibrate) {
+        if (Calibrate)
+        {
             TRSensor.Calibrate(MotionControl);
         }
     }
 
-    public async Task TakePicture(){
+    public async Task TakePicture()
+    {
         await Camera.TakePicture();
     }
 
-    public void TurnLeft() {
+    public void TurnLeft()
+    {
         int[] SensorValues = TRSensor.ReadLine();
-        MotionControl.Left(Power/2);
+        MotionControl.Left(Power / 2);
 
-        while(SensorValues[1]==1) {
+        while (SensorValues[1] == 1)
+        {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[1]==0) {
+        while (SensorValues[1] == 0)
+        {
             SensorValues = TRSensor.ReadLine();
         }
         MotionControl.Stop();
     }
 
-    public void TurnRight() {
+    public void TurnRight()
+    {
         int[] SensorValues = TRSensor.ReadLine();
-        MotionControl.Right(Power/2);
-        
-        while(SensorValues[3]==1) {
+        MotionControl.Right(Power / 2);
+
+        while (SensorValues[3] == 1)
+        {
             SensorValues = TRSensor.ReadLine();
         }
-        while(SensorValues[3]==0) {
+        while (SensorValues[3] == 0)
+        {
             SensorValues = TRSensor.ReadLine();
         }
         MotionControl.Stop();
     }
 
     public void LineFollow()
-    {        
+    {
         double ScalingFactor = 100;
 
         int MemorySize = 10;
@@ -66,19 +75,20 @@ public class AlphaBot
         double Derivative;
         double Integral = 0;
 
-        double PositionParameter   = 0.005;
-        double IntegralParameter   = 0.0001;
-        double DerivativeParameter = 0.05/MemorySize; 
+        double PositionParameter = 0.005;
+        double IntegralParameter = 0.0001;
+        double DerivativeParameter = 0.05 / MemorySize;
 
         double SteeringInput;
 
         MotionControl.Forward(Power);
 
-        while (Following()) {
+        while (Following())
+        {
 
-            for (int i = MemorySize-1; i > 0; i--)
+            for (int i = MemorySize - 1; i > 0; i--)
             {
-                PositionMemory[i] = PositionMemory[i-1];
+                PositionMemory[i] = PositionMemory[i - 1];
             }
 
             PositionMemory[0] = TRSensor.GetPosition();
@@ -92,11 +102,11 @@ public class AlphaBot
 
             Integral += PositionMemory[0];
 
-            SteeringInput = PositionMemory[0] * PositionParameter 
-                          + Integral * IntegralParameter 
+            SteeringInput = PositionMemory[0] * PositionParameter
+                          + Integral * IntegralParameter
                           + Derivative * DerivativeParameter;
 
-            Steer(SteeringInput/ScalingFactor);
+            Steer(SteeringInput / ScalingFactor);
         }
 
         MotionControl.Stop();
@@ -104,16 +114,21 @@ public class AlphaBot
 
     private void Steer(double SteeringInput)
     {
-        if (SteeringInput > Power) {
+        if (SteeringInput > Power)
+        {
             SteeringInput = Power;
         }
-        if (SteeringInput < -Power) {
+        if (SteeringInput < -Power)
+        {
             SteeringInput = -Power;
         }
-        if (SteeringInput < 0) {
+        if (SteeringInput < 0)
+        {
             MotionControl.SetPowerLeft(Power + SteeringInput);
             MotionControl.SetPowerRight(Power);
-        } else {
+        }
+        else
+        {
             MotionControl.SetPowerLeft(Power);
             MotionControl.SetPowerRight(Power - SteeringInput);
         }
@@ -123,18 +138,22 @@ public class AlphaBot
     {
         int[] SensorValues = TRSensor.ReadLine();
 
-        if (SensorValues.Sum() >= 3){
+        if (SensorValues.Sum() >= 3)
+        {
             return false;
         }
-        if(SensorValues.Sum() == 0) {
-            MotionControl.Stop(); 
+
+        if (SensorValues.Sum() == 0)
+        {
+            MotionControl.Stop();
             throw new OffLineException("Following: No line!");
         }
 
         return true;
     }
 
-    public void CleanUp() {
+    public void CleanUp()
+    {
         MotionControl.CleanUp();
     }
 }

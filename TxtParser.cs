@@ -14,9 +14,12 @@
  * Find words and run the corresponding method for GridBot.  
  */
 
-class TxtParser {
-    public static async Task RunFile(string FilePath, GridBot Gunnar){
-        if (File.Exists(FilePath)) {
+class TxtParser
+{
+    public async Task RunFile(string FilePath, GridBot Gunnar)
+    {
+        if (File.Exists(FilePath))
+        {
 
             using StreamReader Reader = new(FilePath);
             string? Line;
@@ -25,30 +28,37 @@ class TxtParser {
             {
                 await Execute(Line, Gunnar);
             }
-        } else {
+        }
+        else
+        {
             Console.WriteLine("The file does not exist.");
         }
     }
-    
-    private static async Task Execute(string Command, GridBot Gunnar) {
+
+    private static async Task Execute(string Command, GridBot Gunnar)
+    {
         string[] Parts = Command.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-        switch(Parts[0]){
+        switch (Parts[0])
+        {
             case "PLACE":
-                if (Parts.Length == 4){
+                if (Parts.Length == 4)
+                {
                     Gunnar.Place(int.Parse(Parts[1]), int.Parse(Parts[2]), Parts[3].ToLower());
-                }else{
+                }
+                else
+                {
                     Console.WriteLine("Invalid Command PLACE");
                 }
                 break;
             case "MOVE":
                 Gunnar.Move();
                 Console.WriteLine("MOVE");
-            break;
+                break;
             case "LEFT":
                 Gunnar.Left();
                 Console.WriteLine("LEFT");
-            break;
+                break;
             case "RIGHT":
                 Gunnar.Right();
                 Console.WriteLine("RIGHT");
@@ -61,7 +71,7 @@ class TxtParser {
                 break;
             default:
                 Console.WriteLine("Invalid Command OTHER");
-            break;
+                break;
         }
     }
 }
