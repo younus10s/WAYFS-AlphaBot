@@ -6,7 +6,7 @@ import StepperContext from '../contexts/StepperContext';
 import MovingStep from './steps/MovingStep';
 /**
  * Component to control robot by adding, removing and sending a string of commands.
- * Commands are sent by starting a websocket.
+ * Commands are sent by starting a websocket. The moves will update the grid
  */
 function ControlRobot() {
     const [currentStep, setCurrentStep] = useState(1);
@@ -22,6 +22,29 @@ function ControlRobot() {
             direction: "North"
         }
     );
+
+    const [gunnarPosition, setGunnarPosition] = useState({ x: 258, y: 250, deg: '0deg' });
+    const [destPosition, setdestPosition] = useState({ x: 0, y: 0 });
+
+    const moveGunnar = (gridX, gridY, dir) => {
+        // Convert grid coordinates to pixel position
+        const pixelX = gridX * 59 + 258;
+        const pixelY =  250 - gridY * 59;
+  
+        var direction = '0deg';
+        
+        if(dir == "NORTH")
+          direction = '-90deg';
+        else if(dir == "WEST")
+          direction = '-180deg';
+        else if(dir == "SOUTH")
+          direction = '-270deg';
+        else if(dir == "EAST")
+          direction = '0deg';
+  
+        // Update state with the new pixel position
+        setGunnarPosition({ x: pixelX, y: pixelY, deg: direction });
+      };
 
     const steps = [
         "Placement of Robot",
@@ -46,6 +69,7 @@ function ControlRobot() {
             if(message.Title == "status")
                 setCurrentIndex(parseInt(message.Msg[0]))
                 setCurrentCommand(message.Msg[1])
+                moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4].toUpperCase())
 
             console.log(message)
           };
@@ -144,6 +168,9 @@ function ControlRobot() {
     const handleClick = (direction) => {
         let newStep = currentStep;
 
+        if(direction === "next")
+            moveGunnar(placeValues.xcoord, placeValues.ycoord, placeValues.direction.toUpperCase());
+
         direction === "next" || direction === "send" ? newStep++ : newStep--;
         // check if steps are withing bounds
         newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
@@ -151,11 +178,49 @@ function ControlRobot() {
         console.log(currentStep);
     }
 
+    const handleMoveClick = () => {
+        // Example: Move to (100, 100) and rotate 45 degrees
+        moveGunnar(2, 2, 'NORTH');
+    };
+
+    const handleCellClick = (x, y) => {
+        // Example: Move to (100, 100) and rotate 45 degrees
+        setdestPosition(x, y);
+        console.log("(" + x + ":" + y + ")");
+    };
+
+    
+    const rows = 5;
+    const cols = 5;
+
+    function createGrid() {
+        let grid = [];
+        for (let row = rows-1; row >= 0; row--) {
+            let cells = [];
+            for (let col = 0; col < cols; col++) {
+                cells.push(
+                    <div key={`cell-${row}-${col}`} className='col p-0' onClick={() => handleCellClick(col, row) }>
+                        <img src="src/assets/plus.png" />
+                    </div>
+                );
+            }
+            grid.push(<div key={`row-${row}`} className='container row gap-0 self-start w-50'>{cells}</div>);
+        }
+        return grid;
+    }
+
     return (
         <div>
-            <div className="container horizontal mt-5">
-                <div className='row p-2 m-4 bg-white self-start max-w-screen-md'>
-                    <div className='text-3xl col m-6 font-semibold'>Step {currentStep}</div>
+            <div className="container horizontal mt-5 relative">
+                <img className="absolute w-8 h-8" style={{ left: `${gunnarPosition.x}px`, top: `${gunnarPosition.y}px`, transform: `rotate(${gunnarPosition.deg})` }} src="src/assets/pac.png" />
+                {createGrid()}
+                
+            </div>
+
+            <div className="container horizontal mt-3">
+            <button onClick={handleMoveClick}>Move and Rotate</button>
+                <div className='row p-2 m-2 bg-white self-start max-w-screen-md'>
+                    <div className='text-3xl col m-3 font-semibold'>Step {currentStep}</div>
                     <div className='text-xl'>
                         <StepperContext.Provider value={{}}>
                             {displayStep(currentStep)}
