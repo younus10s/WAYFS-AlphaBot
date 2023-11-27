@@ -6,7 +6,7 @@ import StepperContext from '../contexts/StepperContext';
 import MovingStep from './steps/MovingStep';
 /**
  * Component to control robot by adding, removing and sending a string of commands.
- * Commands are sent by starting a websocket.
+ * Commands are sent by starting a websocket. The moves will update the grid
  */
 function ControlRobot() {
     const [currentStep, setCurrentStep] = useState(1);
