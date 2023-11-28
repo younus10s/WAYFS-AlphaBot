@@ -16,7 +16,7 @@ export default function App() {
   useEffect(() => {
     // Function to initialize WebSocket connection
     const connectWebSocket = () => {
-      const newWebSocket = new WebSocket('ws://192.168.187.239:5000');
+      const newWebSocket = new WebSocket('ws://192.168.187.236:5000');
       //const newWebSocket = new WebSocket('ws://192.168.187.239:5175');
       console.log("Trying to connect...");
 
