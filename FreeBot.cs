@@ -8,27 +8,29 @@ public class FreeBot : AlphaBot
         //Maybe add more variable ints
     }
 
-    public void Move(double dx, double dy){
+    public void Move(double dx_, double dy_){
+        double dx = dx_ * 0.80;
+        double dy = dy_ * 0.80;
         double abs = Math.Sqrt(dx * dx + dy * dy);
-        if(dy > 0.1){
+        if(dy > 0.2){
             MotionControl.Forward(abs);
-            if(dx > 0.1){
-                MotionControl.SetPowerRight(dx);
-            }else if(dx < -0.1){
-                MotionControl.SetPowerLeft(Math.Abs(dx));
+            if(dx > 0.2){
+                MotionControl.SetPowerRight(dx * 0.7);
+            }else if(dx < -0.2){
+                MotionControl.SetPowerLeft(Math.Abs(dx) * 0.7);
             }
-        }else if(dy < -0.1){
+        }else if(dy < -0.2){
             MotionControl.Backward(abs);
-            if(dx > 0.1){
-                MotionControl.SetPowerRight(dx);
-            }else if(dx < -0.1){
-                MotionControl.SetPowerLeft(Math.Abs(dx));
+            if(dx > 0.2){
+                MotionControl.SetPowerRight(Math.Abs(dx) * 0.7); 
+            }else if(dx < -0.2){
+                MotionControl.SetPowerLeft(dx);
             }
         }else{
-            if(dx > 0.1){
-                MotionControl.SetPowerLeft(abs);
-            }else if(dx < -0.1){
-                MotionControl.SetPowerRight(abs);
+            if(dx > 0.2){
+                MotionControl.SetPowerLeft(abs*0.7);
+            }else if(dx < -0.2){
+                MotionControl.SetPowerRight(abs* 0.7);
             }else{
                 MotionControl.Stop();
             }
