@@ -56,7 +56,7 @@ function ControlRobot() {
     useEffect(() => {
         // Function to initialize WebSocket connection
         const connectWebSocket = () => {
-          const newWebSocket = new WebSocket('ws://192.168.187.236:5175');
+          const newWebSocket = new WebSocket('ws://localhost:5175');
     
           newWebSocket.onopen = () => {
             console.log('Connected to WebSocket');
