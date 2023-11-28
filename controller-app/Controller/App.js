@@ -105,8 +105,8 @@ export default function App() {
             } else {
               pan.x.setValue(gestureState.dx);
               pan.y.setValue(gestureState.dy);
-              setDx(Number(clampedX/boundary).toFixed(2));
-              setDy(-1 * gestureState.dy/boundary);
+              setDx(Number(gestureState.dx/boundary).toFixed(2));
+              setDy(-1 * Number(gestureState.dy/boundary).toFixed(2));
 
 
             }

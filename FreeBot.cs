@@ -1,3 +1,4 @@
+using Microsoft.Net.Http.Headers;
 using MMALSharp.Processors.Motion;
 
 public class FreeBot : AlphaBot
@@ -8,72 +9,30 @@ public class FreeBot : AlphaBot
     }
 
     public void Move(double dx, double dy){
-        double AbsDy = Math.Abs(dy);
-        double AbsDx = Math.Abs(dx);
-        
-        //Controll movement
-        if(dy > 0)
-        {
-            MotionControl.Forward(AbsDy);
-            //Controll rotation
-            if(dx > 0)
-            {
-                Console.WriteLine($"Move forward with {AbsDy} and and Rotate clockwise with {AbsDx}");
-                MotionControl.SetPowerLeft(AbsDy);
-                MotionControl.SetPowerRight(0.25);
+        double abs = Math.Sqrt(dx * dx + dy * dy);
+        if(dy > 0.1){
+            MotionControl.Forward(abs);
+            if(dx > 0.1){
+                MotionControl.SetPowerRight(dx);
+            }else if(dx < -0.1){
+                MotionControl.SetPowerLeft(Math.Abs(dx));
             }
-            else if(dx < 0)
-            {
-                Console.WriteLine($"Move forward with {AbsDy} and Rotate anti-clockwise with {AbsDx}");
-                MotionControl.SetPowerLeft(0.25);
-                MotionControl.SetPowerRight(AbsDy);
+        }else if(dy < -0.1){
+            MotionControl.Backward(abs);
+            if(dx > 0.1){
+                MotionControl.SetPowerRight(dx);
+            }else if(dx < -0.1){
+                MotionControl.SetPowerLeft(Math.Abs(dx));
             }
-            else
-            {
-                Console.WriteLine($"Move forward with {AbsDy}");
-            }  
+        }else{
+            if(dx > 0.1){
+                MotionControl.SetPowerLeft(abs);
+            }else if(dx < -0.1){
+                MotionControl.SetPowerRight(abs);
+            }else{
+                MotionControl.Stop();
+            }
         }
-        else if(dy < 0)
-        {
-            
-            MotionControl.Backward(AbsDy);
-
-            if(dx > 0)
-            {
-                Console.WriteLine($"Move backward with {AbsDy} and and Rotate clockwise with {AbsDx}");
-                MotionControl.SetPowerLeft(AbsDy);
-                MotionControl.SetPowerRight(0.25);
-            }
-            else if(dx < 0)
-            {
-                Console.WriteLine($"Move backward with {AbsDy} and Rotate anti-clockwise with {AbsDx}");
-                MotionControl.SetPowerLeft(0.25);
-                MotionControl.SetPowerRight(AbsDy);
-            }
-            else
-            {
-                Console.WriteLine($"Move backward with {AbsDy}");
-            }  
-        }
-        else
-        {
-            if(dx > 0)
-            {
-                Console.WriteLine($"Move backward with {AbsDy} and and Rotate clockwise with {AbsDx}");
-                MotionControl.SetPowerLeft(AbsDy);
-                MotionControl.SetPowerRight(0);
-            }
-            else if(dx < 0)
-            {
-                Console.WriteLine($"Move backward with {AbsDy} and Rotate anti-clockwise with {AbsDx}");
-                MotionControl.SetPowerLeft(0);
-                MotionControl.SetPowerRight(AbsDy);
-            }
-
-            Console.WriteLine("Stop Movement");
-            MotionControl.Stop();
-        }
-        
     }
 
 }
