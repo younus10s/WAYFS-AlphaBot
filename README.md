@@ -1,30 +1,46 @@
 # WAYFS AlphaBot
 
-## Connecting to RPi:
-We followed the guide for the AlphaBot2 on the [Wiki page](https://hiq365.atlassian.net/wiki/spaces/Labbet/pages/18055489/Robot) to get the RPi connected to a mobile hotspot. With the pi on a network, it can be headlessly accessed via ssh-connection or VNC. 
+## Connecting to RPi
+We followed the guide for the AlphaBot2 on the [Wiki page](https://hiq365.atlassian.net/wiki/spaces/Labbet/pages/18055489/Robot) to get the RPi connected to a mobile hotspot. With the pi on a network, it can be headlessly accessed via ssh-connection or VNC.
 
 ### SSH
-If both the computer and RPi are on the same network ssh pi@raspberrypi.local can be used. No IP address is needed.
+If both the computer and RPi are on the same network,
+```console
+ssh pi@raspberrypi.local
+```
+can be used. No IP address is needed.
 
 ### VNC
 Download VNC. Connect to the RPi using SSH to find the AlphaBots IP address (ifconfig). Open VNC and create a new connection (file->new connection...). Enter the IP address, and a name. Select the VNC server and enter username (pi) and password (HiQBot1!) if prompted.
 
-## Installing .NET SDK on the RPi (raspbian):
+## Installing .NET SDK on the RPi (raspbian)
 
-### Install via curl:
+### Install via curl
+```console
 curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel Current
+```
 
+```console
 echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc
+```
+
+```console
 echo 'export PATH=$PATH:$HOME/.dotnet' >> ~/.bashrc
+```
+
+```console
 source ~/.bashrc
+```
 
-## Add GPIO package for pin access:
+## Add GPIO package for pin access
 
+```console
 dotnet add package System.Device.Gpio --version 2.2.0-*
+```
 
 ## Usage
 
-To run the Robot, modify the Program.cs main method as needed, then run it from a command line. 
+To run the Robot, modify the Program.cs main method as needed, then run it from a command-line.
 The GridBot, and AlphaBot, classes contain functionality to control the Robot's behaviour.
 The Alphabot is general purpose, and the GridBot abstracts its functionality and adds behaviour specific to traversing a grid.
 
@@ -43,11 +59,11 @@ To run the app:
 * Type: expo start
 
 ### Programmatic commands
-The first option is to control the robot programmatically. Both Alphabot, and GridBot instances can be controlled this way.
+The first option is to control the robot programmatically. Create a new Main method and populate it with initializations, and then commands as wanted. Both Alphabot, and GridBot instances can be controlled this way.
 Find their documentation in their respective files.
 
 ### .txt file commands
-The GridBot has the option of being controlled via a .txt file of commands. 
+The GridBot has the option of being controlled via a .txt file of commands.
 To do so, create a GridBot and a TxtParser and attach the GridBot to the TxtParser.
 Then use the TxtParser.RunFile(string FileName) function to run the commands in the file.
 
@@ -59,5 +75,13 @@ Commands:
 * LEFT - Makes the robot turn anti-clock wise
 * RIGHT - Makes the robot turn clock wise
 
-## Start server with IP address
-dotnet run --urls "http://192.168.187.236:5175"
+Use the dotnet run command with the flag -t or --txt to run the program in TxtParser mode. The flag should be followed by a filename.
+
+## Commands from a frontend site, or app
+The Robot can also be run in tandem with a site. This way commands can be sent, and feedback recieved, in real time.
+
+Use the dotnet run command with the flag -u or --urls to run the program in AppCmdParser mode. The flag should be followed by a valid URL and port (like <http://localhost:5175>).
+
+Using the -u flag, another flag, -d or --dummy, Can be set to run the backend without initializing an AlphaBot. This is useful for working on the frontend locally without a working backend.
+
+The frontend also needs to be launched. This is done npm run dev -- --host.
