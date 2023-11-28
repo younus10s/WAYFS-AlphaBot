@@ -16,8 +16,8 @@ export default function App() {
   useEffect(() => {
     // Function to initialize WebSocket connection
     const connectWebSocket = () => {
-      //const newWebSocket = new WebSocket('ws://192.168.187.236:5175');
-      const newWebSocket = new WebSocket('ws://192.168.187.239:5175');
+      const newWebSocket = new WebSocket('ws://192.168.187.239:5000');
+      //const newWebSocket = new WebSocket('ws://192.168.187.239:5175');
       console.log("Trying to connect...");
 
       newWebSocket.onopen = () => {
@@ -44,6 +44,7 @@ export default function App() {
       }
     };
   }, []);
+
 
   //Status vars
   const [dy, setDy] = useState(0);
@@ -131,7 +132,6 @@ export default function App() {
             } else {
               pan.x.setValue(gestureState.dx);
               pan.y.setValue(gestureState.dy);
-
               
             }
           },
@@ -149,6 +149,22 @@ export default function App() {
       },
     })
   ).current;
+
+
+
+  useEffect(() => {
+    // Koden här kommer att köras varje gång variabel1 eller variabel2 ändras
+    if(webSocket != null){
+      const msg = {
+        "Title": "movement",
+        "Msg": [dx.toString(), dy.toString()]
+      }
+      //const fullCommands = combineCommands();
+      webSocket.send(JSON.stringify(msg));
+      console.log("Sending:");
+      console.log(msg);
+    }
+  }, [dx, dy]); // Dependency array
 
 
   return (

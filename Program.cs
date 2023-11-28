@@ -11,6 +11,9 @@ public class Options
 
     [Option('d', "dummy", Required = false, HelpText = "Run Program in Dummy Mode.")]
     public bool Dummy { get; set; }
+    
+    [Option('f', "free", Required = false, HelpText = "Run Program in free movement Mode.")]
+    public bool Free { get; set; }
 }
 
 namespace ConsoleApplication
@@ -34,7 +37,7 @@ namespace ConsoleApplication
                 {
                     Console.WriteLine($"Using URL: {options.URL}");
 
-                    await WebSocketRoutine(options.Dummy, options.URL);
+                    await WebSocketRoutine(options.Dummy, options.URL, options.Free);
                 }
                 else if (options.TxtFile != null)
                 {
@@ -55,15 +58,19 @@ namespace ConsoleApplication
             Gunnar.CleanUp();
         }
 
-        private static async Task WebSocketRoutine(bool Dummy, string URL)
+        private static async Task WebSocketRoutine(bool Dummy, string URL, bool Free)
         {
             AppCmdParser cmdParser = null;
-            GridBot Gunnar;
+            GridBot Gunnar = null;
+            FreeBot FBot = null;
 
-            if (!Dummy)
+            if (!Dummy && !Free)
             {
                 Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
                 cmdParser = new AppCmdParser(Gunnar);
+            }
+            else if (!Dummy && Free){
+                FBot = new FreeBot(Power, Calibrate);
             }
 
             string[] args = { "--urls", URL };
@@ -73,22 +80,19 @@ namespace ConsoleApplication
 
             app.UseWebSockets();
 
-            Console.WriteLine("Test4");
-
             app.Use(async (context, next) =>
             {
-                Console.WriteLine("Test5");
                 if (context.WebSockets.IsWebSocketRequest)
                 {
 
                     WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
-                    Console.WriteLine("Test6");
-
 
                     Console.WriteLine("The frontend is connected");
                     WebSocketHandler webSocketHandler = new WebSocketHandler(webSocket);
-
-                    await webSocketHandler.HandleWebSocketAsync(cmdParser);
+                    if(Free)
+                        await webSocketHandler.HandleWebSocketAsyncFreeBot(FBot);
+                    else
+                        await webSocketHandler.HandleWebSocketAsync(cmdParser);
 
                     Console.WriteLine("after socket messages");
                 }
