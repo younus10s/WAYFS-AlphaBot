@@ -57,6 +57,19 @@ public class FreeBot : AlphaBot
         }
         else
         {
+            if(dx > 0)
+            {
+                Console.WriteLine($"Move backward with {AbsDy} and and Rotate clockwise with {AbsDx}");
+                MotionControl.SetPowerLeft(AbsDy);
+                MotionControl.SetPowerRight(0);
+            }
+            else if(dx < 0)
+            {
+                Console.WriteLine($"Move backward with {AbsDy} and Rotate anti-clockwise with {AbsDx}");
+                MotionControl.SetPowerLeft(0);
+                MotionControl.SetPowerRight(AbsDy);
+            }
+
             Console.WriteLine("Stop Movement");
             MotionControl.Stop();
         }
