@@ -1,5 +1,7 @@
 using System.Net.WebSockets;
 using CommandLine;
+using System.Diagnostics;
+using System;
 
 public class Options
 {
@@ -14,6 +16,8 @@ public class Options
 
     [Option('f', "free", Required = false, HelpText = "Run Program in free movement Mode.")]
     public bool Free { get; set; }
+    [Option('s', "stream", Required = false, HelpText = "Provide video stream for frontend")]
+    public bool Stream { get; set; }
 }
 
 namespace ConsoleApplication
@@ -37,6 +41,11 @@ namespace ConsoleApplication
                 {
                     Console.WriteLine($"Using URL: {options.URL}");
 
+                    if (options.Stream)
+                    {
+                        StartStream();
+                    }
+                    
                     await WebSocketRoutine(options.Dummy, options.URL, options.Free);
                 }
                 else if (options.TxtFile != null)
@@ -45,7 +54,44 @@ namespace ConsoleApplication
 
                     await TxtParserRoutine(options.TxtFile);
                 }
+
+
             });
+        }
+
+        private static async Task StartStream()
+        {
+            string pythonScriptPath = "./stream.py";
+
+            // Set up process start info
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = "python3",  // or "python3" for Python 3.x
+                Arguments = pythonScriptPath,
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            // Start the process
+            using (Process process = new Process { StartInfo = startInfo })
+            {
+                process.Start();
+
+                // Read the output (if needed) asynchronously
+                Task<string> outputTask = process.StandardOutput.ReadToEndAsync();
+
+                // Continue with other tasks in C# while Python script is running
+                Console.WriteLine("C# program continues while Python script is running...");
+
+                // You can await other asynchronous operations here if needed
+
+                // Wait for the Python script to complete and get the output
+                string output = await outputTask;
+                Console.WriteLine("Python script output:\n" + output);
+
+                process.WaitForExit();
+            }
         }
 
         private static async Task TxtParserRoutine(string FileName)

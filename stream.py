@@ -31,6 +31,7 @@ class StreamingOutput(object):
                 self.frame = self.buffer.getvalue()
                 self.condition.notify_all()
             self.buffer.seek(0)
+
         return self.buffer.write(buf)
 
 class StreamingHandler(server.BaseHTTPRequestHandler):
