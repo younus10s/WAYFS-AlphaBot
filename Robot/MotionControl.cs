@@ -93,13 +93,13 @@ public class MotionControl
 
     public void SetPowerLeft(double power)
     {
-        LeftMotor.Forward();
+        //LeftMotor.Forward();
         LeftMotor.SetPower(power);
     }
 
     public void SetPowerRight(double power)
     {
-        RightMotor.Forward();
+        //RightMotor.Forward();
         RightMotor.SetPower(power);
     }
 }
