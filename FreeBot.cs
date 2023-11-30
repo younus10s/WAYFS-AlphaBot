@@ -8,7 +8,8 @@ public class FreeBot : AlphaBot
         //Maybe add more variable ints
     }
 
-    public void Move(double dx, double dy){
+    public void Move(double dx_, double dy_){
+        /*
         double Abs = Math.Sqrt(dx * dx + dy * dy);
         double Ang = Math.Atan2(dy, dx);
 
@@ -23,9 +24,9 @@ public class FreeBot : AlphaBot
 
         MotionControl.SetPowerLeft(powers[0]);
         MotionControl.SetPowerRight(powers[1]);
+        */
 
-
-        /*
+        
         double dx = dx_ * 0.80;
         double dy = dy_ * 0.80;
         double abs = Math.Sqrt(dx * dx + dy * dy);
@@ -51,7 +52,7 @@ public class FreeBot : AlphaBot
             }else{
                 MotionControl.Stop();
             }
-        }*/
+        }
     }
 
 
