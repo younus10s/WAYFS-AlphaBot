@@ -56,7 +56,7 @@ function ControlRobot() {
     useEffect(() => {
         // Function to initialize WebSocket connection
         const connectWebSocket = () => {
-          const newWebSocket = new WebSocket('ws://localhost:5175');
+          const newWebSocket = new WebSocket('ws://192.168.132.236:5175');
     
           newWebSocket.onopen = () => {
             console.log('Connected to WebSocket');
@@ -215,6 +215,7 @@ function ControlRobot() {
                 <img className="absolute w-8 h-8" style={{ left: `${gunnarPosition.x}px`, top: `${gunnarPosition.y}px`, transform: `rotate(${gunnarPosition.deg})` }} src="src/assets/pac.png" />
                 {createGrid()}
                 
+                <iframe src="http://192.168.132.236:8000/index.html" width="800" height="600" frameborder="0"></iframe>
             </div>
 
             <div className="container horizontal mt-3">
