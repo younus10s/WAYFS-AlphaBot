@@ -102,4 +102,14 @@ public class MotionControl
         //RightMotor.Forward();
         RightMotor.SetPower(power);
     }
+
+    public void ActivateForward(){
+        LeftMotor.Forward();
+        RightMotor.Forward();
+    }
+
+    public void ActivateBackward(){
+        LeftMotor.Backward();
+        RightMotor.Backward();
+    }
 }
