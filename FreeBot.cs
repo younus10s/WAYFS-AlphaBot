@@ -22,48 +22,15 @@ public class FreeBot : AlphaBot
         else if(dy < -0)
             MotionControl.ActivateBackward();
 
-
         MotionControl.SetPowerLeft(powers[0] * 0.6);
         MotionControl.SetPowerRight(powers[1]* 0.6);
-        
-
-
-        /*
-        double dx = dx_ * 0.80;
-        double dy = dy_ * 0.80;
-        double abs = Math.Sqrt(dx * dx + dy * dy);
-        if(dy > 0.2){
-            MotionControl.Forward(abs);
-            if(dx > 0.2){
-                MotionControl.SetPowerRight(dx * 0.5);
-            }else if(dx < -0.2){
-                MotionControl.SetPowerLeft(Math.Abs(dx) * 0.5);
-            }
-        }else if(dy < -0.2){
-            MotionControl.Backward(abs);
-            if(dx > 0.2){
-                MotionControl.SetPowerRight(Math.Abs(dx) * 0.5); 
-            }else if(dx < -0.2){
-                MotionControl.SetPowerLeft(dx);
-            }
-        }else{
-            if(dx > 0.2){
-                MotionControl.SetPowerLeft(abs*0.5);
-            }else if(dx < -0.2){
-                MotionControl.SetPowerRight(abs* 0.5);
-            }else{
-                MotionControl.Stop();
-            }
-        }*/
     }
-
 
     public double[] CalculatePower(double abs, double angle){
         double[] powers = new double[2];
 
         powers[0] = abs * (1 + Math.Cos(angle));
         powers[1] = abs * (1 - Math.Cos(angle));
-
 
         //Normalize motor powers if they exceed 1
         double max_power = Math.Max(powers[0], powers[1]);

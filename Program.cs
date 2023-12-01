@@ -54,7 +54,6 @@ namespace ConsoleApplication
             TxtParser TParser = new TxtParser();
 
             await TParser.RunFile(FileName, Gunnar);
-
             Gunnar.CleanUp();
         }
 
