@@ -16,6 +16,7 @@ public class Options
 
     [Option('f', "free", Required = false, HelpText = "Run Program in free movement Mode.")]
     public bool Free { get; set; }
+    
     [Option('s', "stream", Required = false, HelpText = "Provide video stream for frontend")]
     public bool Stream { get; set; }
 }
