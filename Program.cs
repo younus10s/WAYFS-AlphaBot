@@ -11,7 +11,7 @@ public class Options
 
     [Option('d', "dummy", Required = false, HelpText = "Run Program in Dummy Mode.")]
     public bool Dummy { get; set; }
-    
+
     [Option('f', "free", Required = false, HelpText = "Run Program in free movement Mode.")]
     public bool Free { get; set; }
 }
@@ -68,7 +68,8 @@ namespace ConsoleApplication
                 Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
                 cmdParser = new AppCmdParser(Gunnar);
             }
-            else if (!Dummy && Free){
+            else if (!Dummy && Free)
+            {
                 FBot = new FreeBot(Power, Calibrate);
             }
 
