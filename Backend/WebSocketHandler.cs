@@ -1,6 +1,7 @@
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
+using System.Globalization;
 
 namespace ConsoleApplication
 {
@@ -39,6 +40,29 @@ namespace ConsoleApplication
         {
             byte[] serverMessageBytes = Encoding.UTF8.GetBytes(msg);
             await WebSocket.SendAsync(new ArraySegment<byte>(serverMessageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        public async Task HandleWebSocketAsyncFreeBot(FreeBot FBot = null)
+        {
+            try
+            {
+                var buffer = new byte[1024];
+
+                while (WebSocket.State == WebSocketState.Open)
+                {
+                    string clientMessage = await reciveMessage();
+                    Console.WriteLine("Received JSON: " + clientMessage);
+                    MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
+
+                    if(message?.Title == "movement"){
+                        FBot.Move(double.Parse(message.Msg[0], CultureInfo.InvariantCulture), double.Parse(message.Msg[1], CultureInfo.InvariantCulture));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"WebSocket exception caught: {ex.Message}");
+            }
         }
 
         public async Task HandleWebSocketAsync(AppCmdParser cmdParser = null)

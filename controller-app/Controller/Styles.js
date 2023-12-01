@@ -88,9 +88,9 @@ const styles = StyleSheet.create({
     statusContainer: {
       //backgroundColor: "gray",
       position: 'absolute',
-      width: 150,
+      width: 200,
       height: 50,
-      top:30,
+      top:40,
       left: 20,
       alignItems: 'left',
       justifyContent: 'center',

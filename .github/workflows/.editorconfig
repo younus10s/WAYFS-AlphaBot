@@ -1,0 +1,4 @@
+[*.{cs}]
+# Example rules to adjust whitespace handling
+trim_trailing_whitespace = false
+insert_final_newline = false
