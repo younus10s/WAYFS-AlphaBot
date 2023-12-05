@@ -4,16 +4,19 @@
  * ShowAll(Color color)
  * Sets and shows all lights in the strip to the provided color.
  *
+ * SwitchOff()
+ * Resets the strip and sets all LEDs to Black? RGB 0,0,0.
+ *
+ * StartColorWipe()
+ * Creates and starts a Thread for running ColorWipe().
+ *
  * ColorWipe()
  * Sets all LED lights first to red, then green, then blue and waits before changing color.
  * Uses Wipe(Color color) to affect all pixels.
  * Uses SwitchOff() to reset the lights after use.
  * 
  * Wipe(Color color)
- * Sets all LEDs to the chosen Color, one after the other with a delay.
- * 
- * SwitchOff()
- * Resets the strip and sets all LEDs to Black? RGB 0,0,0.
+ * Sets all LEDs to the chosen Color, one after the other with a delay. 
  *
  * StartBlinking(int[] ledIDs, Color color)
  * Creates a new Thread to use the functionality of Blink(ledIDs, color).
@@ -22,11 +25,11 @@
  * Joins the thread created in StartBlinking and stops the lights.
  *
  * Blink(int[] ledID, Color color)
- * Update loop that tracks the state of the _isBlinking flag.
+ * Update loop that tracks the state of the IsBlinking flag.
  * Uses SetLEDSAndWait(ledIDs, color) to specify the lights and color to use.
  *
  * SetLEDSAndWait(ledIDs, color)
- * Set the color to all lights with an ID found in ledIDs and then show the result for the specified _interval.
+ * Set the color to all lights with an ID found in ledIDs and then show the result for the specified Interval.
  */
 
 using rpi_ws281x;
@@ -34,20 +37,20 @@ using System.Drawing;
 
 public class Lights
 {
-    private bool _isBlinking;
-    private bool _isOn = false;
-    private Thread? _blinkThread;
-    private int _interval = 500;  // Blink every 500 milliseconds
+    private bool IsBlinking;
+    private bool IsOn = false;
+    private Thread? Thread;
+    private int Interval = 500;  // Blink every 500 milliseconds
 
     private WS281x Device { get; set; }
     private Controller Controller { get; set; }
-    private const int _LEDCount = 4; // keep public?
+    private const int LedCount = 4;
     private Color[] Empty { get; set; }
 
     public Lights()
     {
         var settings = Settings.CreateDefaultSettings();
-        settings.AddController(_LEDCount, Pin.Gpio18, StripType.WS2811_STRIP_RGB);
+        settings.AddController(LedCount, Pin.Gpio18, StripType.WS2811_STRIP_RGB);
 
         Device = new(settings);
         Controller = Device.GetController();
@@ -69,12 +72,31 @@ public class Lights
         Controller.SetLED(3, color);
 
         Device.Render();
-        _isOn = true;
+        IsOn = true;
     }
 
-    public void ColorWipe()
+    public void SwitchOff()
     {
-        for (var i = 0; i < _LEDCount; i++)
+        if (IsOn)
+        {
+            Controller.SetLEDS(Empty);
+            Device.Reset(); // no danger to Reset device multiple times?
+
+            IsOn = false;
+        }
+
+        Thread?.Join();  // Wait for the thread to finish
+    }
+
+    public void StartColorWipe()
+    {
+        Thread = new (ColorWipe);
+        Thread.Start();
+    }
+
+    private void ColorWipe()
+    {
+        for (var i = 0; i < LedCount; i++)
         {
             Wipe(Color.Red);
             Wipe(Color.Green);
@@ -95,38 +117,27 @@ public class Lights
         }
     }
 
-    public void SwitchOff()
-    {
-        if (_isOn)
-        {
-            Controller.SetLEDS(Empty);
-            Device.Reset(); // no danger to Reset device multiple times?
-
-            _isOn = false;
-        }
-    }
     public void StartBlinking(int[] ledIDs, Color color)
     {
-        _isBlinking = true;
-        _blinkThread = new Thread(() => Blink(ledIDs, color));
-        _blinkThread.Start();
+        IsBlinking = true;
+        Thread = new (() => Blink(ledIDs, color));
+        Thread.Start();
     }
 
     public void StopBlinking()
     {
-        _isBlinking = false;
-        _blinkThread?.Join();  // Wait for the thread to finish
+        IsBlinking = false;
     }
 
     private void Blink(int[] ledIDs, Color color)
     {
-        while (_isBlinking)
+        while (IsBlinking)
         {
             SetLEDSAndWait(ledIDs, color);
-            SetLEDSAndWait(ledIDs, Color.Empty); // same as Empty[0] ?
+            SetLEDSAndWait(ledIDs, Color.Empty);
         }
 
-        SwitchOff(); // maybe not thread safe? move to StopBlinking?
+        SwitchOff();
     }
 
     private void SetLEDSAndWait(int[] ledID, Color color)
@@ -137,6 +148,6 @@ public class Lights
         }
 
         Device.Render();
-        Thread.Sleep(_interval);
+        Thread.Sleep(Interval);
     }
 }

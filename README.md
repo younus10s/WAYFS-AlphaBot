@@ -50,6 +50,8 @@ To run the backend:
 * Go to './WAYFS-AlphaBot'
 * Type: dotnet run --urls "http://<rpi-ip-address>:<port>"
 
+The LEDs require root permission to work. Build as usual with `dotnet build` and then execute the program with `sudo -E ./bin/Debug/net7.0/WAYFS-AlphaBot --u "http://<rpi-ip-address>:<port>"`.
+
 To run the frontend:
 * Go to './WAYFS-AlphaBot/client'
 * Type: npm run dev -- --host

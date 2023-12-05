@@ -67,8 +67,6 @@ public class GridBot : AlphaBot
 
                     LineFollow();
                     MoveDone = true;
-
-                    Lights.ColorWipe();
                 }
                 catch (OffLineException e)
                 {
@@ -139,6 +137,8 @@ public class GridBot : AlphaBot
 
     public void Right()
     {
+        Lights.StartBlinking(new int[]{ 0, 1 }, Color.Orange);
+
         TurnRight();
         switch (Heading)
         {
@@ -159,6 +159,7 @@ public class GridBot : AlphaBot
 
     public async Task Report()
     {
+        Lights.StartColorWipe();
         await TakePicture();
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);
     }
