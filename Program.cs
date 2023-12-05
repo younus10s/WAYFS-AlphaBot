@@ -67,7 +67,7 @@ namespace ConsoleApplication
             // Set up process start info
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
-                FileName = "python3",  // or "python3" for Python 3.x
+                FileName = "python3",
                 Arguments = pythonScriptPath,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
