@@ -55,7 +55,9 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header("Age", 0)
             self.send_header("Cache-Control", "no-cache, private")
             self.send_header("Pragma", "no-cache")
-            self.send_header("Content-Type", "multipart/x-mixed-replace; boundary=FRAME")
+            self.send_header(
+                "Content-Type", "multipart/x-mixed-replace; boundary=FRAME"
+            )
             self.end_headers()
             try:
                 while True:
@@ -70,8 +72,8 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     self.wfile.write(b"\r\n")
             except Exception as e:
                 logging.warning(
-                    "Removed streaming client %s: %s",
-                    self.client_address, str(e))
+                    "Removed streaming client %s: %s", self.client_address, str(e)
+                )
         else:
             self.send_error(404)
             self.end_headers()
@@ -80,6 +82,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
+
 
 with picamera.PiCamera(resolution="320x240", framerate=24) as camera:
     output = StreamingOutput()
