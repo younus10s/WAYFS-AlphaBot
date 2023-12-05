@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation,useParams } from 'react-router-dom';
 import StepperControl from './StepperControl';
 import PlaceStep from './steps/PlaceStep';
 import CommandStep from './steps/CommandStep';
 import StepperContext from '../contexts/StepperContext';
 import MovingStep from './steps/MovingStep';
+
+
+import PacImg from '../assets/pac.png'
+import PlusImg from '../assets/plus.png'
 /**
  * Component to control robot by adding, removing and sending a string of commands.
  * Commands are sent by starting a websocket. The moves will update the grid
@@ -15,6 +20,9 @@ function ControlRobot() {
     const [currentCommand, setCurrentCommand] = useState("IDLE");
     const [currentIndex, setCurrentIndex] = useState("0");
 
+    const { ipAddress } = useParams();
+    const [streamIp, setStreamIp] = useState();
+
     const [placeValues, setPlaceValues] = useState(
         {
             xcoord: "0",
@@ -23,12 +31,12 @@ function ControlRobot() {
         }
     );
 
-    const [gunnarPosition, setGunnarPosition] = useState({ x: 258, y: 250, deg: '0deg' });
+    const [gunnarPosition, setGunnarPosition] = useState({ x: 78, y: 250, deg: '0deg' });
     const [destPosition, setdestPosition] = useState({ x: 0, y: 0 });
 
     const moveGunnar = (gridX, gridY, dir) => {
         // Convert grid coordinates to pixel position
-        const pixelX = gridX * 59 + 258;
+        const pixelX = gridX * 59 + 78;
         const pixelY =  250 - gridY * 59;
   
         var direction = '0deg';
@@ -56,7 +64,8 @@ function ControlRobot() {
     useEffect(() => {
         // Function to initialize WebSocket connection
         const connectWebSocket = () => {
-          const newWebSocket = new WebSocket('ws://192.168.132.236:5175');
+            const newWebSocket = new WebSocket(`ws://${ipAddress}:5000`);
+            //const newWebSocket = new WebSocket('ws://192.168.132.236:5175');
     
           newWebSocket.onopen = () => {
             console.log('Connected to WebSocket');
@@ -77,7 +86,10 @@ function ControlRobot() {
           setWebSocket(newWebSocket);
         };
     
-        connectWebSocket();
+        if (ipAddress) {
+            connectWebSocket();
+            setStreamIp(`http://${ipAddress}:6000/index.html`);
+          }
     
         // Cleanup function to close WebSocket connection
         return () => {
@@ -86,7 +98,7 @@ function ControlRobot() {
             console.log('WebSocket disconnected');
           }
         };
-      }, []);
+      }, [ipAddress]);
     
 
 
@@ -200,23 +212,28 @@ function ControlRobot() {
             for (let col = 0; col < cols; col++) {
                 cells.push(
                     <div key={`cell-${row}-${col}`} className='col p-0' onClick={() => handleCellClick(col, row) }>
-                        <img src="src/assets/plus.png" />
+                        <img src={PlusImg} />
                     </div>
                 );
             }
-            grid.push(<div key={`row-${row}`} className='container row gap-0 self-start w-50'>{cells}</div>);
+            grid.push(<div key={`row-${row}`} className='container row gap-0 self-start w-100'>{cells}</div>);
         }
         return grid;
     }
 
     return (
         <div>
-            <div className="container horizontal mt-5 relative">
-                <img className="absolute w-8 h-8" style={{ left: `${gunnarPosition.x}px`, top: `${gunnarPosition.y}px`, transform: `rotate(${gunnarPosition.deg})` }} src="src/assets/pac.png" />
+            <div className="flex container mt-5 relative">
+            <div className="flex-1"> {/* Column 1 */}
+                <img className="absolute w-8 h-8" style={{ left: `${gunnarPosition.x}px`, top: `${gunnarPosition.y}px`, transform: `rotate(${gunnarPosition.deg})` }} src={PacImg} />
                 {createGrid()}
-                
-                <iframe src="http://192.168.132.236:8000/index.html" width="800" height="600" frameborder="0"></iframe>
             </div>
+
+            <div className="flex-1"> {/* Column 2 */}
+                <iframe src={streamIp} width="300" height="300" frameborder="0"></iframe>
+            </div>
+        </div>
+
 
             <div className="container horizontal mt-3">
             <button onClick={handleMoveClick}>Move and Rotate</button>
