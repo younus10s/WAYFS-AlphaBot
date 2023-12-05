@@ -19,7 +19,7 @@ function Header() {
             </Navbar>
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/control" element={<ControlRobot />} />
+                <Route path="/control/:ipAddress" element={<ControlRobot />} />
             </Routes>
         </>
     );

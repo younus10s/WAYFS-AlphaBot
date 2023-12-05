@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
 /**
  * Component to render start/home page for app.
  */
 function Home() {
+    const [ipAddress, setipAddress] = useState("");
 
     return (
         <div className='row'>
@@ -13,8 +14,19 @@ function Home() {
                         <h3 className='text-4xl p-4 mb-2'>Hello!</h3>
                         <i className="fa-solid fa-robot text-4xl mb-4" style={{ color: "blue" }}></i>
                         <h5 className='text-md p-8'>Welcome to our Robot lab website.</h5>
+
+                        <input 
+                            className='bg-white border border-gray-300'
+                            type="text" 
+                            value={ipAddress} 
+                            onChange={(e) => {
+                                setipAddress(e.target.value);
+                            }}
+                            placeholder="Type IP-address:Port"
+                        />
+
                         <h5 className='text-md p-8'>Press
-                            <Link to="/control" className='text-blue-500'> here </Link>
+                        <Link to={`/control/${ipAddress}`}>Go to Control Robot</Link>
                             to start controlling the robot.</h5>
                     </div>
                 </div>
