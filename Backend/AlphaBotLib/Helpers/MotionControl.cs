@@ -21,7 +21,7 @@
  * CleanUp()
  * Should be ran when MotionControl goes out of scope to stop both motors. 
  */
-public class MotionControl
+public class MotionControl : IMotionControl
 {
     private const int left_in1 = 12;
     private const int left_in2 = 13;
@@ -31,8 +31,8 @@ public class MotionControl
     private const int right_ena = 26;
 
     private const int Frequency = 50;
-    private readonly Motor LeftMotor;
-    private readonly Motor RightMotor;
+    private readonly IMotor LeftMotor;
+    private readonly IMotor RightMotor;
 
     public MotionControl()
     {
@@ -93,22 +93,22 @@ public class MotionControl
 
     public void SetPowerLeft(double power)
     {
-        //LeftMotor.Forward();
         LeftMotor.SetPower(power);
     }
 
     public void SetPowerRight(double power)
     {
-        //RightMotor.Forward();
         RightMotor.SetPower(power);
     }
 
-    public void ActivateForward(){
+    public void ActivateForward()
+    {
         LeftMotor.Forward();
         RightMotor.Forward();
     }
 
-    public void ActivateBackward(){
+    public void ActivateBackward()
+    {
         LeftMotor.Backward();
         RightMotor.Backward();
     }

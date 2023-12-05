@@ -2,7 +2,7 @@ using MMALSharp;
 using MMALSharp.Common;
 using MMALSharp.Handlers;
 
-public class Camera
+public class Camera : ICamera
 {
     public async Task TakePicture()
     {

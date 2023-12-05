@@ -12,7 +12,7 @@
 
 using System.Device.Gpio;
 
-class Motor
+class Motor : IMotor
 {
     private readonly GpioController gpioController;
     private readonly int in1;

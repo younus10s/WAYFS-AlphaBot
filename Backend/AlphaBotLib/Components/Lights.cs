@@ -35,7 +35,7 @@
 using rpi_ws281x;
 using System.Drawing;
 
-public class Lights
+public class Lights : ILights
 {
     private bool IsBlinking;
     private bool IsOn = false;
@@ -55,13 +55,8 @@ public class Lights
         Device = new(settings);
         Controller = Device.GetController();
 
-        Empty = new[] // Clear all 4 LEDs , can also be dynamic.
-        {
-            Color.FromArgb(0, 0, 0),
-            Color.FromArgb(0, 0, 0),
-            Color.FromArgb(0, 0, 0),
-            Color.FromArgb(0, 0, 0)
-        };
+        // Clear all LEDs with black color
+        Empty = Enumerable.Repeat(Color.FromArgb(0, 0, 0), LedCount).ToArray();
     }
 
     public void ShowAll(Color color)

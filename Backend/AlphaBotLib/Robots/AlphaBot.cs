@@ -12,8 +12,6 @@
  * Calls MotionControl to stop both left and right motor, should be called after running. 
  */
 
-using System.Drawing;
-
 public class AlphaBot
 {
     public MotionControl MotionControl = new();

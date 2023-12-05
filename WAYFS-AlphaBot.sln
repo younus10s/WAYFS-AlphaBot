@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaBotApp", "Backend\AlphaBotApp\WAYFS-AlphaBot.csproj", "{80BF3503-6B1C-4E11-828E-AE845164AEB5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{99AF0D03-ADA0-4A59-BE2B-DE2FA5F1D2A2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlphaBotApp", "Backend\AlphaBotApp\WAYFS-AlphaBot.csproj", "{80BF3503-6B1C-4E11-828E-AE845164AEB5}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaBotLib", "Backend\AlphaBotLib\AlphaBotLib.csproj", "{DA2585E0-59E6-467B-B95E-21F0D5B4A9C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaBotLib.Tests", "Backend\AlphaBotLib.Tests\AlphaBotLib.Tests.csproj", "{4D28AFC9-78B3-4715-9E79-F2979F95366D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{DA2585E0-59E6-467B-B95E-21F0D5B4A9C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA2585E0-59E6-467B-B95E-21F0D5B4A9C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA2585E0-59E6-467B-B95E-21F0D5B4A9C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D28AFC9-78B3-4715-9E79-F2979F95366D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D28AFC9-78B3-4715-9E79-F2979F95366D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D28AFC9-78B3-4715-9E79-F2979F95366D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D28AFC9-78B3-4715-9E79-F2979F95366D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,5 +38,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DA2585E0-59E6-467B-B95E-21F0D5B4A9C6} = {99AF0D03-ADA0-4A59-BE2B-DE2FA5F1D2A2}
+		{4D28AFC9-78B3-4715-9E79-F2979F95366D} = {99AF0D03-ADA0-4A59-BE2B-DE2FA5F1D2A2}
 	EndGlobalSection
 EndGlobal
