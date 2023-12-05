@@ -113,7 +113,7 @@ public class GridBot : AlphaBot
 
     public void Left()
     {
-        Lights.StartBlinking(new int[]{ 2, 3 }, Color.Orange);
+        Lights.StartBlinking([2, 3], Color.Orange);
 
         TurnLeft();
         switch (Heading)
@@ -137,7 +137,7 @@ public class GridBot : AlphaBot
 
     public void Right()
     {
-        Lights.StartBlinking(new int[]{ 0, 1 }, Color.Orange);
+        Lights.StartBlinking([0, 1], Color.Orange);
 
         TurnRight();
         switch (Heading)
