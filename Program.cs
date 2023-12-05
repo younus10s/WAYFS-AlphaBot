@@ -46,13 +46,8 @@ namespace ConsoleApplication
                     {
                         StartStream();
                     }
-<<<<<<< HEAD
-                    
-                    await WebSocketRoutine(options.Dummy, options.URL, options.Free);
-=======
 
-                    await WebSocketRoutine(options.Dummy, options.URL);
->>>>>>> 855a977 (Added Stream to frontend)
+                    await WebSocketRoutine(options.Dummy, options.URL, options.Free);
                 }
                 else if (options.TxtFile != null)
                 {
@@ -141,7 +136,7 @@ namespace ConsoleApplication
 
                     Console.WriteLine("The frontend is connected");
                     WebSocketHandler webSocketHandler = new WebSocketHandler(webSocket);
-                    if(Free)
+                    if (Free)
                         await webSocketHandler.HandleWebSocketAsyncFreeBot(FBot);
                     else
                         await webSocketHandler.HandleWebSocketAsync(cmdParser);
