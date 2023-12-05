@@ -18,7 +18,7 @@
 
 using System.Device.Gpio;
 
-public class TRSensor
+public class TRSensor : ITRSensor
 {
     private const int CS = 5;
     private const int Clock = 25;
@@ -40,7 +40,7 @@ public class TRSensor
         GpioController.OpenPin(DataOut, PinMode.InputPullUp);
     }
 
-    public void Calibrate(MotionControl MotionControl)
+    public void Calibrate(IMotionControl MotionControl)
     {
         MotionControl.Left(0.3);
 

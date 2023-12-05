@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="digitalhigh.rpi-ws281x-csharp" Version="1.2.0" />
+    <PackageReference Include="MMALSharp" Version="0.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.2.1" />
+    <PackageReference Include="System.Device.Gpio" Version="2.2.0-*" />
+  </ItemGroup>
+
+</Project>

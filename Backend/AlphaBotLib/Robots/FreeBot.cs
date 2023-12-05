@@ -1,6 +1,3 @@
-using Microsoft.Net.Http.Headers;
-using MMALSharp.Processors.Motion;
-
 public class FreeBot : AlphaBot
 {
     public FreeBot(double power, bool Calibrate) : base(power, Calibrate)
@@ -8,8 +5,8 @@ public class FreeBot : AlphaBot
         //Maybe add more variable ints
     }
 
-    public void Move(double dx, double dy){
-        
+    public void Move(double dx, double dy)
+    {    
         double Abs = Math.Sqrt(dx * dx + dy * dy);
         double Ang = Math.Atan2(dy, dx);
 
@@ -26,11 +23,9 @@ public class FreeBot : AlphaBot
         MotionControl.SetPowerRight(powers[1]* 0.6);
     }
 
-    public double[] CalculatePower(double abs, double angle){
-        double[] powers = new double[2];
-
-        powers[0] = abs * (1 + Math.Cos(angle));
-        powers[1] = abs * (1 - Math.Cos(angle));
+    public double[] CalculatePower(double abs, double angle)
+    {
+        double[] powers = [abs * (1 + Math.Cos(angle)), abs * (1 - Math.Cos(angle))];
 
         //Normalize motor powers if they exceed 1
         double max_power = Math.Max(powers[0], powers[1]);
@@ -40,5 +35,4 @@ public class FreeBot : AlphaBot
 
         return powers;
     }
-
 }
