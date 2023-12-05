@@ -12,6 +12,8 @@
  * Left() / Right()
  * Make the robot turns 90 degree on a crossing
  */
+using System.Drawing;
+
 public class GridBot : AlphaBot
 {
     private static int NumRows;
@@ -61,11 +63,15 @@ public class GridBot : AlphaBot
             {
                 try
                 {
+                    Lights.ShowAll(Color.Green);
+
                     LineFollow();
                     MoveDone = true;
                 }
                 catch (OffLineException e)
                 {
+                    Lights.ShowAll(Color.Red);
+
                     Console.WriteLine(MoveDone);
                     MoveDone = false;
                     Console.WriteLine(e.Message);
@@ -75,6 +81,8 @@ public class GridBot : AlphaBot
                 }
                 catch (Exception e)
                 {
+                    Lights.ShowAll(Color.Red);
+
                     Console.WriteLine(e.Message);
 
                     CleanUp();
@@ -99,10 +107,14 @@ public class GridBot : AlphaBot
         {
             Console.WriteLine("Invalid move");
         }
+
+        Lights.SwitchOff();
     }
 
     public void Left()
     {
+        Lights.StartBlinking(new int[]{ 2, 3 }, Color.Orange);
+
         TurnLeft();
         switch (Heading)
         {
@@ -119,10 +131,14 @@ public class GridBot : AlphaBot
                 Heading = "north";
                 break;
         }
+
+        Lights.StopBlinking();
     }
 
     public void Right()
     {
+        Lights.StartBlinking(new int[]{ 0, 1 }, Color.Orange);
+
         TurnRight();
         switch (Heading)
         {
@@ -143,6 +159,7 @@ public class GridBot : AlphaBot
 
     public async Task Report()
     {
+        Lights.StartColorWipe();
         await TakePicture();
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);
     }
