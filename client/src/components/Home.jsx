@@ -26,7 +26,7 @@ function Home() {
                         />
 
                         <h5 className='text-md p-8'>Press
-                        <Link to={`/control/${ipAddress}`}>Go to Control Robot</Link>
+                        <Link to={`/control/${ipAddress}`}> Here </Link>
                             to start controlling the robot.</h5>
                     </div>
                 </div>
