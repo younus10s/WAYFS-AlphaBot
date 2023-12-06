@@ -6,7 +6,7 @@
  * Places the robot with (x,y) coords and a heading ("north", "south", "east", "west") in the grid 
  * 
  * Move() 
- * First checks if moving one step forward in the direction it is facing will take the robot out of the grid. 
+ * First checks if moving one step MOVE in the direction it is facing will take the robot out of the grid. 
  * Then calls Alphabot's LineFollow(). 
  * 
  * Left() / Right()
@@ -94,7 +94,7 @@ public class GridBot : AlphaBot
             PosY = tempY;
 
             int[] SensorValues = TRSensor.ReadLine();
-            MotionControl.Forward(0.1);
+            MotionControl.MOVE(0.1);
 
             while (SensorValues.Sum() >= 3)
             {
@@ -168,4 +168,109 @@ public class GridBot : AlphaBot
     {
         return !(X < 0 || X >= NumRows || Y < 0 || Y >= NumCols);
     }
+
+
+
+    public List<string> FindPath(int destX, int destY)
+    {
+        List<string> path = ["PLACE " + PosX.ToString() + "," + PosY.ToString() + "," + Heading];
+        
+        while (true)
+        {
+            // Adjust direction towards destination X
+            AdjustX(path, destX);
+
+            // Adjust direction towards destination Y
+            AdjustY(path, destY);
+
+            // Destination reached
+            if (PosX == destX && PosY == destY) 
+                break;
+        }
+
+        path.Add("REPORT");
+
+        return path;
+    }
+
+    private void AdjustX(List<string> path, int destX){
+        while (PosX != destX)
+        {
+            if ((PosX < destX && Heading == "EAST") || (PosX > destX && Heading == "WEST"))
+            {
+                path.Add("MOVE");
+                Move();
+            }
+            else
+            {
+                if (PosX < destX)
+                {
+                    if(Heading == "SOUTH")
+                    {
+                        TurnLeft();
+                        path.Add("LEFT");
+                    }
+                    else
+                    {
+                        TurnRight();
+                        path.Add("RIGHT");
+                    }
+                }
+                else
+                {
+                    if(Heading == "NORTH")
+                    {
+                        TurnLeft();
+                        path.Add("LEFT");
+                    }
+                    else
+                    {
+                        TurnRight();
+                        path.Add("RIGHT");
+                    }
+                }
+            }
+        }
+    }
+
+    private void AdjustY(List<string> path, int destY){
+        while (PosY != destY)
+        {
+            if ((PosY < destY && Heading == "NORTH") || (PosY > destY && Heading == "SOUTH"))
+            {
+                Move();
+                path.Add("MOVE");
+            }
+            else
+            {
+                if (PosY < destY)
+                {
+                    if(Heading == "EAST")
+                    {
+                        TurnLeft();
+                        path.Add("LEFT");
+                    }
+                    else
+                    {
+                        TurnRight();
+                        path.Add("RIGHT");
+                    }
+                }
+                else
+                {
+                    if(Heading == "WEST")
+                    {
+                        TurnLeft();
+                        path.Add("LEFT");
+                    }
+                    else
+                    {
+                        TurnRight();
+                        path.Add("RIGHT");
+                    }
+                }
+            }
+        }
+    }
+
 }
