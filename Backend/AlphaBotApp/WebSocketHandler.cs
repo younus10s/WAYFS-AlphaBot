@@ -83,7 +83,7 @@ namespace ConsoleApplication
                     else if(message?.Title == "command")
                         actions = message?.Msg;
                     else
-                        actions = [];
+                        actions = new();
 
                     await ProcessMessageAsync(actions, cmdParser);
 
