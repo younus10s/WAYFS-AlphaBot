@@ -174,7 +174,7 @@ public class GridBot : AlphaBot
     public List<string> FindPath(int destX, int destY)
     {
         List<string> path = ["PLACE " + PosX.ToString() + "," + PosY.ToString() + "," + Heading];
-        
+
         while (true)
         {
             // Adjust direction towards destination X
@@ -272,5 +272,4 @@ public class GridBot : AlphaBot
             }
         }
     }
-
 }
