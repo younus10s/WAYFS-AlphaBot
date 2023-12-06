@@ -94,7 +94,7 @@ public class GridBot : AlphaBot
             PosY = tempY;
 
             int[] SensorValues = TRSensor.ReadLine();
-            MotionControl.MOVE(0.1);
+            MotionControl.Forward(0.1);
 
             while (SensorValues.Sum() >= 3)
             {
@@ -207,12 +207,12 @@ public class GridBot : AlphaBot
                 {
                     if(Heading == "SOUTH")
                     {
-                        TurnLeft();
+                        Left();
                         path.Add("LEFT");
                     }
                     else
                     {
-                        TurnRight();
+                        Right();
                         path.Add("RIGHT");
                     }
                 }
@@ -220,12 +220,12 @@ public class GridBot : AlphaBot
                 {
                     if(Heading == "NORTH")
                     {
-                        TurnLeft();
+                        Left();
                         path.Add("LEFT");
                     }
                     else
                     {
-                        TurnRight();
+                        Right();
                         path.Add("RIGHT");
                     }
                 }
@@ -247,12 +247,12 @@ public class GridBot : AlphaBot
                 {
                     if(Heading == "EAST")
                     {
-                        TurnLeft();
+                        Left();
                         path.Add("LEFT");
                     }
                     else
                     {
-                        TurnRight();
+                        Right();
                         path.Add("RIGHT");
                     }
                 }
@@ -260,12 +260,12 @@ public class GridBot : AlphaBot
                 {
                     if(Heading == "WEST")
                     {
-                        TurnLeft();
+                        Left();
                         path.Add("LEFT");
                     }
                     else
                     {
-                        TurnRight();
+                        Right();
                         path.Add("RIGHT");
                     }
                 }
