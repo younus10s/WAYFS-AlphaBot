@@ -46,11 +46,20 @@ The Alphabot is general purpose, and the GridBot abstracts its functionality and
 
 ### Run Backend & Frontend
 
-To run the backend:
-* Go to './WAYFS-AlphaBot'
+To run the backend on your local machine:
+* Go to './WAYFS-AlphaBot/Backend/AlphaBotApp'
 * Type: dotnet run --urls "http://<rpi-ip-address>:<port>"
 
-The LEDs require root permission to work. Build as usual with `dotnet build` and then execute the program with `sudo -E ./bin/Debug/net7.0/WAYFS-AlphaBot --u "http://<rpi-ip-address>:<port>"`.
+You can also use the `--project` flag:
+* Go to './WAYFS-AlphaBot'
+* Type: dotnet run --project Backend/AlphaBotApp/WAYFS-AlphaBot.csproj --urls "http://<rpi-ip-address>:<port>"
+
+To run the backend on the Raspberry Pi:
+* The LEDs require root permission to work so in order to run with the lights you need to build and run in two steps.
+* Go to './WAYFS-AlphaBot'
+* Build as usual with `dotnet build`. The executable gets built to './Backend/AlphaBotApp/bin/Debug/net7.0'
+* Go to './Backend/AlphaBotApp/bin/Debug/net7.0'
+* Type: `sudo -E ./WAYFS-AlphaBot -u "http://<rpi-ip-address>:<port>"`.
 
 To run the frontend:
 * Go to './WAYFS-AlphaBot/client'
@@ -59,6 +68,17 @@ To run the frontend:
 To run the app:
 * Go to './WAYFS-AlphaBot/controller-app/Controller'
 * Type: expo start
+
+### Testing
+
+The backend is organized in three C# projects.
+* AlphaBotApp.csproj - ASPNET.Core web app containing our main entry point.
+* AlphaBotLib.csproj - .NET class library containing the robot specific code that we want to test.
+* AlphaBotLib.Tests.csproj - xUnit test project. Contains example unit tests.
+
+To run the backend tests:
+* Go to './WAYFS-AlphaBot'
+* Type: `dotnet test`
 
 ### Programmatic commands
 The first option is to control the robot programmatically. Create a new Main method and populate it with initializations, and then commands as wanted. Both Alphabot, and GridBot instances can be controlled this way.
