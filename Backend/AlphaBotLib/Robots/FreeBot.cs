@@ -25,7 +25,7 @@ public class FreeBot : AlphaBot
 
     public double[] CalculatePower(double abs, double angle)
     {
-        double[] powers = [abs * (1 + Math.Cos(angle)), abs * (1 - Math.Cos(angle))];
+        double[] powers = { abs * (1 + Math.Cos(angle)), abs * (1 - Math.Cos(angle)) };
 
         //Normalize motor powers if they exceed 1
         double max_power = Math.Max(powers[0], powers[1]);
