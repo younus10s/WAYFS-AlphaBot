@@ -174,7 +174,7 @@ public class GridBot : AlphaBot
     public List<string> FindPath(int destX, int destY)
     {
         List<string> path = new();
-         path.Add("PLACE " + PosX.ToString() + "," + PosY.ToString() + "," + Heading);
+        path.Add("PLACE " + PosX.ToString() + "," + PosY.ToString() + "," + Heading);
 
         while (true)
         {

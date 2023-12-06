@@ -88,7 +88,7 @@ function ControlRobot() {
     
         if (ipAddress) {
             connectWebSocket();
-            setStreamIp(`http://${ipAddress}:6000/index.html`);
+            setStreamIp(`http://${ipAddress}:8000/index.html`);
           }
     
         // Cleanup function to close WebSocket connection
@@ -198,9 +198,10 @@ function ControlRobot() {
     const handleCellClick = (x, y) => {
         // Example: Move to (100, 100) and rotate 45 degrees
         setdestPosition(x, y);
+        const placeString = `PLACE,${placeValues.xcoord},${placeValues.ycoord},${placeValues.direction.toUpperCase()}`;
         const msg = {
             "Title": "gridCoor",
-            "Msg": [x, y]
+            "Msg": [placeString, x.toString(), y.toString()]
         }
         //const fullCommands = combineCommands();
         webSocket.send(JSON.stringify(msg));
