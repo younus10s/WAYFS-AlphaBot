@@ -62,6 +62,8 @@ public class Lights : ILights
 
     public void ShowAll(Color color)
     {
+        SwapRedAndGreen(ref color);
+
         Controller.SetLED(0, color);
         Controller.SetLED(1, color);
         Controller.SetLED(2, color);
@@ -84,15 +86,17 @@ public class Lights : ILights
         Thread?.Join();  // Wait for the thread to finish
     }
 
-    public void StartColorWipe()
+    public void StartColorWipe(uint playCount = 1)
     {
-        Thread = new (ColorWipe);
+        Thread = new (() => ColorWipe(playCount));
         Thread.Start();
     }
 
-    private void ColorWipe()
+    private void ColorWipe(uint playCount)
     {
-        for (var i = 0; i < LedCount; i++)
+        IsOn = true;
+
+        for (var i = 0; i < playCount; i++)
         {
             Wipe(Color.Red);
             Wipe(Color.Green);
@@ -104,11 +108,13 @@ public class Lights : ILights
 
     private void Wipe(Color color)
     {
-        for (var i = 0; i < Controller.LEDCount; i++)
+        SwapRedAndGreen(ref color);
+
+        for (var i = 0; i < LedCount; i++)
         {
             Controller.SetLED(i, color);
             Device.Render();
-            var waitPeriod = (int)Math.Max(500.0 / Controller.LEDCount, 5.0);
+            var waitPeriod = (int)Math.Max(500.0 / LedCount, 5.0);
             Thread.Sleep(waitPeriod);
         }
     }
@@ -145,5 +151,18 @@ public class Lights : ILights
 
         Device.Render();
         Thread.Sleep(Interval);
+    }
+
+    // Found potential bug in rpi_ws281x.Controller so this is a workaround.
+    private void SwapRedAndGreen(ref Color color)
+    {
+        if (color == Color.Red)
+        {
+            color = Color.Green;
+        }
+        else if (color == Color.Green)
+        {
+            color = Color.Red;
+        }
     }
 }

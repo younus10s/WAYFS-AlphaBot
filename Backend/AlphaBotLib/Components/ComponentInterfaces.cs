@@ -9,7 +9,7 @@ public interface ILights
 {
     void ShowAll(Color color);
     void SwitchOff();
-    void StartColorWipe();
+    void StartColorWipe(uint playCount);
     void StartBlinking(int[] ledIDs, Color color);
     void StopBlinking();
 }
