@@ -173,19 +173,25 @@ public class GridBot : AlphaBot
 
     public List<string> FindPath(int destX, int destY)
     {
-        List<string> path = new();
-        path.Add("PLACE " + PosX.ToString() + "," + PosY.ToString() + "," + Heading);
+        int currX = PosX;
+        int currY = PosY;
 
+        string dir = Heading;
+
+        List<string> path = new();
         while (true)
         {
+            Console.WriteLine("here 1 " + currX + " " + currY);
             // Adjust direction towards destination X
-            AdjustX(path, destX);
+            AdjustX(path, ref currX, ref destX, ref dir);
+            Console.WriteLine("here 2 " + currX + " " + currY);
 
             // Adjust direction towards destination Y
-            AdjustY(path, destY);
+            AdjustY(path, ref currY, ref destY, ref dir);
+            Console.WriteLine("here 3 " + currX + " " + currY);
 
             // Destination reached
-            if (PosX == destX && PosY == destY) 
+            if (currX == destX && currY == destY) 
                 break;
         }
 
@@ -194,80 +200,86 @@ public class GridBot : AlphaBot
         return path;
     }
 
-    private void AdjustX(List<string> path, int destX){
-        while (PosX != destX)
+    private void AdjustX(List<string> path, ref int CurrX, ref int destX, ref string dir){
+        while (CurrX != destX)
         {
-            if ((PosX < destX && Heading == "EAST") || (PosX > destX && Heading == "WEST"))
+            if ((CurrX < destX && dir == "EAST") || (CurrX > destX && dir == "WEST"))
             {
                 path.Add("MOVE");
-                Move();
+                if(dir == "EAST")
+                    CurrX++;
+                else 
+                    CurrX--;
             }
             else
             {
-                if (PosX < destX)
+                if (CurrX < destX)
                 {
-                    if(Heading == "SOUTH")
+                    if(dir == "SOUTH")
                     {
-                        Left();
                         path.Add("LEFT");
+                        dir = "EAST";
                     }
                     else
                     {
-                        Right();
                         path.Add("RIGHT");
+                        dir = "EAST";
                     }
                 }
                 else
                 {
-                    if(Heading == "NORTH")
+                    if(dir == "NORTH")
                     {
-                        Left();
                         path.Add("LEFT");
+                        dir = "WEST";
                     }
                     else
                     {
-                        Right();
                         path.Add("RIGHT");
+                        dir = "WEST";
                     }
                 }
             }
         }
     }
 
-    private void AdjustY(List<string> path, int destY){
-        while (PosY != destY)
+    private void AdjustY(List<string> path, ref int CurrY, ref int destY, ref string dir){
+        while (CurrY != destY)
         {
-            if ((PosY < destY && Heading == "NORTH") || (PosY > destY && Heading == "SOUTH"))
+            if ((CurrY < destY && dir == "NORTH") || (CurrY > destY && dir == "SOUTH"))
             {
-                Move();
                 path.Add("MOVE");
+                if(dir == "NORTH")
+                    CurrY++;
+                else
+                    CurrY--;
             }
             else
             {
-                if (PosY < destY)
+                if (CurrY < destY)
                 {
-                    if(Heading == "EAST")
+                    if(dir == "EAST")
                     {
-                        Left();
                         path.Add("LEFT");
+                        dir = "NORTH";
                     }
                     else
                     {
-                        Right();
                         path.Add("RIGHT");
+                        dir = "NORTH";
                     }
                 }
                 else
                 {
-                    if(Heading == "WEST")
+                    if(dir == "WEST")
                     {
-                        Left();
                         path.Add("LEFT");
+                        dir = "SOUTH";
                     }
                     else
                     {
-                        Right();
                         path.Add("RIGHT");
+                        dir = "SOUTH";
                     }
                 }
             }
