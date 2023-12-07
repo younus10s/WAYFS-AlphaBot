@@ -50,7 +50,7 @@ public class LightBot : IRobotCommands
         var ledIDs = new int[] { 2, 3 };
         
         Console.WriteLine($"Handling `Left` command. Lights are on? {Lights.IsOn}");
-        Console.WriteLine($"Blinking {ledIDs.Count()} lights with color {Color}.");
+        Console.WriteLine($"Blinking {ledIDs.Length} lights with color {Color}.");
 
         Lights.StartBlinking(ledIDs, Color);
         Lights.StopBlinking();
@@ -62,7 +62,7 @@ public class LightBot : IRobotCommands
         var ledIDs = new int[] { 0, 1 };
         
         Console.WriteLine($"Handling `Right` command. Lights are on? {Lights.IsOn}");
-        Console.WriteLine($"Blinking {ledIDs.Count()} lights with color {Color}.");
+        Console.WriteLine($"Blinking {ledIDs.Length} lights with color {Color}.");
 
         Lights.StartBlinking(ledIDs, Color);
         Lights.StopBlinking();
