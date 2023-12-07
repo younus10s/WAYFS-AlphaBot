@@ -80,7 +80,7 @@ namespace ConsoleApplication
                     if(message?.Title == "gridCoor"){
                         await cmdParser.RunCommand(message.Msg[0]);
                         Console.WriteLine(cmdParser.Gunnar.PosX + ":" + cmdParser.Gunnar.PosY + ":" + cmdParser.Gunnar.Heading);
-                        actions = cmdParser.Gunnar.FindPath(cmdParser.Gunnar.PosX, cmdParser.Gunnar.PosY, cmdParser.Gunnar.Heading, int.Parse(message.Msg[1]), int.Parse(message.Msg[2]));
+                        actions = cmdParser.Gunnar.FindPath(cmdParser.Gunnar.PosX, cmdParser.Gunnar.PosY, cmdParser.Gunnar.Heading, int.Parse(message.Msg[1]), int.Parse(message.Msg[2]) );
                         Console.Write("Actions: (");
                         foreach(var action in actions){
                             Console.Write(action + " ");

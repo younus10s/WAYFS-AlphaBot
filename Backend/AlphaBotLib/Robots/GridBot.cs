@@ -176,13 +176,15 @@ public class GridBot : AlphaBot
         int currX = PosX_;
         int currY = PosY_;
 
-        string dir = Heading_;
+        string dir = Heading_.ToUpper();
 
         List<string> path = new();
         while (true)
         {
             // Adjust direction towards destination X
             AdjustX(path, ref currX, ref destX, ref dir);
+
+            Console.WriteLine("Head is: " + Heading);
 
             // Adjust direction towards destination Y
             AdjustY(path, ref currY, ref destY, ref dir);
@@ -243,6 +245,7 @@ public class GridBot : AlphaBot
     private void AdjustY(List<string> path, ref int CurrY, ref int destY, ref string dir){
         while (CurrY != destY)
         {
+            Console.WriteLine("Dir is: " + dir);
             if ((CurrY < destY && dir == "NORTH") || (CurrY > destY && dir == "SOUTH"))
             {
                 path.Add("MOVE");
@@ -262,6 +265,7 @@ public class GridBot : AlphaBot
                     }
                     else
                     {
+                        Console.WriteLine("Should not be here");
                         path.Add("RIGHT");
                         dir = "NORTH";
                     }
