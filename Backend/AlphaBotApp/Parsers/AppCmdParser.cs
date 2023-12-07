@@ -15,13 +15,12 @@
  */
 public class AppCmdParser
 {
-    public GridBot Gunnar;
+    public IRobotCommands Gunnar;
 
-    public AppCmdParser(GridBot gridBot)
+    public AppCmdParser(IRobotCommands robot)
     {
-        Gunnar = gridBot;
+        Gunnar = robot;
     }
-
 
     public async Task RunCommand(string command)
     {

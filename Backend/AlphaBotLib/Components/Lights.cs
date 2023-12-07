@@ -37,14 +37,15 @@ using System.Drawing;
 
 public class Lights : ILights
 {
-    private bool IsBlinking;
-    private bool IsOn = false;
+    public const int LedCount = 4;
+    public bool IsOn { get; private set; } = false;
+    
+    private bool IsBlinking; // public ? or keep private?
     private Thread? Thread;
     private int Interval = 500;  // Blink every 500 milliseconds
 
     private WS281x Device { get; set; }
     private Controller Controller { get; set; }
-    private const int LedCount = 4;
     private Color[] Empty { get; set; }
 
     public Lights()

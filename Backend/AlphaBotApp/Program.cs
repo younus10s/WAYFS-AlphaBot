@@ -5,10 +5,10 @@ using System.Net.WebSockets;
 public class Options
 {
     [Option('t', "txt", Required = false, HelpText = "Set to run using txt-file parser.")]
-    public string TxtFile { get; set; }
+    public string? TxtFile { get; set; }
 
     [Option('u', "urls", Required = false, HelpText = "Provide URL for Web Sockets.")]
-    public string URL { get; set; }
+    public string? URL { get; set; }
 
     [Option('d', "dummy", Required = false, HelpText = "Run Program in Dummy Mode.")]
     public bool Dummy { get; set; }
@@ -18,6 +18,9 @@ public class Options
 
     [Option('s', "stream", Required = false, HelpText = "Provide video stream for frontend")]
     public bool Stream { get; set; }
+
+    [Option('l', "lights", Required = false, HelpText = "Run Program to test LED lights")]
+    public bool LightTest { get; set; }
 }
 
 namespace ConsoleApplication
@@ -45,7 +48,7 @@ namespace ConsoleApplication
                         StartStream();
                     }
 
-                    await WebSocketRoutine(options.Dummy, options.URL, options.Free);
+                    await WebSocketRoutine(options.Dummy, options.URL, options.Free, options.LightTest);
                 }
                 else if (options.TxtFile != null)
                 {
@@ -100,16 +103,26 @@ namespace ConsoleApplication
             Gunnar.CleanUp();
         }
 
-        private static async Task WebSocketRoutine(bool Dummy, string URL, bool Free)
+        private static async Task WebSocketRoutine(bool Dummy, string URL, bool Free, bool LightTest)
         {
             AppCmdParser cmdParser = null;
             GridBot Gunnar = null;
             FreeBot FBot = null;
+            LightBot LightBot = null;
 
             if (!Dummy && !Free)
             {
-                Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
-                cmdParser = new AppCmdParser(Gunnar);
+                // Run the light test without affecting the robot.
+                if (LightTest)
+                {
+                    LightBot = new();
+                    cmdParser = new AppCmdParser(LightBot);
+                }
+                else
+                {
+                    Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
+                    cmdParser = new AppCmdParser(Gunnar);
+                }
             }
             else if (!Dummy && Free)
             {

@@ -14,13 +14,14 @@
  */
 using System.Drawing;
 
-public class GridBot : AlphaBot
+public class GridBot : AlphaBot, IRobotCommands
 {
     private static int NumRows;
     private static int NumCols;
-    public int PosX;
-    public int PosY;
-    public string Heading = "";
+
+    public int PosX { get; set; }
+    public int PosY { get; set; }
+    public string Heading { get; set; } = "";
 
     public GridBot(double power, bool Calibrate, int Rows, int Cols) : base(power, Calibrate)
     {
@@ -63,14 +64,14 @@ public class GridBot : AlphaBot
             {
                 try
                 {
-                    Lights.ShowAll(Color.Green);
+                    // Lights.ShowAll(Color.Green);
 
                     LineFollow();
                     MoveDone = true;
                 }
                 catch (OffLineException e)
                 {
-                    Lights.ShowAll(Color.Red);
+                    // Lights.ShowAll(Color.Red);
 
                     Console.WriteLine(MoveDone);
                     MoveDone = false;
@@ -81,7 +82,7 @@ public class GridBot : AlphaBot
                 }
                 catch (Exception e)
                 {
-                    Lights.ShowAll(Color.Red);
+                    // Lights.ShowAll(Color.Red);
 
                     Console.WriteLine(e.Message);
 
@@ -108,7 +109,7 @@ public class GridBot : AlphaBot
             Console.WriteLine("Invalid move");
         }
 
-        Lights.SwitchOff();
+        // Lights.SwitchOff();
     }
 
     public void Left()
