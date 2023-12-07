@@ -77,14 +77,15 @@ namespace ConsoleApplication
                     Console.WriteLine("Received JSON: " + clientMessage);
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
                     List<string>? actions;
-                    
                     if(message?.Title == "gridCoor"){
                         await cmdParser.RunCommand(message.Msg[0]);
-                        actions = cmdParser.Gunnar.FindPath(int.Parse(message.Msg[1]), int.Parse(message.Msg[2]));
-
+                        Console.WriteLine(cmdParser.Gunnar.PosX + ":" + cmdParser.Gunnar.PosY + ":" + cmdParser.Gunnar.Heading);
+                        actions = cmdParser.Gunnar.FindPath(cmdParser.Gunnar.PosX, cmdParser.Gunnar.PosY, cmdParser.Gunnar.Heading, int.Parse(message.Msg[1]), int.Parse(message.Msg[2]));
+                        Console.Write("Actions: ");
                         foreach(var action in actions){
-                            Console.Write("Actions: " + action + " ");
+                            Console.Write(action + " ");
                         }
+                        Console.WriteLine(")");
                     }
                     else if(message?.Title == "command")
                         actions = message?.Msg;

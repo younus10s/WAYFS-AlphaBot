@@ -63,7 +63,7 @@ public class GridBot : AlphaBot
             {
                 try
                 {
-                    Lights.ShowAll(Color.Green);
+                    //Lights.ShowAll(Color.Green);
 
                     LineFollow();
                     MoveDone = true;
@@ -108,12 +108,12 @@ public class GridBot : AlphaBot
             Console.WriteLine("Invalid move");
         }
 
-        Lights.SwitchOff();
+        //Lights.SwitchOff();
     }
 
     public void Left()
     {
-        Lights.StartBlinking(new int[] { 2, 3 }, Color.Orange);
+        //Lights.StartBlinking(new int[] { 2, 3 }, Color.Orange);
 
         TurnLeft();
         switch (Heading)
@@ -132,12 +132,12 @@ public class GridBot : AlphaBot
                 break;
         }
 
-        Lights.StopBlinking();
+        //Lights.StopBlinking();
     }
 
     public void Right()
     {
-        Lights.StartBlinking(new int[] { 0, 1 }, Color.Orange);
+        //Lights.StartBlinking(new int[] { 0, 1 }, Color.Orange);
 
         TurnRight();
         switch (Heading)
@@ -171,24 +171,21 @@ public class GridBot : AlphaBot
 
 
 
-    public List<string> FindPath(int destX, int destY)
+    public List<string> FindPath(int PosX_, int PosY_, string Heading_, int destX, int destY)
     {
-        int currX = PosX;
-        int currY = PosY;
+        int currX = PosX_;
+        int currY = PosY_;
 
-        string dir = Heading;
+        string dir = Heading_;
 
         List<string> path = new();
         while (true)
         {
-            Console.WriteLine("here 1 " + currX + " " + currY);
             // Adjust direction towards destination X
             AdjustX(path, ref currX, ref destX, ref dir);
-            Console.WriteLine("here 2 " + currX + " " + currY);
 
             // Adjust direction towards destination Y
             AdjustY(path, ref currY, ref destY, ref dir);
-            Console.WriteLine("here 3 " + currX + " " + currY);
 
             // Destination reached
             if (currX == destX && currY == destY) 
