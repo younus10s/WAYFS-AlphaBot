@@ -5,7 +5,7 @@ using System.Net.WebSockets;
 public class Options
 {
     [Option('t', "txt", Required = false, HelpText = "Set to run using txt-file parser.")]
-    public string TxtFile { get; set; }
+    public string? TxtFile { get; set; }
 
     [Option('u', "urls", Required = false, HelpText = "Provide URL for Web Sockets.")]
     public string URL { get; set; }
@@ -24,7 +24,7 @@ namespace ConsoleApplication
 {
     class Program
     {
-        private static Process PythonStream;
+        private static Process? PythonStream;
 
         static double Power = 0.4;
         static bool Calibrate = true;
@@ -48,7 +48,7 @@ namespace ConsoleApplication
                     }
 
                     await WebSocketRoutine(options.Dummy, options.URL, options.Free);
-                    
+
                     if (options.Stream)
                     {
                         StopStream();
@@ -104,9 +104,9 @@ namespace ConsoleApplication
 
         private static async Task WebSocketRoutine(bool Dummy, string URL, bool Free)
         {
-            AppCmdParser cmdParser = null;
-            GridBot Gunnar = null;
-            FreeBot FBot = null;
+            AppCmdParser? cmdParser = null;
+            GridBot? Gunnar = null;
+            FreeBot? FBot = null;
 
             if (!Dummy && !Free)
             {
