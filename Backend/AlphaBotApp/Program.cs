@@ -64,7 +64,7 @@ namespace ConsoleApplication
 
         }
 
-        private static async Task StartStream()
+        private static void StartStream()
         {
             string pythonScriptPath = "./stream.py";
 
@@ -77,7 +77,7 @@ namespace ConsoleApplication
                 CreateNoWindow = true
             };
 
-            PythonStream = new Process { StartInfo = startInfo }
+            PythonStream = new Process { StartInfo = startInfo };
 
             PythonStream.Start();
 
