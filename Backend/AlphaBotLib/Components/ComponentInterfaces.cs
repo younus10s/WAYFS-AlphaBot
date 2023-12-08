@@ -1,17 +1,6 @@
-using System.Drawing;
-
 public interface ICamera
 {
     Task TakePicture();
-}
-
-public interface ILights
-{
-    void ShowAll(Color color);
-    void SwitchOff();
-    void StartColorWipe();
-    void StartBlinking(int[] ledIDs, Color color);
-    void StopBlinking();
 }
 
 public interface IMotor
