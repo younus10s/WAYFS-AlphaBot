@@ -183,7 +183,7 @@ function ControlRobot() {
             const placeString = `PLACE,${placeValues.xcoord},${placeValues.ycoord},${placeValues.direction.toUpperCase()}`;
             
             const msg = {
-                "Title": "placeing",
+                "Title": "placing",
                 "Msg": [placeString]
             }
             //const fullCommands = combineCommands();
