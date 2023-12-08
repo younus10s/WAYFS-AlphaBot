@@ -1,7 +1,6 @@
-using System.Net.WebSockets;
 using CommandLine;
 using System.Diagnostics;
-using System;
+using System.Net.WebSockets;
 
 public class Options
 {
@@ -32,7 +31,6 @@ namespace ConsoleApplication
 
         static async Task Main(string[] args)
         {
-
             var parserResult = Parser.Default.ParseArguments<Options>(args);
 
             await parserResult.WithParsedAsync(async options =>
@@ -55,8 +53,6 @@ namespace ConsoleApplication
 
                     await TxtParserRoutine(options.TxtFile);
                 }
-
-
             });
         }
 
