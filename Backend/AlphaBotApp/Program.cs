@@ -24,6 +24,8 @@ namespace ConsoleApplication
 {
     class Program
     {
+        private static Process PythonStream;
+
         static double Power = 0.4;
         static bool Calibrate = true;
         static int Rows = 5;
@@ -46,6 +48,11 @@ namespace ConsoleApplication
                     }
 
                     await WebSocketRoutine(options.Dummy, options.URL, options.Free);
+                    
+                    if (options.Stream)
+                    {
+                        StopStream();
+                    }
                 }
                 else if (options.TxtFile != null)
                 {
@@ -54,13 +61,13 @@ namespace ConsoleApplication
                     await TxtParserRoutine(options.TxtFile);
                 }
             });
+
         }
 
         private static async Task StartStream()
         {
             string pythonScriptPath = "./stream.py";
 
-            // Set up process start info
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = "python3",
@@ -70,24 +77,19 @@ namespace ConsoleApplication
                 CreateNoWindow = true
             };
 
-            // Start the process
-            using (Process process = new Process { StartInfo = startInfo })
+            PythonStream = new Process { StartInfo = startInfo }
+
+            PythonStream.Start();
+
+            Console.WriteLine("C# program continues while Python script is running...");
+        }
+
+        private static void StopStream()
+        {
+            if (PythonStream != null && !PythonStream.HasExited)
             {
-                process.Start();
-
-                // Read the output (if needed) asynchronously
-                Task<string> outputTask = process.StandardOutput.ReadToEndAsync();
-
-                // Continue with other tasks in C# while Python script is running
-                Console.WriteLine("C# program continues while Python script is running...");
-
-                // You can await other asynchronous operations here if needed
-
-                // Wait for the Python script to complete and get the output
-                string output = await outputTask;
-                Console.WriteLine("Python script output:\n" + output);
-
-                process.WaitForExit();
+                PythonStream.Kill(); // Terminate the process
+                PythonStream.Dispose(); // Release resources
             }
         }
 
