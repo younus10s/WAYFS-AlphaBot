@@ -70,7 +70,7 @@ public class GridBot : AlphaBot
                 }
                 catch (OffLineException e)
                 {
-                    Lights.ShowAll(Color.Red);
+                    //Lights.ShowAll(Color.Red);
 
                     Console.WriteLine(MoveDone);
                     MoveDone = false;
@@ -81,7 +81,7 @@ public class GridBot : AlphaBot
                 }
                 catch (Exception e)
                 {
-                    Lights.ShowAll(Color.Red);
+                    //Lights.ShowAll(Color.Red);
 
                     Console.WriteLine(e.Message);
 
