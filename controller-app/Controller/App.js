@@ -154,7 +154,7 @@ export default function App() {
         "Title": "gridCoor",
         "Msg": [x.toString(), y.toString()]
     }
-    //const fullCommands = combineCommands();
+
     webSocket.send(JSON.stringify(msg));
     console.log("Sending:")
     console.log("(" + x + ":" + y + ")");
