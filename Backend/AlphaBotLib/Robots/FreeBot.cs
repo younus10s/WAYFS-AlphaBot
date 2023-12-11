@@ -1,3 +1,5 @@
+using System.Drawing;
+
 public class FreeBot : AlphaBot
 {
     public FreeBot(double power, bool Calibrate) : base(power, Calibrate)
@@ -21,6 +23,15 @@ public class FreeBot : AlphaBot
 
         MotionControl.SetPowerLeft(powers[0] * 0.6);
         MotionControl.SetPowerRight(powers[1]* 0.6);
+
+        if(dy > 0.1)
+            Lights.Show(Color.Green);
+
+        else if (dy < -0.1)
+            Lights.Show(Color.Red);   
+        else
+            Lights.Show(Color.Yellow);
+        
     }
 
     public double[] CalculatePower(double abs, double angle)

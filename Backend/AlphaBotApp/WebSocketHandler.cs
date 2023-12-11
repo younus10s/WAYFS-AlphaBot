@@ -131,7 +131,7 @@ namespace ConsoleApplication
                     string sendMsg = JsonSerializer.Serialize(dataToSend);
                     await SendMessage(sendMsg);
                     Console.WriteLine($"Send: {sendMsg} \n");
-
+                    Thread.Sleep(20);
                     await cmdParser.RunCommand(actions[i]);
                 }
             }
