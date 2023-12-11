@@ -2,38 +2,38 @@ import React, { useState, useEffect, useRef } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { Text, View, Switch, Image, TouchableOpacity, Animated, PanResponder } from 'react-native'
 
-import styles from './Styles.js';
+import styles from './Styles.js'
 
-export default function App () 
-{
-  //Toggle var
-  const [isCameraMode, setIsCameraMode] = useState(false);
-  const toggleSwitch = () => setIsCameraMode(previousState => !previousState);
-  const [webSocket, setWebSocket] = useState(null);
+export default function App (){
+  // Toggle var
+  const [isCameraMode, setIsCameraMode] = useState(false)
+  const toggleSwitch = () => setIsCameraMode(previousState => !previousState)
+  const [webSocket, setWebSocket] = useState(null)
 
   useEffect(() => {
     // Function to initialize WebSocket connection
     const connectWebSocket = () => {
-      //const newWebSocket = new WebSocket('ws://192.168.187.236:5000');
+      // const newWebSocket = new WebSocket('ws://192.168.187.236:5000');
       const newWebSocket = new WebSocket('ws://localhost:5000');
       console.log("Trying to connect...");
 
       newWebSocket.onopen = () => {
         console.log('Connected to WebSocket');
         const placeString = "PLACE,0,0,NORTH";
-          const msg = {
-              "Title": "placing",
-              "Msg": [placeString]
-          }
-          webSocket.send(JSON.stringify(msg));
-          console.log("Sending: Placing,0,0,NORTH");
+        const msg = {
+          "Title": "placing",
+          "Msg": [placeString]
+        }
+        webSocket.send(JSON.stringify(msg));
+        console.log("Sending: Placing,0,0,NORTH");
       };
 
       newWebSocket.onmessage = (event) => {
         console.log('Message from server ');
-
         const message = JSON.parse(event.data);
-        console.log(message)
+        if(message.Title === 'status')
+          moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4]);
+        console.log(message);
       };
 
       setWebSocket(newWebSocket);
@@ -67,19 +67,19 @@ export default function App ()
 
       var direction = '0deg';
       
-      if(dir == "NORTH")
+      if(dir === "NORTH")
         direction = '-90deg';
-      else if(dir == "WEST")
+      else if(dir === "WEST")
         direction = '-180deg';
-      else if(dir == "SOUTH")
+      else if(dir === "SOUTH")
         direction = '-270deg';
-      else if(dir == "EAST")
+      else if(dir === "EAST")
         direction = '0deg';
 
       // Update state with the new pixel position
       setGunnarPosition({ x: pixelX, y: pixelY, deg: direction });
     };
-  //Joystick movement
+  // Joystick movement
   const pan = useRef(new Animated.ValueXY()).current;
   const boundary = 40; 
 
@@ -140,7 +140,7 @@ export default function App ()
         "Title": "movement",
         "Msg": [dx.toString(), dy.toString()]
       }
-      //const fullCommands = combineCommands();
+      // const fullCommands = combineCommands();
       webSocket.send(JSON.stringify(msg));
       console.log("Sending:");
       console.log(msg);
