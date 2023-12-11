@@ -16,12 +16,17 @@ export default function App() {
   useEffect(() => {
     // Function to initialize WebSocket connection
     const connectWebSocket = () => {
-      const newWebSocket = new WebSocket('ws://192.168.187.236:5175');
-      //const newWebSocket = new WebSocket('ws://192.168.187.239:5175');
+      //const newWebSocket = new WebSocket('ws://192.168.187.236:5000');
+      const newWebSocket = new WebSocket('ws://localhost:5000');
       console.log("Trying to connect...");
 
       newWebSocket.onopen = () => {
         console.log('Connected to WebSocket');
+        const placeString = "PLACE,0,0,NORTH";
+            const msg = {
+                "Title": "placing",
+                "Msg": [placeString]
+            }
       };
 
       newWebSocket.onmessage = (event) => {
@@ -143,6 +148,37 @@ export default function App() {
   }, [dx, dy]); // Dependency array
 
 
+  const handleCellClick = (x, y) => {
+    // Example: Move to (100, 100) and rotate 45 degrees
+    const msg = {
+        "Title": "gridCoor",
+        "Msg": [x.toString(), y.toString()]
+    }
+    //const fullCommands = combineCommands();
+    webSocket.send(JSON.stringify(msg));
+    console.log("Sending:")
+    console.log("(" + x + ":" + y + ")");
+
+};
+
+
+  function createGrid() {
+    let grid = [];
+    for (let row = 4; row >= 0; row--) {
+        let cells = [];
+        for (let col = 0; col < 5; col++) {
+            cells.push(
+                <TouchableOpacity  key={`cell-${row}-${col}`} style={styles.mapCell} onPress={() => handleCellClick(col, row) }>
+                    <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/>
+                </TouchableOpacity >
+            );
+        }
+        grid.push(<View key={`row-${row}`} style={styles.mapRow}>{cells}</View>);
+    }
+    return grid;
+}
+
+
   return (
     <View style={styles.container}>
 
@@ -188,21 +224,6 @@ export default function App() {
         <Text>Dy: {dy}</Text>
         <Text>Dx: {dx}</Text>
         <Text>Direction: {dir}</Text>
-        <Button
-          onPress={() => {
-            moveGunnar(3, 3, "SOUTH")
-            const msg = {
-              "Title": "Test",
-              "Msg": ["Hello"]
-            }
-            //const fullCommands = combineCommands();
-            webSocket.send(JSON.stringify(msg));
-            console.log("Sending:");
-            console.log(msg);
-          }}
-          title="Move"
-          color="#841584"
-        />
       </View>
 
       {/* Map & Camera code*/}
@@ -224,91 +245,7 @@ export default function App() {
 
         {/* Map code */}
         { !isCameraMode && <View style={styles.mapContainer}>
-          <View style={styles.mapRow}>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-          </View>
-          <View style={styles.mapRow}>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-          </View>
-          <View style={styles.mapRow}>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-          </View>
-          <View style={styles.mapRow}>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-          </View>
-          <View style={styles.mapRow}>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-          </View>
+          {createGrid()}
 
           <Image style={[styles.pac, { left: gunnarPosition.x, bottom: gunnarPosition.y, transform: [{ rotate: gunnarPosition.deg}] }]} source={require('./assets/pac.png')}/> 
           
