@@ -50,7 +50,6 @@ export default function App (){
     };
   }, []);
 
-
   //Status vars
   const [dy, setDy] = useState(0);
   const [dx, setDx] = useState(0);
@@ -131,8 +130,6 @@ export default function App (){
     })
   ).current;
 
-
-
   useEffect(() => {
     // Koden här kommer att köras varje gång variabel1 eller variabel2 ändras
     if(webSocket != null){
@@ -147,7 +144,6 @@ export default function App (){
     }
   }, [dx, dy]); // Dependency array
 
-
   const handleCellClick = (x, y) => {
     // Example: Move to (100, 100) and rotate 45 degrees
     const msg = {
@@ -159,10 +155,9 @@ export default function App (){
     console.log("Sending:")
     console.log("(" + x + ":" + y + ")");
 
-};
+  };
 
-
-  function createGrid() {
+  function createGrid () {
     let grid = [];
     for (let row = 4; row >= 0; row--) {
         let cells = [];
@@ -176,8 +171,7 @@ export default function App (){
         grid.push(<View key={`row-${row}`} style={styles.mapRow}>{cells}</View>);
     }
     return grid;
-}
-
+  }
 
   return (
     <View style={styles.container}>
