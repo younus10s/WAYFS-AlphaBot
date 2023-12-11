@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { Text, View, Switch, Image, TouchableOpacity, Animated, PanResponder, Button } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react'
+import { StatusBar } from 'expo-status-bar'
+import { Text, View, Switch, Image, TouchableOpacity, Animated, PanResponder } from 'react-native'
 
 import styles from './Styles.js';
 
-export default function App() {
-
+export default function App () 
+{
   //Toggle var
   const [isCameraMode, setIsCameraMode] = useState(false);
   const toggleSwitch = () => setIsCameraMode(previousState => !previousState);
-
-
   const [webSocket, setWebSocket] = useState(null);
 
   useEffect(() => {
@@ -23,10 +21,12 @@ export default function App() {
       newWebSocket.onopen = () => {
         console.log('Connected to WebSocket');
         const placeString = "PLACE,0,0,NORTH";
-            const msg = {
-                "Title": "placing",
-                "Msg": [placeString]
-            }
+          const msg = {
+              "Title": "placing",
+              "Msg": [placeString]
+          }
+          webSocket.send(JSON.stringify(msg));
+          console.log("Sending: Placing,0,0,NORTH");
       };
 
       newWebSocket.onmessage = (event) => {
