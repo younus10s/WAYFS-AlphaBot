@@ -63,14 +63,14 @@ public class GridBot : AlphaBot
             {
                 try
                 {
-                    Lights.ShowAll(Color.Green);
+                    Lights.Show(Color.Green);
 
                     LineFollow();
                     MoveDone = true;
                 }
                 catch (OffLineException e)
                 {
-                    Lights.ShowAll(Color.Red);
+                    Lights.Show(Color.Red);
 
                     Console.WriteLine(MoveDone);
                     MoveDone = false;
@@ -81,7 +81,7 @@ public class GridBot : AlphaBot
                 }
                 catch (Exception e)
                 {
-                    Lights.ShowAll(Color.Red);
+                    Lights.Show(Color.Red);
 
                     Console.WriteLine(e.Message);
 
@@ -107,13 +107,11 @@ public class GridBot : AlphaBot
         {
             Console.WriteLine("Invalid move");
         }
-
-        Lights.SwitchOff();
     }
 
     public void Left()
     {
-        Lights.StartBlinking(new int[] { 2, 3 }, Color.Orange);
+        Lights.Show(Color.Orange);
 
         TurnLeft();
         switch (Heading)
@@ -131,13 +129,11 @@ public class GridBot : AlphaBot
                 Heading = "north";
                 break;
         }
-
-        Lights.StopBlinking();
     }
 
     public void Right()
     {
-        Lights.StartBlinking(new int[] { 0, 1 }, Color.Orange);
+        Lights.Show(Color.Pink);
 
         TurnRight();
         switch (Heading)
@@ -159,7 +155,7 @@ public class GridBot : AlphaBot
 
     public async Task Report()
     {
-        Lights.StartColorWipe();
+        Lights.ClearStrip();
         await TakePicture();
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);
     }
