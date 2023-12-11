@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { Text, View, Switch, Image, TouchableOpacity, Animated, PanResponder } from 'react-native'
+import { WebView } from 'react-native-webview'
 
 import styles from './Styles.js'
 
@@ -13,8 +14,8 @@ export default function App (){
   useEffect(() => {
     // Function to initialize WebSocket connection
     const connectWebSocket = () => {
-      // const newWebSocket = new WebSocket('ws://192.168.187.236:5000');
-      const newWebSocket = new WebSocket('ws://localhost:5000');
+       const newWebSocket = new WebSocket('ws://192.168.187.236:5000');
+      //const newWebSocket = new WebSocket('ws://localhost:5000');
       console.log("Trying to connect...");
 
       newWebSocket.onopen = () => {
@@ -24,15 +25,16 @@ export default function App (){
           "Title": "placing",
           "Msg": [placeString]
         }
-        webSocket.send(JSON.stringify(msg));
+        newWebSocket.send(JSON.stringify(msg));
         console.log("Sending: Placing,0,0,NORTH");
+        moveGunnar(0, 0, "NORTH");
       };
 
       newWebSocket.onmessage = (event) => {
         console.log('Message from server ');
         const message = JSON.parse(event.data);
         if(message.Title === 'status')
-          moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4]);
+          moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4].toUpper());
         console.log(message);
       };
 
@@ -249,7 +251,10 @@ export default function App (){
         {/* Camera code */}
         { isCameraMode && 
         <View style={styles.mapContainer}>
-          <Text>Camera Here!</Text>
+          <WebView
+            source={{ uri: '192.168.187.236:8000' }}
+            style={{ width: 500, height: 500 }}
+          />
         </View>
         }
       
