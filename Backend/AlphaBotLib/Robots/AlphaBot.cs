@@ -12,8 +12,9 @@
  * Calls MotionControl to stop both left and right motor, should be called after running. 
  */
 
-public class AlphaBot
+public class AlphaBot : IDisposable
 {
+    public Buzzer Buzzer = new();
     public MotionControl MotionControl = new();
     public TRSensor TRSensor = new();
     public Camera Camera = new();
@@ -158,6 +159,11 @@ public class AlphaBot
     public void CleanUp()
     {
         MotionControl.CleanUp();
+    }
+
+    public void Dispose()
+    {
+        Buzzer.Dispose();
     }
 }
 
