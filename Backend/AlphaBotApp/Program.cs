@@ -15,9 +15,6 @@ public class Options
 
     [Option('f', "free", Required = false, HelpText = "Run Program in free movement Mode.")]
     public bool Free { get; set; }
-
-    [Option('s', "stream", Required = false, HelpText = "Provide video stream for frontend")]
-    public bool Stream { get; set; }
 }
 
 namespace ConsoleApplication
@@ -42,17 +39,12 @@ namespace ConsoleApplication
                 {
                     Console.WriteLine($"Using URL: {options.URL}");
 
-                    if (options.Stream)
-                    {
-                        StartStream();
-                    }
+                    StartStream();
 
                     await WebSocketRoutine(options.Dummy, options.URL, options.Free);
 
-                    if (options.Stream)
-                    {
-                        StopStream();
-                    }
+                    StopStream();
+
                 }
                 else if (options.TxtFile != null)
                 {
