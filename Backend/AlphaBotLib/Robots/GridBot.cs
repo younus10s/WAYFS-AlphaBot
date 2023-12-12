@@ -58,8 +58,6 @@ public class GridBot : AlphaBot
 
         if (PositionValid(tempX, tempY))
         {
-            Buzzer.BeepOn();
-
             bool MoveDone = false;
             while (!MoveDone)
             {
@@ -91,8 +89,6 @@ public class GridBot : AlphaBot
                     Environment.Exit(0);
                 }
             }
-
-            Buzzer.BeepOff();
 
             PosX = tempX;
             PosY = tempY;

@@ -10,12 +10,13 @@ export default function App (){
   const [isCameraMode, setIsCameraMode] = useState(false)
   const toggleSwitch = () => setIsCameraMode(previousState => !previousState)
   const [webSocket, setWebSocket] = useState(null)
+  const [beepOn, setBeepOn] = useState(false)
 
   useEffect(() => {
     // Function to initialize WebSocket connection
     const connectWebSocket = () => {
-      const newWebSocket = new WebSocket('ws://192.168.187.236:5000')
-      // const newWebSocket = new WebSocket('ws://localhost:5000');
+      // const newWebSocket = new WebSocket('ws://192.168.187.236:5000')
+      const newWebSocket = new WebSocket('ws://localhost:5000');
       console.log('Trying to connect...')
 
       newWebSocket.onopen = () => {
@@ -188,6 +189,19 @@ export default function App (){
     return grid;
   }
 
+  function beep () {
+    setBeepOn(!beepOn);
+
+    const msg = {
+      Title: 'beeping',
+      Msg: [beepOn.toString()]
+    }
+
+    webSocket.send(JSON.stringify(msg));
+    console.log('Sending:')
+    console.log('Print beeping');
+  }
+
   return (
     <View style={styles.container}>
 
@@ -233,6 +247,9 @@ export default function App (){
         <Text>Dy: {dy}</Text>
         <Text>Dx: {dx}</Text>
         <Text>Direction: {dir}</Text>
+        <TouchableOpacity onPress={() => beep()} style={styles.button}>
+          <Text>Buzzer</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Map & Camera code*/}
