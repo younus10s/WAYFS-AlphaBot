@@ -195,7 +195,9 @@ export default function App (){
     }
 
     webSocket.send(JSON.stringify(msg));
-    console.log('Sending: Shutdown')
+    console.log('Sending: Shutdown');
+    webSocket.close();
+    console.log('WebSocket disconnected');
   }
 
   return (
