@@ -14,15 +14,13 @@ def get_ip_address():
         return subprocess.getoutput("hostname -I").split()[0]
 
 ip_address = get_ip_address()
-print(ip_address)
 command = ''
 
 if platform.system() == "Windows":
-    command = f".\\Backend\\AlphaBotApp\\bin\\Debug\\net7.0\\WAYFS-AlphaBot -d -s {args.free} -u \"http://{ip_address}:5000\""
+    command = f".\\Backend\\AlphaBotApp\\bin\\Debug\\net7.0\\WAYFS-AlphaBot -d {args.free} -u \"http://{ip_address}:5000\""
 else: # Linux
-    command = f"./Backend/AlphaBotApp/bin/Debug/net7.0/WAYFS-AlphaBot -s {args.free} -u \"http://{ip_address}:5000\""
+    command = f"./Backend/AlphaBotApp/bin/Debug/net7.0/WAYFS-AlphaBot {args.free} -u \"http://{ip_address}:5000\""
 
-print(command)
 if platform.system() == "Linux":
     os.system(f"sudo -E {command}")
 else:

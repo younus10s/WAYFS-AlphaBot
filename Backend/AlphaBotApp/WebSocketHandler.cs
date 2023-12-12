@@ -80,7 +80,7 @@ namespace ConsoleApplication
 
                     ConsoleKeyInfo keyInfo = Console.ReadKey();
 
-                    if (keyInfo.Key == ConsoleKey.Q)
+                    if (keyInfo.Key == ConsoleKey.Q || message?.Title == "shutdowm")
                     {
                         Console.WriteLine("works");
                         break;

@@ -188,6 +188,16 @@ export default function App (){
     return grid;
   }
 
+  function shutDownBackend(){
+    const msg = {
+      Title: 'shutdown',
+      Msg: []
+    }
+
+    webSocket.send(JSON.stringify(msg));
+    console.log('Sending: Shutdown')
+  }
+
   return (
     <View style={styles.container}>
 
@@ -233,6 +243,9 @@ export default function App (){
         <Text>Dy: {dy}</Text>
         <Text>Dx: {dx}</Text>
         <Text>Direction: {dir}</Text>
+        <TouchableOpacity style={styles.shutdowmButton} onPress={()=>{shutDownBackend()}}>
+          <Text>Shutdown</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Map & Camera code*/}

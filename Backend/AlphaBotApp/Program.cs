@@ -140,6 +140,7 @@ namespace ConsoleApplication
                         await webSocketHandler.HandleWebSocketAsync(cmdParser);
 
                     Console.WriteLine("after socket messages");
+                    System.Environment.Exit(0);
                 }
                 else
                 {
