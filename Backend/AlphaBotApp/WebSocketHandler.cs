@@ -78,6 +78,14 @@ namespace ConsoleApplication
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
                     List<string>? actions;
 
+                    ConsoleKeyInfo keyInfo = Console.ReadKey();
+
+                    if (keyInfo.Key == ConsoleKey.Q)
+                    {
+                        Console.WriteLine("works");
+                        break;
+                    }
+
                     if(message?.Title == "placing"){
                         await cmdParser.RunCommand(message.Msg[0]);
                         Console.WriteLine("Placing" + cmdParser.Gunnar.PosX + " " + cmdParser.Gunnar.PosY + " " +  cmdParser.Gunnar.Heading);
