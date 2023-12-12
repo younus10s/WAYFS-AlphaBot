@@ -194,7 +194,8 @@ public class GridBot : AlphaBot
         return path;
     }
 
-    private void AdjustX(List<string> path, ref int CurrX, ref int destX, ref string dir) {
+    private void AdjustX(List<string> path, ref int CurrX, ref int destX, ref string dir)
+    {
         while (CurrX != destX)
         {
             if ((CurrX < destX && dir == "EAST") || (CurrX > destX && dir == "WEST"))
@@ -237,7 +238,8 @@ public class GridBot : AlphaBot
         }
     }
 
-    private void AdjustY(List<string> path, ref int CurrY, ref int destY, ref string dir) {
+    private void AdjustY(List<string> path, ref int CurrY, ref int destY, ref string dir)
+    {
         while (CurrY != destY)
         {
             Console.WriteLine("Dir is: " + dir);
