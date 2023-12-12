@@ -76,8 +76,28 @@ namespace ConsoleApplication
                     string clientMessage = await reciveMessage();
                     Console.WriteLine("Received JSON: " + clientMessage);
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
+                    List<string>? actions;
 
-                    await ProcessMessageAsync(message, cmdParser);
+                    if(message?.Title == "placing"){
+                        await cmdParser.RunCommand(message.Msg[0]);
+                        Console.WriteLine("Placing" + cmdParser.Gunnar.PosX + " " + cmdParser.Gunnar.PosY + " " +  cmdParser.Gunnar.Heading);
+                        continue;
+                    }
+                    if(message?.Title == "gridCoor"){
+                        Console.WriteLine(cmdParser.Gunnar.PosX + ":" + cmdParser.Gunnar.PosY + ":" + cmdParser.Gunnar.Heading);
+                        actions = cmdParser.Gunnar.FindPath(cmdParser.Gunnar.PosX, cmdParser.Gunnar.PosY, cmdParser.Gunnar.Heading, int.Parse(message.Msg[0]), int.Parse(message.Msg[1]) );
+                        Console.Write("Actions: (");
+                        foreach(var action in actions){
+                            Console.Write(action + " ");
+                        }
+                        Console.WriteLine(")");
+                    }
+                    else if(message?.Title == "command")
+                        actions = message?.Msg;
+                    else
+                        actions = new();
+
+                    await ProcessMessageAsync(actions, cmdParser);
 
                     var doneMsg = new MSG
                     {
@@ -96,23 +116,23 @@ namespace ConsoleApplication
             }
         }
 
-        private async Task ProcessMessageAsync(MSG? message, AppCmdParser cmdParser)
+        private async Task ProcessMessageAsync(List<string>? actions, AppCmdParser cmdParser)
         {
-            if (cmdParser != null && message != null)
+            if (cmdParser != null && actions != null)
             {
-                for (int i = 0; i < message.Msg.Count; i++)
+                for (int i = 0; i < actions.Count; i++)
                 {
                     var dataToSend = new MSG
                     {
                         Title = "status",
-                        Msg = new List<string> {i.ToString(), message.Msg[i], cmdParser.Gunnar.PosX.ToString(), cmdParser.Gunnar.PosY.ToString(), cmdParser.Gunnar.Heading}
+                        Msg = new List<string> {i.ToString(), actions[i], cmdParser.Gunnar.PosX.ToString(), cmdParser.Gunnar.PosY.ToString(), cmdParser.Gunnar.Heading}
                     };
 
                     string sendMsg = JsonSerializer.Serialize(dataToSend);
                     await SendMessage(sendMsg);
                     Console.WriteLine($"Send: {sendMsg} \n");
-
-                    await cmdParser.RunCommand(message.Msg[i]);
+                    Thread.Sleep(20);
+                    await cmdParser.RunCommand(actions[i]);
                 }
             }
         }

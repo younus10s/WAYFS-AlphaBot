@@ -6,7 +6,7 @@
  * Places the robot with (x,y) coords and a heading ("north", "south", "east", "west") in the grid 
  * 
  * Move() 
- * First checks if moving one step forward in the direction it is facing will take the robot out of the grid. 
+ * First checks if moving one step MOVE in the direction it is facing will take the robot out of the grid. 
  * Then calls Alphabot's LineFollow(). 
  * 
  * Left() / Right()
@@ -163,5 +163,123 @@ public class GridBot : AlphaBot
     private static bool PositionValid(int X, int Y)
     {
         return !(X < 0 || X >= NumRows || Y < 0 || Y >= NumCols);
+    }
+
+
+
+    public List<string> FindPath(int PosX_, int PosY_, string Heading_, int destX, int destY)
+    {
+        int currX = PosX_;
+        int currY = PosY_;
+
+        string dir = Heading_.ToUpper();
+
+        List<string> path = new();
+        while (true)
+        {
+            // Adjust direction towards destination X
+            AdjustX(path, ref currX, ref destX, ref dir);
+
+            Console.WriteLine("Head is: " + Heading);
+
+            // Adjust direction towards destination Y
+            AdjustY(path, ref currY, ref destY, ref dir);
+
+            // Destination reached
+            if (currX == destX && currY == destY) 
+                break;
+        }
+
+        path.Add("REPORT");
+
+        return path;
+    }
+
+    private void AdjustX(List<string> path, ref int CurrX, ref int destX, ref string dir){
+        while (CurrX != destX)
+        {
+            if ((CurrX < destX && dir == "EAST") || (CurrX > destX && dir == "WEST"))
+            {
+                path.Add("MOVE");
+                if(dir == "EAST")
+                    CurrX++;
+                else 
+                    CurrX--;
+            }
+            else
+            {
+                if (CurrX < destX)
+                {
+                    if(dir == "SOUTH")
+                    {
+                        path.Add("LEFT");
+                        dir = "EAST";
+                    }
+                    else
+                    {
+                        path.Add("RIGHT");
+                        dir = "EAST";
+                    }
+                }
+                else
+                {
+                    if(dir == "NORTH")
+                    {
+                        path.Add("LEFT");
+                        dir = "WEST";
+                    }
+                    else
+                    {
+                        path.Add("RIGHT");
+                        dir = "WEST";
+                    }
+                }
+            }
+        }
+    }
+
+    private void AdjustY(List<string> path, ref int CurrY, ref int destY, ref string dir){
+        while (CurrY != destY)
+        {
+            Console.WriteLine("Dir is: " + dir);
+            if ((CurrY < destY && dir == "NORTH") || (CurrY > destY && dir == "SOUTH"))
+            {
+                path.Add("MOVE");
+                if(dir == "NORTH")
+                    CurrY++;
+                else
+                    CurrY--;
+            }
+            else
+            {
+                if (CurrY < destY)
+                {
+                    if(dir == "EAST")
+                    {
+                        path.Add("LEFT");
+                        dir = "NORTH";
+                    }
+                    else
+                    {
+                        Console.WriteLine("Should not be here");
+                        path.Add("RIGHT");
+                        dir = "NORTH";
+                    }
+                }
+                else
+                {
+                    if(dir == "WEST")
+                    {
+                        path.Add("LEFT");
+                        dir = "SOUTH";
+                    }
+                    else
+                    {
+                        path.Add("RIGHT");
+                        dir = "SOUTH";
+                    }
+                }
+            }
+        }
     }
 }

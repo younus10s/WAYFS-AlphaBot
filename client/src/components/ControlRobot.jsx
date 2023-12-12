@@ -88,7 +88,7 @@ function ControlRobot() {
     
         if (ipAddress) {
             connectWebSocket();
-            setStreamIp(`http://${ipAddress}:6000/index.html`);
+            setStreamIp(`http://${ipAddress}:8000/index.html`);
           }
     
         // Cleanup function to close WebSocket connection
@@ -126,8 +126,6 @@ function ControlRobot() {
 
         handleClick("send"); // To update current step
 
-        const placeString = `PLACE,${placeValues.xcoord},${placeValues.ycoord},${placeValues.direction.toUpperCase()}`;
-        commands.unshift(placeString);
         commands.push("REPORT");
         
         const msg = {
@@ -180,8 +178,19 @@ function ControlRobot() {
     const handleClick = (direction) => {
         let newStep = currentStep;
 
-        if(direction === "next")
+        if(direction === "next"){
             moveGunnar(placeValues.xcoord, placeValues.ycoord, placeValues.direction.toUpperCase());
+            const placeString = `PLACE,${placeValues.xcoord},${placeValues.ycoord},${placeValues.direction.toUpperCase()}`;
+            
+            const msg = {
+                "Title": "placing",
+                "Msg": [placeString]
+            }
+            //const fullCommands = combineCommands();
+            webSocket.send(JSON.stringify(msg));
+            console.log("Sending:")
+            console.log(msg)
+        }
 
         direction === "next" || direction === "send" ? newStep++ : newStep--;
         // check if steps are withing bounds
@@ -198,7 +207,15 @@ function ControlRobot() {
     const handleCellClick = (x, y) => {
         // Example: Move to (100, 100) and rotate 45 degrees
         setdestPosition(x, y);
+        const msg = {
+            "Title": "gridCoor",
+            "Msg": [x.toString(), y.toString()]
+        }
+        //const fullCommands = combineCommands();
+        webSocket.send(JSON.stringify(msg));
+        console.log("Sending:")
         console.log("(" + x + ":" + y + ")");
+
     };
 
     

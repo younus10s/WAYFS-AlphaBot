@@ -1,34 +1,41 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { Text, View, Switch, Image, TouchableOpacity, Animated, PanResponder, Button } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react'
+import { StatusBar } from 'expo-status-bar'
+import { Text, View, Switch, Image, TouchableOpacity, Animated, PanResponder } from 'react-native'
+import { WebView } from 'react-native-webview'
 
-import styles from './Styles.js';
+import styles from './Styles.js'
 
-export default function App() {
-
-  //Toggle var
-  const [isCameraMode, setIsCameraMode] = useState(false);
-  const toggleSwitch = () => setIsCameraMode(previousState => !previousState);
-
-
-  const [webSocket, setWebSocket] = useState(null);
+export default function App (){
+  // Toggle var
+  const [isCameraMode, setIsCameraMode] = useState(false)
+  const toggleSwitch = () => setIsCameraMode(previousState => !previousState)
+  const [webSocket, setWebSocket] = useState(null)
 
   useEffect(() => {
     // Function to initialize WebSocket connection
     const connectWebSocket = () => {
-      const newWebSocket = new WebSocket('ws://192.168.187.236:5175');
-      //const newWebSocket = new WebSocket('ws://192.168.187.239:5175');
-      console.log("Trying to connect...");
+      const newWebSocket = new WebSocket('ws://192.168.187.236:5000')
+      // const newWebSocket = new WebSocket('ws://localhost:5000');
+      console.log('Trying to connect...')
 
       newWebSocket.onopen = () => {
-        console.log('Connected to WebSocket');
+        console.log('Connected to WebSocket')
+        const placeString = 'PLACE,0,0,NORTH';
+        const msg = {
+          Title : 'placing',
+          Msg : [placeString]
+        }
+        newWebSocket.send(JSON.stringify(msg));
+        console.log('Sending: Placing,0,0,NORTH');
+        moveGunnar(0, 0, 'NORTH');
       };
 
       newWebSocket.onmessage = (event) => {
         console.log('Message from server ');
-
         const message = JSON.parse(event.data);
-        console.log(message)
+        if (message.Title === 'status')
+          moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4].toUpper());
+        console.log(message);
       };
 
       setWebSocket(newWebSocket);
@@ -45,11 +52,10 @@ export default function App() {
     };
   }, []);
 
-
   //Status vars
   const [dy, setDy] = useState(0);
   const [dx, setDx] = useState(0);
-  const [dir, setDir] = useState("NORTH");
+  const [dir, setDir] = useState('NORTH');
 
     // Define the initial state for Pacman's position
     const [gunnarPosition, setGunnarPosition] = useState({ x: 15, y: 0, deg: '0deg'});
@@ -62,19 +68,28 @@ export default function App() {
 
       var direction = '0deg';
       
-      if(dir == "NORTH")
+      if (dir === 'NORTH')
+      {
         direction = '-90deg';
-      else if(dir == "WEST")
+      }
+      else if (dir === 'WEST')
+      {
         direction = '-180deg';
-      else if(dir == "SOUTH")
+      }
+      else if (dir === 'SOUTH')
+      {
         direction = '-270deg';
-      else if(dir == "EAST")
+      }
+      else if (dir === 'EAST')
+      {
         direction = '0deg';
+      }
 
       // Update state with the new pixel position
       setGunnarPosition({ x: pixelX, y: pixelY, deg: direction });
     };
-  //Joystick movement
+
+  // Joystick movement
   const pan = useRef(new Animated.ValueXY()).current;
   const boundary = 40; 
 
@@ -94,7 +109,8 @@ export default function App() {
             // Limit the movement within the joystickCircle
             const distance = Math.sqrt(gestureState.dx ** 2 + gestureState.dy ** 2);
 
-            if (distance > boundary) {
+            if (distance > boundary) 
+            {
               // Calculate the maximum x and y within the boundary
               const clampedX = boundary * (gestureState.dx / distance);
               const clampedY = boundary * (gestureState.dy / distance);
@@ -102,7 +118,9 @@ export default function App() {
               pan.y.setValue(clampedY);
               setDx(Number(clampedX/boundary).toFixed(2));
               setDy(-1* Number(clampedY/boundary).toFixed(2));
-            } else {
+            } 
+            else 
+            {
               pan.x.setValue(gestureState.dx);
               pan.y.setValue(gestureState.dy);
               setDx(Number(gestureState.dx/boundary).toFixed(2));
@@ -126,27 +144,54 @@ export default function App() {
     })
   ).current;
 
-
-
   useEffect(() => {
     // Koden här kommer att köras varje gång variabel1 eller variabel2 ändras
-    if(webSocket != null){
+    if (webSocket != null)
+    {
       const msg = {
-        "Title": "movement",
-        "Msg": [dx.toString(), dy.toString()]
+        'Title': 'movement',
+        'Msg': [dx.toString(), dy.toString()]
       }
-      //const fullCommands = combineCommands();
+      // const fullCommands = combineCommands();
       webSocket.send(JSON.stringify(msg));
-      console.log("Sending:");
+      console.log('Sending:');
       console.log(msg);
     }
   }, [dx, dy]); // Dependency array
 
+  const handleCellClick = (x, y) => {
+    // Example: Move to (100, 100) and rotate 45 degrees
+    const msg = {
+        Title: 'gridCoor',
+        Msg: [x.toString(), y.toString()]
+    }
+
+    webSocket.send(JSON.stringify(msg));
+    console.log('Sending:')
+    console.log('(' + x + ':' + y + ')')
+
+  };
+
+  function createGrid () {
+    let grid = [];
+    for (let row = 4; row >= 0; row--) {
+        let cells = [];
+        for (let col = 0; col < 5; col++) {
+            cells.push(
+                <TouchableOpacity  key={`cell-${row}-${col}`} style={styles.mapCell} onPress={() => handleCellClick(col, row) }>
+                    <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/>
+                </TouchableOpacity >
+            );
+        }
+        grid.push(<View key={`row-${row}`} style={styles.mapRow}>{cells}</View>);
+    }
+    return grid;
+  }
 
   return (
     <View style={styles.container}>
 
-      <StatusBar style="auto" />
+      <StatusBar style='auto' />
 
       {/* Joystick code*/}
       <View style={styles.joystickContainer}> 
@@ -188,21 +233,6 @@ export default function App() {
         <Text>Dy: {dy}</Text>
         <Text>Dx: {dx}</Text>
         <Text>Direction: {dir}</Text>
-        <Button
-          onPress={() => {
-            moveGunnar(3, 3, "SOUTH")
-            const msg = {
-              "Title": "Test",
-              "Msg": ["Hello"]
-            }
-            //const fullCommands = combineCommands();
-            webSocket.send(JSON.stringify(msg));
-            console.log("Sending:");
-            console.log(msg);
-          }}
-          title="Move"
-          color="#841584"
-        />
       </View>
 
       {/* Map & Camera code*/}
@@ -214,7 +244,7 @@ export default function App() {
           <Switch
             trackColor={{false: '#767577', true: '#81b0ff'}}
             thumbColor={isCameraMode ? '#f5dd4b' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
+            ios_backgroundColor='#3e3e3e'
             onValueChange={toggleSwitch}
             value={isCameraMode}
             style={styles.item}
@@ -224,91 +254,7 @@ export default function App() {
 
         {/* Map code */}
         { !isCameraMode && <View style={styles.mapContainer}>
-          <View style={styles.mapRow}>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-          </View>
-          <View style={styles.mapRow}>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-          </View>
-          <View style={styles.mapRow}>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-          </View>
-          <View style={styles.mapRow}>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-          </View>
-          <View style={styles.mapRow}>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-            <View style={styles.mapCell}> 
-              <Image style={styles.mapCellImg} source={require('./assets/plus.png')}/> 
-            </View>
-          </View>
+          {createGrid()}
 
           <Image style={[styles.pac, { left: gunnarPosition.x, bottom: gunnarPosition.y, transform: [{ rotate: gunnarPosition.deg}] }]} source={require('./assets/pac.png')}/> 
           
@@ -318,10 +264,12 @@ export default function App() {
         {/* Camera code */}
         { isCameraMode && 
         <View style={styles.mapContainer}>
-          <Text>Camera Here!</Text>
+          <WebView
+            source={{ uri: '192.168.187.236:8000' }}
+            style={{ width: 500, height: 500 }}
+          />
         </View>
         }
-      
       </View>
 
     </View>
