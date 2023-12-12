@@ -78,11 +78,10 @@ namespace ConsoleApplication
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
                     List<string>? actions;
 
-                    ConsoleKeyInfo keyInfo = Console.ReadKey();
-
-                    if (keyInfo.Key == ConsoleKey.Q || message?.Title == "shutdowm")
+                    Console.WriteLine(message?.Title);
+                    if (message?.Title == "shutdown")
                     {
-                        Console.WriteLine("works");
+                        Console.WriteLine("Shutdowm");
                         break;
                     }
 
