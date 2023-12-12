@@ -156,7 +156,6 @@ public class GridBot : AlphaBot
     public async Task Report()
     {
         Lights.ClearStrip();
-        await TakePicture();
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);
     }
 
@@ -186,7 +185,7 @@ public class GridBot : AlphaBot
             AdjustY(path, ref currY, ref destY, ref dir);
 
             // Destination reached
-            if (currX == destX && currY == destY) 
+            if (currX == destX && currY == destY)
                 break;
         }
 
@@ -195,22 +194,23 @@ public class GridBot : AlphaBot
         return path;
     }
 
-    private void AdjustX(List<string> path, ref int CurrX, ref int destX, ref string dir){
+    private void AdjustX(List<string> path, ref int CurrX, ref int destX, ref string dir)
+    {
         while (CurrX != destX)
         {
             if ((CurrX < destX && dir == "EAST") || (CurrX > destX && dir == "WEST"))
             {
                 path.Add("MOVE");
-                if(dir == "EAST")
+                if (dir == "EAST")
                     CurrX++;
-                else 
+                else
                     CurrX--;
             }
             else
             {
                 if (CurrX < destX)
                 {
-                    if(dir == "SOUTH")
+                    if (dir == "SOUTH")
                     {
                         path.Add("LEFT");
                         dir = "EAST";
@@ -228,7 +228,7 @@ public class GridBot : AlphaBot
                 }
                 else
                 {
-                    if(dir == "NORTH")
+                    if (dir == "NORTH")
                     {
                         path.Add("LEFT");
                         dir = "WEST";
@@ -247,14 +247,15 @@ public class GridBot : AlphaBot
         }
     }
 
-    private void AdjustY(List<string> path, ref int CurrY, ref int destY, ref string dir){
+    private void AdjustY(List<string> path, ref int CurrY, ref int destY, ref string dir)
+    {
         while (CurrY != destY)
         {
             Console.WriteLine("Dir is: " + dir);
             if ((CurrY < destY && dir == "NORTH") || (CurrY > destY && dir == "SOUTH"))
             {
                 path.Add("MOVE");
-                if(dir == "NORTH")
+                if (dir == "NORTH")
                     CurrY++;
                 else
                     CurrY--;
@@ -263,7 +264,7 @@ public class GridBot : AlphaBot
             {
                 if (CurrY < destY)
                 {
-                    if(dir == "EAST")
+                    if (dir == "EAST")
                     {
                         path.Add("LEFT");
                         dir = "NORTH";
@@ -280,7 +281,7 @@ public class GridBot : AlphaBot
                 }
                 else
                 {
-                    if(dir == "WEST")
+                    if (dir == "WEST")
                     {
                         path.Add("LEFT");
                         dir = "SOUTH";
