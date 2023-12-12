@@ -162,7 +162,13 @@ const styles = StyleSheet.create({
       position: 'absolute',
       width: 50,
       height: 50,
-    }
+    },
+
+    button: {
+      borderRadius: 1,
+      borderColor: 'black',
+      borderWidth: 1,
+    },
 
   });
 

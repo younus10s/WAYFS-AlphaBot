@@ -78,6 +78,20 @@ namespace ConsoleApplication
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
                     List<string>? actions;
 
+                    if (message?.Title == "beeping")
+                    {
+                        if (bool.Parse(message.Msg[0]))
+                        {
+                            cmdParser.Gunnar.Buzzer.BeepOn();
+                        }
+                        else
+                        {
+                            cmdParser.Gunnar.Buzzer.BeepOff();
+                        }
+                        
+                        continue;
+                    }
+
                     if(message?.Title == "placing"){
                         await cmdParser.RunCommand(message.Msg[0]);
                         Console.WriteLine("Placing" + cmdParser.Gunnar.PosX + " " + cmdParser.Gunnar.PosY + " " +  cmdParser.Gunnar.Heading);
