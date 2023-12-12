@@ -95,12 +95,11 @@ namespace ConsoleApplication
             Gunnar.CameraControl.PanLeft();
             Thread.Sleep(1000);
             Gunnar.CameraControl.PanRight();
-            Gunnar.CameraControl.PanRight();
-            Gunnar.CameraControl.PanRight();
-            Gunnar.CameraControl.PanRight();
-            Gunnar.CameraControl.PanRight();
             Thread.Sleep(1000);
-
+            Gunnar.CameraControl.TiltDown();
+            Thread.Sleep(1000);
+            Gunnar.CameraControl.TiltUp();
+            
             await TParser.RunFile(FileName, Gunnar);
             Gunnar.CleanUp();
         }
