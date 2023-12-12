@@ -14,26 +14,26 @@ export default function App (){
   useEffect(() => {
     // Function to initialize WebSocket connection
     const connectWebSocket = () => {
-      const newWebSocket = new WebSocket('ws://192.168.187.236:5000');
+      const newWebSocket = new WebSocket('ws://192.168.187.236:5000')
       // const newWebSocket = new WebSocket('ws://localhost:5000');
       console.log('Trying to connect...')
 
       newWebSocket.onopen = () => {
         console.log('Connected to WebSocket')
-        const placeString = "PLACE,0,0,NORTH";
+        const placeString = 'PLACE,0,0,NORTH';
         const msg = {
-          Title : "placing",
+          Title : 'placing',
           Msg : [placeString]
         }
         newWebSocket.send(JSON.stringify(msg));
-        console.log("Sending: Placing,0,0,NORTH");
-        moveGunnar(0, 0, "NORTH");
+        console.log('Sending: Placing,0,0,NORTH');
+        moveGunnar(0, 0, 'NORTH');
       };
 
       newWebSocket.onmessage = (event) => {
         console.log('Message from server ');
         const message = JSON.parse(event.data);
-        if(message.Title === 'status')
+        if (message.Title === 'status')
           moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4].toUpper());
         console.log(message);
       };
@@ -55,7 +55,7 @@ export default function App (){
   //Status vars
   const [dy, setDy] = useState(0);
   const [dx, setDx] = useState(0);
-  const [dir, setDir] = useState("NORTH");
+  const [dir, setDir] = useState('NORTH');
 
     // Define the initial state for Pacman's position
     const [gunnarPosition, setGunnarPosition] = useState({ x: 15, y: 0, deg: '0deg'});
@@ -68,19 +68,19 @@ export default function App (){
 
       var direction = '0deg';
       
-      if (dir === "NORTH")
+      if (dir === 'NORTH')
       {
         direction = '-90deg';
       }
-      else if (dir === "WEST")
+      else if (dir === 'WEST')
       {
         direction = '-180deg';
       }
-      else if (dir === "SOUTH")
+      else if (dir === 'SOUTH')
       {
         direction = '-270deg';
       }
-      else if (dir === "EAST")
+      else if (dir === 'EAST')
       {
         direction = '0deg';
       }
@@ -88,7 +88,7 @@ export default function App (){
       // Update state with the new pixel position
       setGunnarPosition({ x: pixelX, y: pixelY, deg: direction });
     };
-    
+
   // Joystick movement
   const pan = useRef(new Animated.ValueXY()).current;
   const boundary = 40; 
@@ -109,7 +109,8 @@ export default function App (){
             // Limit the movement within the joystickCircle
             const distance = Math.sqrt(gestureState.dx ** 2 + gestureState.dy ** 2);
 
-            if (distance > boundary) {
+            if (distance > boundary) 
+            {
               // Calculate the maximum x and y within the boundary
               const clampedX = boundary * (gestureState.dx / distance);
               const clampedY = boundary * (gestureState.dy / distance);
@@ -117,7 +118,9 @@ export default function App (){
               pan.y.setValue(clampedY);
               setDx(Number(clampedX/boundary).toFixed(2));
               setDy(-1* Number(clampedY/boundary).toFixed(2));
-            } else {
+            } 
+            else 
+            {
               pan.x.setValue(gestureState.dx);
               pan.y.setValue(gestureState.dy);
               setDx(Number(gestureState.dx/boundary).toFixed(2));
@@ -143,14 +146,15 @@ export default function App (){
 
   useEffect(() => {
     // Koden här kommer att köras varje gång variabel1 eller variabel2 ändras
-    if(webSocket != null){
+    if (webSocket != null)
+    {
       const msg = {
-        "Title": "movement",
-        "Msg": [dx.toString(), dy.toString()]
+        'Title': 'movement',
+        'Msg': [dx.toString(), dy.toString()]
       }
       // const fullCommands = combineCommands();
       webSocket.send(JSON.stringify(msg));
-      console.log("Sending:");
+      console.log('Sending:');
       console.log(msg);
     }
   }, [dx, dy]); // Dependency array
@@ -158,13 +162,13 @@ export default function App (){
   const handleCellClick = (x, y) => {
     // Example: Move to (100, 100) and rotate 45 degrees
     const msg = {
-        "Title": "gridCoor",
-        "Msg": [x.toString(), y.toString()]
+        Title: 'gridCoor',
+        Msg: [x.toString(), y.toString()]
     }
 
     webSocket.send(JSON.stringify(msg));
-    console.log("Sending:")
-    console.log("(" + x + ":" + y + ")");
+    console.log('Sending:')
+    console.log('(' + x + ':' + y + ')')
 
   };
 
@@ -187,7 +191,7 @@ export default function App (){
   return (
     <View style={styles.container}>
 
-      <StatusBar style="auto" />
+      <StatusBar style='auto' />
 
       {/* Joystick code*/}
       <View style={styles.joystickContainer}> 
@@ -240,7 +244,7 @@ export default function App (){
           <Switch
             trackColor={{false: '#767577', true: '#81b0ff'}}
             thumbColor={isCameraMode ? '#f5dd4b' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
+            ios_backgroundColor='#3e3e3e'
             onValueChange={toggleSwitch}
             value={isCameraMode}
             style={styles.item}
@@ -266,7 +270,6 @@ export default function App (){
           />
         </View>
         }
-      
       </View>
 
     </View>
