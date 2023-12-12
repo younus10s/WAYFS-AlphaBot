@@ -67,7 +67,7 @@ public class AlphaBot
         {
             SensorValues = TRSensor.ReadLine();
         }
-        
+
         MotionControl.Stop();
     }
 
