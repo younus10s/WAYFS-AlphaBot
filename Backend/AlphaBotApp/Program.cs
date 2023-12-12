@@ -42,17 +42,11 @@ namespace ConsoleApplication
                 {
                     Console.WriteLine($"Using URL: {options.URL}");
 
-                    if (options.Stream)
-                    {
-                        StartStream();
-                    }
+                    StartStream();
 
                     await WebSocketRoutine(options.Dummy, options.URL, options.Free);
 
-                    if (options.Stream)
-                    {
-                        StopStream();
-                    }
+                    StopStream();
                 }
                 else if (options.TxtFile != null)
                 {
@@ -97,6 +91,15 @@ namespace ConsoleApplication
         {
             GridBot Gunnar = new GridBot(Power, Calibrate, Rows, Cols);
             TxtParser TParser = new TxtParser();
+
+            Gunnar.CameraControl.PanLeft();
+            Thread.Sleep(1000);
+            Gunnar.CameraControl.PanRight();
+            Gunnar.CameraControl.PanRight();
+            Gunnar.CameraControl.PanRight();
+            Gunnar.CameraControl.PanRight();
+            Gunnar.CameraControl.PanRight();
+            Thread.Sleep(1000);
 
             await TParser.RunFile(FileName, Gunnar);
             Gunnar.CleanUp();

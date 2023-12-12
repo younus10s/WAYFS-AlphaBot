@@ -18,6 +18,7 @@ public class AlphaBot
     public TRSensor TRSensor = new();
     public Camera Camera = new();
     public Lights Lights = new();
+    public CameraControl CameraControl = new();
 
     private readonly double Power;
 

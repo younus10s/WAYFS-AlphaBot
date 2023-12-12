@@ -31,3 +31,17 @@ public interface ITRSensor
     void Calibrate(IMotionControl motionControl);
     double GetPosition();
 }
+
+public interface IPCA9685
+{
+    public void SetPWMFreq(int freq);
+    public void SetServoPulse(int channel, int pulse);
+}
+
+public interface ICameraController
+{
+    public void PanLeft();
+    public void PanRight();
+    public void TiltUp();
+    public void TiltDown();
+}
