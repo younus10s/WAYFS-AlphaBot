@@ -14,16 +14,16 @@ export default function App (){
   useEffect(() => {
     // Function to initialize WebSocket connection
     const connectWebSocket = () => {
-       const newWebSocket = new WebSocket('ws://192.168.187.236:5000');
-      //const newWebSocket = new WebSocket('ws://localhost:5000');
-      console.log("Trying to connect...");
+      const newWebSocket = new WebSocket('ws://192.168.187.236:5000');
+      // const newWebSocket = new WebSocket('ws://localhost:5000');
+      console.log('Trying to connect...')
 
       newWebSocket.onopen = () => {
-        console.log('Connected to WebSocket');
+        console.log('Connected to WebSocket')
         const placeString = "PLACE,0,0,NORTH";
         const msg = {
-          "Title": "placing",
-          "Msg": [placeString]
+          Title : "placing",
+          Msg : [placeString]
         }
         newWebSocket.send(JSON.stringify(msg));
         console.log("Sending: Placing,0,0,NORTH");
@@ -68,18 +68,27 @@ export default function App (){
 
       var direction = '0deg';
       
-      if(dir === "NORTH")
+      if (dir === "NORTH")
+      {
         direction = '-90deg';
-      else if(dir === "WEST")
+      }
+      else if (dir === "WEST")
+      {
         direction = '-180deg';
-      else if(dir === "SOUTH")
+      }
+      else if (dir === "SOUTH")
+      {
         direction = '-270deg';
-      else if(dir === "EAST")
+      }
+      else if (dir === "EAST")
+      {
         direction = '0deg';
+      }
 
       // Update state with the new pixel position
       setGunnarPosition({ x: pixelX, y: pixelY, deg: direction });
     };
+    
   // Joystick movement
   const pan = useRef(new Animated.ValueXY()).current;
   const boundary = 40; 
