@@ -8,9 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="digitalhigh.rpi-ws281x-csharp" Version="1.2.0" />
+    <PackageReference Include="Iot.Device.Bindings" Version="3.1.0" />
     <PackageReference Include="MMALSharp" Version="0.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.2.1" />
-    <PackageReference Include="System.Device.Gpio" Version="2.2.0-*" />
+    <PackageReference Include="System.Device.Gpio" Version="3.1.0-*" />
   </ItemGroup>
 
 </Project>
