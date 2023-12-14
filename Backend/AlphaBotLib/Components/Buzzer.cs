@@ -69,4 +69,4 @@ public class Buzzer : IDisposable
     {
         return Controller.Read(PinNumber) == PinValue.High;
     }
- }
+}

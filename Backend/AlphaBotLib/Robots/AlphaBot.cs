@@ -67,7 +67,7 @@ public class AlphaBot : IDisposable
         {
             SensorValues = TRSensor.ReadLine();
         }
-        
+
         MotionControl.Stop();
     }
 

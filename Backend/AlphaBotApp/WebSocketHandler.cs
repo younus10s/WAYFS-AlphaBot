@@ -54,7 +54,8 @@ namespace ConsoleApplication
                     Console.WriteLine("Received JSON: " + clientMessage);
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
 
-                    if(message?.Title == "movement"){
+                    if (message?.Title == "movement")
+                    {
                         FBot.Move(double.Parse(message.Msg[0], CultureInfo.InvariantCulture), double.Parse(message.Msg[1], CultureInfo.InvariantCulture));
                     }
                 }
@@ -81,25 +82,28 @@ namespace ConsoleApplication
                     // Toggle the Buzzer
                     if (message?.Title == "beeping")
                     {
-                        cmdParser.Gunnar.Buzzer.Beep(bool.Parse(message.Msg[0]));                        
+                        cmdParser.Gunnar.Buzzer.Beep(bool.Parse(message.Msg[0]));
                         continue;
                     }
 
-                    if(message?.Title == "placing"){
+                    if (message?.Title == "placing")
+                    {
                         await cmdParser.RunCommand(message.Msg[0]);
-                        Console.WriteLine("Placing" + cmdParser.Gunnar.PosX + " " + cmdParser.Gunnar.PosY + " " +  cmdParser.Gunnar.Heading);
+                        Console.WriteLine("Placing" + cmdParser.Gunnar.PosX + " " + cmdParser.Gunnar.PosY + " " + cmdParser.Gunnar.Heading);
                         continue;
                     }
-                    if(message?.Title == "gridCoor"){
+                    if (message?.Title == "gridCoor")
+                    {
                         Console.WriteLine(cmdParser.Gunnar.PosX + ":" + cmdParser.Gunnar.PosY + ":" + cmdParser.Gunnar.Heading);
-                        actions = cmdParser.Gunnar.FindPath(cmdParser.Gunnar.PosX, cmdParser.Gunnar.PosY, cmdParser.Gunnar.Heading, int.Parse(message.Msg[0]), int.Parse(message.Msg[1]) );
+                        actions = cmdParser.Gunnar.FindPath(cmdParser.Gunnar.PosX, cmdParser.Gunnar.PosY, cmdParser.Gunnar.Heading, int.Parse(message.Msg[0]), int.Parse(message.Msg[1]));
                         Console.Write("Actions: (");
-                        foreach(var action in actions){
+                        foreach (var action in actions)
+                        {
                             Console.Write(action + " ");
                         }
                         Console.WriteLine(")");
                     }
-                    else if(message?.Title == "command")
+                    else if (message?.Title == "command")
                         actions = message?.Msg;
                     else
                         actions = new();
@@ -132,7 +136,7 @@ namespace ConsoleApplication
                     var dataToSend = new MSG
                     {
                         Title = "status",
-                        Msg = new List<string> {i.ToString(), actions[i], cmdParser.Gunnar.PosX.ToString(), cmdParser.Gunnar.PosY.ToString(), cmdParser.Gunnar.Heading}
+                        Msg = new List<string> { i.ToString(), actions[i], cmdParser.Gunnar.PosX.ToString(), cmdParser.Gunnar.PosY.ToString(), cmdParser.Gunnar.Heading }
                     };
 
                     string sendMsg = JsonSerializer.Serialize(dataToSend);

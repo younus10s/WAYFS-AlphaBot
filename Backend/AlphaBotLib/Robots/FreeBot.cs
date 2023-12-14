@@ -8,7 +8,7 @@ public class FreeBot : AlphaBot
     }
 
     public void Move(double dx, double dy)
-    {    
+    {
         double Abs = Math.Sqrt(dx * dx + dy * dy);
         double Ang = Math.Atan2(dy, dx);
 
@@ -16,22 +16,22 @@ public class FreeBot : AlphaBot
 
         double[] powers = CalculatePower(Scaled_abs, Ang);
 
-        if(dy >= 0)
-            MotionControl.ActivateForward();   
-        else if(dy < -0)
+        if (dy >= 0)
+            MotionControl.ActivateForward();
+        else if (dy < -0)
             MotionControl.ActivateBackward();
 
         MotionControl.SetPowerLeft(powers[0] * 0.6);
-        MotionControl.SetPowerRight(powers[1]* 0.6);
+        MotionControl.SetPowerRight(powers[1] * 0.6);
 
-        if(dy > 0.1)
+        if (dy > 0.1)
             Lights.Show(Color.Green);
 
         else if (dy < -0.1)
-            Lights.Show(Color.Red);   
+            Lights.Show(Color.Red);
         else
             Lights.Show(Color.Yellow);
-        
+
     }
 
     public double[] CalculatePower(double abs, double angle)
