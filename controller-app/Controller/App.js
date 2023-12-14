@@ -10,6 +10,7 @@ export default function App (){
   const [isCameraMode, setIsCameraMode] = useState(false)
   const toggleSwitch = () => setIsCameraMode(previousState => !previousState)
   const [webSocket, setWebSocket] = useState(null)
+  const [streamingError, setStreamingError] = useState(false);
 
   useEffect(() => {
     // Function to initialize WebSocket connection
@@ -279,10 +280,15 @@ export default function App (){
         {/* Camera code */}
         { isCameraMode && 
         <View style={styles.mapContainer}>
-          <WebView
-            source={{ uri: '192.168.187.236:8000' }}
-            style={{ width: 500, height: 500 }}
-          />
+          {streamingError ? (
+            <Text>No Signal</Text>
+          ) : (
+            <WebView
+              source={{ uri: 'http://192.168.187.236:8000' }}
+              style={{ width: 500, height: 500 }}
+              onError={() => setStreamingError(true)}
+            />
+          )}
         </View>
         }
       </View>
