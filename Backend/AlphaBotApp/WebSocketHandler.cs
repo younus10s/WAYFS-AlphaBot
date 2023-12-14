@@ -21,7 +21,7 @@ namespace ConsoleApplication
         }
 
 
-        public async Task<string> reciveMessage()
+        public async Task<string> ReciveMessageAsync()
         {
             var buffer = new byte[1024];
             string clientMessage = "";
@@ -36,7 +36,7 @@ namespace ConsoleApplication
             return "";
         }
 
-        public async Task SendMessage(string msg)
+        public async Task SendMessageAsync(string msg)
         {
             byte[] serverMessageBytes = Encoding.UTF8.GetBytes(msg);
             await WebSocket.SendAsync(new ArraySegment<byte>(serverMessageBytes), WebSocketMessageType.Text, true, CancellationToken.None);
@@ -44,29 +44,65 @@ namespace ConsoleApplication
 
         public async Task HandleWebSocketAsyncFreeBot(FreeBot FBot = null)
         {
-            try
+            await ProcessWebSocketMessagesAsync(async (message, cmdParser) =>
             {
-                var buffer = new byte[1024];
-
-                while (WebSocket.State == WebSocketState.Open)
+                if (message?.Title == "movement")
                 {
-                    string clientMessage = await reciveMessage();
-                    Console.WriteLine("Received JSON: " + clientMessage);
-                    MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
-
-                    if (message?.Title == "movement")
-                    {
-                        FBot.Move(double.Parse(message.Msg[0], CultureInfo.InvariantCulture), double.Parse(message.Msg[1], CultureInfo.InvariantCulture));
-                    }
+                    FBot.Move(double.Parse(message.Msg[0], CultureInfo.InvariantCulture), double.Parse(message.Msg[1], CultureInfo.InvariantCulture));
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"WebSocket exception caught: {ex.Message}");
-            }
+            });
         }
 
         public async Task HandleWebSocketAsync(AppCmdParser cmdParser = null)
+        {
+            await ProcessWebSocketMessagesAsync(async (message, cmdParser) =>
+            {
+                List<string>? actions;
+
+                // Toggle the Buzzer
+                if (message?.Title == "beeping")
+                {
+                    cmdParser.Gunnar.Buzzer.Beep(bool.Parse(message.Msg[0]));
+                    return;
+                }
+
+                if (message?.Title == "placing")
+                {
+                    await cmdParser.RunCommand(message.Msg[0]);
+                    Console.WriteLine("Placing" + cmdParser.Gunnar.PosX + " " + cmdParser.Gunnar.PosY + " " + cmdParser.Gunnar.Heading);
+                    return;
+                }
+                if (message?.Title == "gridCoor")
+                {
+                    Console.WriteLine(cmdParser.Gunnar.PosX + ":" + cmdParser.Gunnar.PosY + ":" + cmdParser.Gunnar.Heading);
+                    actions = cmdParser.Gunnar.FindPath(cmdParser.Gunnar.PosX, cmdParser.Gunnar.PosY, cmdParser.Gunnar.Heading, int.Parse(message.Msg[0]), int.Parse(message.Msg[1]));
+                    Console.Write("Actions: (");
+                    foreach (var action in actions)
+                    {
+                        Console.Write(action + " ");
+                    }
+                    Console.WriteLine(")");
+                }
+                else if (message?.Title == "command")
+                    actions = message?.Msg;
+                else
+                    actions = new();
+
+                await ProcessMessageAsync(actions, cmdParser);
+
+                var doneMsg = new MSG
+                {
+                    Title = "Done",
+                    Msg = new List<string> { "Thank you" }
+                };
+
+                string done = JsonSerializer.Serialize(doneMsg);
+                await SendMessageAsync(done);
+                Console.WriteLine($"Send: {done} \n");
+            });
+        }
+
+        private async Task ProcessWebSocketMessagesAsync(Func<MSG?, AppCmdParser, Task> handleMessage)
         {
             try
             {
@@ -74,51 +110,11 @@ namespace ConsoleApplication
 
                 while (WebSocket.State == WebSocketState.Open)
                 {
-                    string clientMessage = await reciveMessage();
-                    Console.WriteLine("Received JSON: " + clientMessage);
+                    var clientMessage = await ReciveMessageAsync();
+                    Console.WriteLine($"Recieved JSON: {clientMessage}");
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
-                    List<string>? actions;
 
-                    // Toggle the Buzzer
-                    if (message?.Title == "beeping")
-                    {
-                        cmdParser.Gunnar.Buzzer.Beep(bool.Parse(message.Msg[0]));
-                        continue;
-                    }
-
-                    if (message?.Title == "placing")
-                    {
-                        await cmdParser.RunCommand(message.Msg[0]);
-                        Console.WriteLine("Placing" + cmdParser.Gunnar.PosX + " " + cmdParser.Gunnar.PosY + " " + cmdParser.Gunnar.Heading);
-                        continue;
-                    }
-                    if (message?.Title == "gridCoor")
-                    {
-                        Console.WriteLine(cmdParser.Gunnar.PosX + ":" + cmdParser.Gunnar.PosY + ":" + cmdParser.Gunnar.Heading);
-                        actions = cmdParser.Gunnar.FindPath(cmdParser.Gunnar.PosX, cmdParser.Gunnar.PosY, cmdParser.Gunnar.Heading, int.Parse(message.Msg[0]), int.Parse(message.Msg[1]));
-                        Console.Write("Actions: (");
-                        foreach (var action in actions)
-                        {
-                            Console.Write(action + " ");
-                        }
-                        Console.WriteLine(")");
-                    }
-                    else if (message?.Title == "command")
-                        actions = message?.Msg;
-                    else
-                        actions = new();
-
-                    await ProcessMessageAsync(actions, cmdParser);
-
-                    var doneMsg = new MSG
-                    {
-                        Title = "Done",
-                        Msg = new List<string> { "Thank you" }
-                    };
-
-                    string done = JsonSerializer.Serialize(doneMsg);
-                    await SendMessage(done);
-                    Console.WriteLine($"Send: {done} \n");
+                    await handleMessage(message, null); // pass the cmdParser as needed... I need to test this... 
                 }
             }
             catch (Exception ex)
@@ -140,7 +136,7 @@ namespace ConsoleApplication
                     };
 
                     string sendMsg = JsonSerializer.Serialize(dataToSend);
-                    await SendMessage(sendMsg);
+                    await SendMessageAsync(sendMsg);
                     Console.WriteLine($"Send: {sendMsg} \n");
                     Thread.Sleep(20);
                     await cmdParser.RunCommand(actions[i]);
