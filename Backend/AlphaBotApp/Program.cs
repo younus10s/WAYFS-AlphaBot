@@ -133,10 +133,8 @@ namespace ConsoleApplication
 
                     Console.WriteLine("after socket messages");
 
-                    if(Gunnar != null)
-                        Gunnar.CleanUp();
-                    if(FBot != null)
-                        FBot.CleanUp();
+                    Gunnar?.CleanUp();
+                    FBot?.CleanUp();
 
                     Console.WriteLine("Cleanup streaming ...");
                     StopStream();
