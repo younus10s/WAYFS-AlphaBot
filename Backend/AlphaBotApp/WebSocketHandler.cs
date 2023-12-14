@@ -19,7 +19,7 @@ namespace ConsoleApplication
         {
             WebSocket = WebSocket_;
         }
-
+      
         public async Task<string> ReciveMessageAsync()
         {
             var buffer = new byte[1024];
@@ -117,7 +117,6 @@ namespace ConsoleApplication
                     var clientMessage = await ReciveMessageAsync();
                     Console.WriteLine($"Recieved JSON: {clientMessage}");
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
-
                     await handleMessage(message, null);
                 }
             }

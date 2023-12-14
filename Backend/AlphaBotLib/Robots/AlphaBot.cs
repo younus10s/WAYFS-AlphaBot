@@ -158,7 +158,12 @@ public class AlphaBot : IDisposable
 
     public void CleanUp()
     {
+        Console.WriteLine("Cleaning up Motors ...");
         MotionControl.CleanUp();
+        Console.WriteLine("Cleaning up Lights ...");
+        Lights.ClearStrip();
+        Console.WriteLine("Cleaning up Trsensors ...");
+        TRSensor.CleanUp();
     }
 
     public void Dispose()

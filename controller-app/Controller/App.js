@@ -11,6 +11,7 @@ export default function App (){
   const toggleSwitch = () => setIsCameraMode(previousState => !previousState)
   const [webSocket, setWebSocket] = useState(null)
   const [beepOn, setBeepOn] = useState(false)
+  const [streamingError, setStreamingError] = useState(false);
 
   useEffect(() => {
     // Function to initialize WebSocket connection
@@ -35,7 +36,7 @@ export default function App (){
         console.log('Message from server ');
         const message = JSON.parse(event.data);
         if (message.Title === 'status')
-          moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4].toUpper());
+          moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4].toUpperCase());
         console.log(message);
       };
 
@@ -202,6 +203,18 @@ export default function App (){
     console.log('Print beeping');
   }
 
+  function shutDownBackend(){
+    const msg = {
+      Title: 'shutdown',
+      Msg: []
+    }
+
+    webSocket.send(JSON.stringify(msg));
+    console.log('Sending: Shutdown');
+    webSocket.close();
+    console.log('WebSocket disconnected');
+  }
+
   return (
     <View style={styles.container}>
 
@@ -247,8 +260,13 @@ export default function App (){
         <Text>Dy: {dy}</Text>
         <Text>Dx: {dx}</Text>
         <Text>Direction: {dir}</Text>
+
         <TouchableOpacity onPress={() => beep()} style={styles.button}>
           <Text>Buzzer</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.shutdownButton} onPress={()=>{shutDownBackend()}}>
+          <Text>Shutdown</Text>
         </TouchableOpacity>
       </View>
 
@@ -281,10 +299,15 @@ export default function App (){
         {/* Camera code */}
         { isCameraMode && 
         <View style={styles.mapContainer}>
-          <WebView
-            source={{ uri: '192.168.187.236:8000' }}
-            style={{ width: 500, height: 500 }}
-          />
+          {streamingError ? (
+            <Text>No Signal</Text>
+          ) : (
+            <WebView
+              source={{ uri: 'http://192.168.187.236:8000' }}
+              style={{ width: 500, height: 500 }}
+              onError={() => setStreamingError(true)}
+            />
+          )}
         </View>
         }
       </View>
