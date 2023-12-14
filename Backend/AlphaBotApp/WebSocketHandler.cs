@@ -46,6 +46,12 @@ namespace ConsoleApplication
         {
             await ProcessWebSocketMessagesAsync(async (message, cmdParser) =>
             {
+                // Toggle the Buzzer
+                if (message?.Title == "beeping")
+                {
+                    cmdParser.Gunnar.Buzzer.Beep(bool.Parse(message.Msg[0]));
+                    return;
+                }
                 if (message?.Title == "movement")
                 {
                     FBot.Move(double.Parse(message.Msg[0], CultureInfo.InvariantCulture), double.Parse(message.Msg[1], CultureInfo.InvariantCulture));
@@ -65,10 +71,9 @@ namespace ConsoleApplication
                     cmdParser.Gunnar.Buzzer.Beep(bool.Parse(message.Msg[0]));
                     return;
                 }
-
                 if (message?.Title == "placing")
                 {
-                    await cmdParser.RunCommand(message.Msg[0]);
+                    cmdParser.RunCommand(message.Msg[0]);
                     Console.WriteLine("Placing" + cmdParser.Gunnar.PosX + " " + cmdParser.Gunnar.PosY + " " + cmdParser.Gunnar.Heading);
                     return;
                 }
@@ -139,7 +144,7 @@ namespace ConsoleApplication
                     await SendMessageAsync(sendMsg);
                     Console.WriteLine($"Send: {sendMsg} \n");
                     Thread.Sleep(20);
-                    await cmdParser.RunCommand(actions[i]);
+                    cmdParser.RunCommand(actions[i]);
                 }
             }
         }
