@@ -20,7 +20,6 @@ namespace ConsoleApplication
             WebSocket = WebSocket_;
         }
 
-
         public async Task<string> ReciveMessageAsync()
         {
             var buffer = new byte[1024];
@@ -119,7 +118,7 @@ namespace ConsoleApplication
                     Console.WriteLine($"Recieved JSON: {clientMessage}");
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
 
-                    await handleMessage(message, null); // pass the cmdParser as needed... I need to test this... 
+                    await handleMessage(message, null);
                 }
             }
             catch (Exception ex)
