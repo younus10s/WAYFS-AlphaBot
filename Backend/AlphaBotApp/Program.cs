@@ -138,6 +138,7 @@ namespace ConsoleApplication
                     if(FBot != null)
                         FBot.CleanUp();
 
+                    StopStream();
                     System.Environment.Exit(0);
                 }
                 else
