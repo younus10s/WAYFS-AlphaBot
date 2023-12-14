@@ -117,7 +117,7 @@ namespace ConsoleApplication
             }
             else if (!Dummy && Free)
             {
-                FBot = new FreeBot(Power, Calibrate);
+                FBot = new FreeBot(Power, false);
             }
 
             string[] args = { "--urls", URL };
