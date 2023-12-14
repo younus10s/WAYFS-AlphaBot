@@ -10,6 +10,7 @@ export default function App (){
   const [isCameraMode, setIsCameraMode] = useState(false)
   const toggleSwitch = () => setIsCameraMode(previousState => !previousState)
   const [webSocket, setWebSocket] = useState(null)
+  const [beepOn, setBeepOn] = useState(false)
   const [streamingError, setStreamingError] = useState(false);
 
   useEffect(() => {
@@ -189,6 +190,19 @@ export default function App (){
     return grid;
   }
 
+  function beep () {
+    setBeepOn(!beepOn);
+
+    const msg = {
+      Title: 'beeping',
+      Msg: [beepOn.toString()]
+    }
+
+    webSocket.send(JSON.stringify(msg));
+    console.log('Sending:')
+    console.log('Print beeping');
+  }
+
   function shutDownBackend(){
     const msg = {
       Title: 'shutdown',
@@ -246,6 +260,11 @@ export default function App (){
         <Text>Dy: {dy}</Text>
         <Text>Dx: {dx}</Text>
         <Text>Direction: {dir}</Text>
+
+        <TouchableOpacity onPress={() => beep()} style={styles.button}>
+          <Text>Buzzer</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.shutdownButton} onPress={()=>{shutDownBackend()}}>
           <Text>Shutdown</Text>
         </TouchableOpacity>

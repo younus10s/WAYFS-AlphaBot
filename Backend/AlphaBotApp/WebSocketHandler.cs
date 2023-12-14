@@ -19,8 +19,7 @@ namespace ConsoleApplication
         {
             WebSocket = WebSocket_;
         }
-
-
+      
         public async Task<string> ReciveMessageAsync()
         {
             var buffer = new byte[1024];
@@ -46,6 +45,12 @@ namespace ConsoleApplication
         {
             await ProcessWebSocketMessagesAsync(async (message, cmdParser) =>
             {
+                // Toggle the Buzzer
+                if (message?.Title == "beeping")
+                {
+                    cmdParser.Gunnar.Buzzer.Beep(bool.Parse(message.Msg[0]));
+                    return;
+                }
                 if (message?.Title == "movement")
                 {
                     FBot.Move(double.Parse(message.Msg[0], CultureInfo.InvariantCulture), double.Parse(message.Msg[1], CultureInfo.InvariantCulture));
@@ -59,6 +64,12 @@ namespace ConsoleApplication
             {
                 List<string>? actions;
 
+                // Toggle the Buzzer
+                if (message?.Title == "beeping")
+                {
+                    cmdParser.Gunnar.Buzzer.Beep(bool.Parse(message.Msg[0]));
+                    return;
+                }
                 if (message?.Title == "placing")
                 {
                     cmdParser.RunCommand(message.Msg[0]);
@@ -106,8 +117,7 @@ namespace ConsoleApplication
                     var clientMessage = await ReciveMessageAsync();
                     Console.WriteLine($"Recieved JSON: {clientMessage}");
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
-
-                    await handleMessage(message, null); // pass the cmdParser as needed... I need to test this... 
+                    await handleMessage(message, null);
                 }
             }
             catch (Exception ex)
