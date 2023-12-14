@@ -171,4 +171,12 @@ public class TRSensor : ITRSensor
 
         return Value[1..];
     }
+
+
+    public void CleanUp(){
+        GpioController.ClosePin(Clock);
+        GpioController.ClosePin(Address);
+        GpioController.ClosePin(CS);
+        GpioController.ClosePin(DataOut);
+    }
 }

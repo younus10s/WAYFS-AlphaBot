@@ -23,7 +23,7 @@ public class AppCmdParser
     }
 
 
-    public async Task RunCommand(string command)
+    public void RunCommand(string command)
     {
 
         string[] Parts = command.Split(',');
@@ -46,7 +46,7 @@ public class AppCmdParser
                 Gunnar.Right();
                 break;
             case "REPORT":
-                await Gunnar.Report();
+                Gunnar.Report();
                 break;
         }
     }

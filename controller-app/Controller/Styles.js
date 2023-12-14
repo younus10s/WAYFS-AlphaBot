@@ -47,6 +47,12 @@ const styles = StyleSheet.create({
         borderWidth: 1
     },
 
+    shutdownButton:{
+      borderRadius: 1,
+        borderColor: "black",
+        borderWidth: 1
+    },
+
     joystickCircle2: {
       backgroundColor: "black",
       width: 70,

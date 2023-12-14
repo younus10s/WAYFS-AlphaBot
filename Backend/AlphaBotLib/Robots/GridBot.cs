@@ -153,7 +153,7 @@ public class GridBot : AlphaBot
         }
     }
 
-    public async Task Report()
+    public void Report()
     {
         Lights.ClearStrip();
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);
@@ -215,10 +215,15 @@ public class GridBot : AlphaBot
                         path.Add("LEFT");
                         dir = "EAST";
                     }
-                    else
+                    else if(dir == "NORTH")
                     {
                         path.Add("RIGHT");
                         dir = "EAST";
+                    }
+                    else if(dir == "WEST")
+                    {
+                        path.Add("RIGHT");
+                        dir = "NORTH";
                     }
                 }
                 else
@@ -228,10 +233,14 @@ public class GridBot : AlphaBot
                         path.Add("LEFT");
                         dir = "WEST";
                     }
-                    else
+                    else if(dir == "SOUTH")
                     {
                         path.Add("RIGHT");
                         dir = "WEST";
+                    }else if(dir == "EAST")
+                    {
+                        path.Add("RIGHT");
+                        dir = "SOUTH";
                     }
                 }
             }
@@ -260,11 +269,14 @@ public class GridBot : AlphaBot
                         path.Add("LEFT");
                         dir = "NORTH";
                     }
-                    else
+                    else if (dir == "WEST")
                     {
-                        Console.WriteLine("Should not be here");
                         path.Add("RIGHT");
                         dir = "NORTH";
+                    }else if (dir == "SOUTH")
+                    {
+                        path.Add("RIGHT");
+                        dir = "WEST";
                     }
                 }
                 else
@@ -274,10 +286,15 @@ public class GridBot : AlphaBot
                         path.Add("LEFT");
                         dir = "SOUTH";
                     }
-                    else
+                    else if (dir == "EAST")
                     {
                         path.Add("RIGHT");
                         dir = "SOUTH";
+                    }
+                    else if (dir == "NORTH")
+                    {
+                        path.Add("RIGHT");
+                        dir = "EAST";
                     }
                 }
             }

@@ -157,7 +157,12 @@ public class AlphaBot
 
     public void CleanUp()
     {
+        Console.WriteLine("Cleaning up Motors ...");
         MotionControl.CleanUp();
+        Console.WriteLine("Cleaning up Lights ...");
+        Lights.ClearStrip();
+        Console.WriteLine("Cleaning up Trsensors ...");
+        TRSensor.CleanUp();
     }
 }
 
