@@ -35,7 +35,7 @@ export default function App (){
         console.log('Message from server ');
         const message = JSON.parse(event.data);
         if (message.Title === 'status')
-          moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4].toUpper());
+          moveGunnar(message.Msg[2], message.Msg[3], message.Msg[4].toUpperCase());
         console.log(message);
       };
 
