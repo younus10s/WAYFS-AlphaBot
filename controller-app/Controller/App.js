@@ -246,7 +246,7 @@ export default function App (){
         <Text>Dy: {dy}</Text>
         <Text>Dx: {dx}</Text>
         <Text>Direction: {dir}</Text>
-        <TouchableOpacity style={styles.shutdowmButton} onPress={()=>{shutDownBackend()}}>
+        <TouchableOpacity style={styles.shutdownButton} onPress={()=>{shutDownBackend()}}>
           <Text>Shutdown</Text>
         </TouchableOpacity>
       </View>

@@ -81,7 +81,7 @@ namespace ConsoleApplication
                     Console.WriteLine(message?.Title);
                     if (message?.Title == "shutdown")
                     {
-                        Console.WriteLine("Shutdowm");
+                        Console.WriteLine("Shutdown");
                         break;
                     }
 

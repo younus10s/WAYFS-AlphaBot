@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         borderWidth: 1
     },
 
-    shutdowmButton:{
+    shutdownButton:{
       borderRadius: 1,
         borderColor: "black",
         borderWidth: 1
