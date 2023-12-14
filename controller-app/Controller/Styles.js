@@ -6,6 +6,17 @@ const commonStyles = {
   borderWidth: 1,
 };
 
+const commonJoystickStyle = {
+  alignItems: 'center',
+  borderRadius: 100,
+  borderColor: 'black',
+  borderWidth: 1,
+  elevation: 5,
+  width: 70,
+  height: 70,
+  justifyContent: 'center',
+};
+
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
@@ -38,54 +49,29 @@ const styles = StyleSheet.create({
   joystickCell: {
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  },  
 
   joystickCircle: {
-    alignItems: 'center',
-    borderColor: 'black',
-    borderRadius: 100,
-    borderWidth: 1,
-    height: 130,
-    justifyContent: 'center',
+    ...commonJoystickStyle,
     width: 130,
+    height: 130,
   },
 
   joystickCircle2: {
-    alignItems: 'center',
+    ...commonJoystickStyle,
     backgroundColor: 'black',
-    borderColor: 'black',
-    borderRadius: 100,
-    borderWidth: 1,
-    elevation: 5,
-    height: 70,
-    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
-      height: 2,
       width: 1,
+      height: 2,
     },
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
-    width: 70,
   },
 
   joystickCircle2Pressed: {
-    alignItems: 'center',
+    ...commonJoystickStyle,
     backgroundColor: 'gray',
-    borderColor: 'black',
-    borderRadius: 100,
-    borderWidth: 1,
-    elevation: 5,
-    height: 70,
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      height: 2,
-      width: 1,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
-    width: 70,
   },
 
   joystickRow: {
