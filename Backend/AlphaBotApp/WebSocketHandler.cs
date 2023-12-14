@@ -7,8 +7,8 @@ namespace ConsoleApplication
 {
     public class MSG
     {
-        public string Title { get; set; } = string.Empty; // Default to an empty string
-        public List<string> Msg { get; set; } = new List<string>(); // Default to an empty list
+        public string Title { get; set; } = string.Empty;
+        public List<string> Msg { get; set; } = new List<string>();
     }
 
     public class WebSocketHandler
