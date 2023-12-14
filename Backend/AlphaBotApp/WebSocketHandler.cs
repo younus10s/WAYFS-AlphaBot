@@ -86,10 +86,10 @@ namespace ConsoleApplication
                         break;
                     }
 
-                    if(message?.Title == "placing")
+                    if (message?.Title == "placing")
                     {
                         cmdParser.RunCommand(message.Msg[0]);
-                        Console.WriteLine("Placing" + cmdParser.Gunnar.PosX + " " + cmdParser.Gunnar.PosY + " " +  cmdParser.Gunnar.Heading);
+                        Console.WriteLine("Placing" + cmdParser.Gunnar.PosX + " " + cmdParser.Gunnar.PosY + " " + cmdParser.Gunnar.Heading);
                         continue;
                     }
                     if(message?.Title == "gridCoor")
@@ -129,7 +129,14 @@ namespace ConsoleApplication
                     var dataToSend = new MSG
                     {
                         Title = "status",
-                        Msg = new List<string> {i.ToString(), actions[i], cmdParser.Gunnar.PosX.ToString(), cmdParser.Gunnar.PosY.ToString(), cmdParser.Gunnar.Heading}
+                        Msg = new List<string> 
+                        {
+                            i.ToString(),
+                            actions[i],
+                            cmdParser.Gunnar.PosX.ToString(),
+                            cmdParser.Gunnar.PosY.ToString(),
+                            cmdParser.Gunnar.Heading
+                        }
                     };
 
                     string sendMsg = JsonSerializer.Serialize(dataToSend);
