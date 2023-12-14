@@ -23,7 +23,7 @@ public class AppCmdParser
     }
 
 
-    public async Task RunCommand(string command)
+    public void RunCommand(string command)
     {
 
         string[] Parts = command.Split(',');

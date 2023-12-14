@@ -86,7 +86,7 @@ namespace ConsoleApplication
                     }
 
                     if(message?.Title == "placing"){
-                        await cmdParser.RunCommand(message.Msg[0]);
+                        cmdParser.RunCommand(message.Msg[0]);
                         Console.WriteLine("Placing" + cmdParser.Gunnar.PosX + " " + cmdParser.Gunnar.PosY + " " +  cmdParser.Gunnar.Heading);
                         continue;
                     }
@@ -139,7 +139,7 @@ namespace ConsoleApplication
                     await SendMessage(sendMsg);
                     Console.WriteLine($"Send: {sendMsg} \n");
                     Thread.Sleep(100);
-                    await cmdParser.RunCommand(actions[i]);
+                    cmdParser.RunCommand(actions[i]);
                 }
             }
         }
