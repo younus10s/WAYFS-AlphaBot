@@ -78,17 +78,10 @@ namespace ConsoleApplication
                     MSG? message = JsonSerializer.Deserialize<MSG>(clientMessage);
                     List<string>? actions;
 
+                    // Toggle the Buzzer
                     if (message?.Title == "beeping")
                     {
-                        if (bool.Parse(message.Msg[0]))
-                        {
-                            cmdParser.Gunnar.Buzzer.BeepOn();
-                        }
-                        else
-                        {
-                            cmdParser.Gunnar.Buzzer.BeepOff();
-                        }
-                        
+                        cmdParser.Gunnar.Buzzer.Beep(bool.Parse(message.Msg[0]));                        
                         continue;
                     }
 

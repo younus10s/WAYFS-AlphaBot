@@ -1,6 +1,9 @@
 /* Class Buzzer
  * Class to control the output to the Buzzer component on the top of the robot.
  * 
+ * Beep(bool turnOn)
+ * Calls BeepOn or BeepOff based on the turnOn flag.
+ *  
  * BeepOn()
  * Start the buzzing sound.
  *
@@ -22,7 +25,7 @@ public class Buzzer : IDisposable
     {
         get { return GetIsBepping(); }
     }
-    private readonly int PinNumber = 4; // double-check
+    private readonly int PinNumber = 4;
 
     private readonly GpioController Controller;
 
@@ -32,15 +35,27 @@ public class Buzzer : IDisposable
         Controller.OpenPin(PinNumber, PinMode.Output);
     }
 
-    public void BeepOn()
+    public void Beep(bool turnOn)
     {
-        Console.WriteLine("Buzzer On");
+        if (turnOn)
+        {
+            BeepOn();
+        }
+        else
+        {
+            BeepOff();
+        }
+    }
+
+    private void BeepOn()
+    {
+        // Console.WriteLine("Buzzer On");
         Controller.Write(PinNumber, PinValue.High);
     }
 
-    public void BeepOff()
+    private void BeepOff()
     {
-        Console.WriteLine("Buzzer Off");
+        // Console.WriteLine("Buzzer Off");
         Controller.Write(PinNumber, PinValue.Low);
     }
 

@@ -140,9 +140,6 @@ namespace ConsoleApplication
             });
 
             await app.RunAsync();
-
-            Gunnar?.Dispose();
-            FBot?.Dispose();
         }
     }
 }
