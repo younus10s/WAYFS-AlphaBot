@@ -138,7 +138,9 @@ namespace ConsoleApplication
                     if(FBot != null)
                         FBot.CleanUp();
 
+                    Console.WriteLine("Cleanup streaming ...");
                     StopStream();
+                    Console.WriteLine("Done");
                     System.Environment.Exit(0);
                 }
                 else

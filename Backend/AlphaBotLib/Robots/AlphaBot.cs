@@ -163,7 +163,6 @@ public class AlphaBot
         Lights.ClearStrip();
         Console.WriteLine("Cleaning up Trsensors ...");
         TRSensor.CleanUp();
-        Console.WriteLine("Done");
     }
 }
 
