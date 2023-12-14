@@ -46,7 +46,7 @@ public class AppCmdParser
                 Gunnar.Right();
                 break;
             case "REPORT":
-                await Gunnar.Report();
+                Gunnar.Report();
                 break;
         }
     }

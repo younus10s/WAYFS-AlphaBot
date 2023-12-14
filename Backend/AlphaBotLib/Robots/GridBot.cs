@@ -153,7 +153,7 @@ public class GridBot : AlphaBot
         }
     }
 
-    public async Task Report()
+    public void Report()
     {
         Lights.ClearStrip();
         Console.WriteLine("Report() \tpos: (" + PosX + "," + PosY + ") facing: " + Heading);

@@ -8,7 +8,7 @@ public class Options
     public string? TxtFile { get; set; }
 
     [Option('u', "urls", Required = false, HelpText = "Provide URL for Web Sockets.")]
-    public string URL { get; set; }
+    public string? URL { get; set; }
 
     [Option('d', "dummy", Required = false, HelpText = "Run Program in Dummy Mode.")]
     public bool Dummy { get; set; }
@@ -132,6 +132,12 @@ namespace ConsoleApplication
                         await webSocketHandler.HandleWebSocketAsync(cmdParser);
 
                     Console.WriteLine("after socket messages");
+
+                    if(Gunnar != null)
+                        Gunnar.CleanUp();
+                    if(FBot != null)
+                        FBot.CleanUp();
+
                     System.Environment.Exit(0);
                 }
                 else
