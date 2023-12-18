@@ -4,6 +4,14 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <!-- NuGet package metadata -->
+    <PackageId>AlphaBotLib.HiQ</PackageId>
+    <Version>1.0.1</Version>
+    <Authors>Filip Alberius;Rasmus Nordling;Younus Salman</Authors>
+    <Company>HiQ Stockholm AB</Company>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +19,8 @@
     <PackageReference Include="MMALSharp" Version="0.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.2.1" />
     <PackageReference Include="System.Device.Gpio" Version="2.2.0-*" />
+    <None Include="docs\README.md" Pack="true" PackagePath="\"/>
+    <None Include="licenses\LICENSE.txt" Pack="true" PackagePath=""/>
   </ItemGroup>
 
 </Project>
