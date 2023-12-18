@@ -46,8 +46,6 @@ namespace ConsoleApplication
         {
             try
             {
-                var buffer = new byte[1024];
-
                 while (WebSocket.State == WebSocketState.Open)
                 {
                     string clientMessage = await reciveMessage();
@@ -57,6 +55,13 @@ namespace ConsoleApplication
                     if (message?.Title == "movement")
                     {
                         FBot.Move(double.Parse(message.Msg[0], CultureInfo.InvariantCulture), double.Parse(message.Msg[1], CultureInfo.InvariantCulture));
+                    }
+
+                    // Toggle the Buzzer
+                    if (message?.Title == "beeping")
+                    {
+                        FBot.Buzzer.Beep(bool.Parse(message.Msg[0]));
+                        return;
                     }
                 }
             }
@@ -70,8 +75,6 @@ namespace ConsoleApplication
         {
             try
             {
-                var buffer = new byte[1024];
-
                 while (WebSocket.State == WebSocketState.Open)
                 {
                     string clientMessage = await reciveMessage();
